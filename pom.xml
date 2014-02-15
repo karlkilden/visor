@@ -21,10 +21,19 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.os890.cdi</groupId>
-    <artifactId>javaweb-cdi-ds-project-template</artifactId>
-    <packaging>war</packaging>
+    <groupId>com.kildeen.visor</groupId>
+    <artifactId>visor-parent</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>visor-core</module>
+        <module>visor-core-api</module>
+        <module>visor-jsf</module>
+        <module>visor-jsf-api</module>
+        <module>visor-sc</module>
+        <module>visor-ee</module>
+        <module>visor-test</module>
+    </modules>
 
     <properties>
         <jsf-myfaces.version>2.2.0</jsf-myfaces.version>
@@ -41,8 +50,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
 
@@ -91,35 +100,6 @@
                 <jsf-web-xml>src/main/jetty/myfaces-web.xml</jsf-web-xml>
             </properties>
         </profile>
-
-        <profile>
-            <!-- Activate by adding -Pmojarra -->
-            <id>mojarra</id>
-            <dependencies>
-                <dependency>
-                    <groupId>com.sun.faces</groupId>
-                    <artifactId>jsf-api</artifactId>
-                    <version>${jsf-mojarra.version}</version>
-                    <scope>compile</scope>
-                </dependency>
-                <dependency>
-                    <groupId>com.sun.faces</groupId>
-                    <artifactId>jsf-impl</artifactId>
-                    <version>${jsf-mojarra.version}</version>
-                    <scope>runtime</scope>
-                </dependency>
-            </dependencies>
-            <repositories>
-                <repository>
-                    <id>java.net</id>
-                    <url>http://download.java.net/maven/2</url>
-                </repository>
-            </repositories>
-
-            <properties>
-                <jsf-web-xml>src/main/jetty/mojarra-web.xml</jsf-web-xml>
-            </properties>
-        </profile>
     </profiles>
 
     <!-- Project dependencies -->
@@ -163,13 +143,6 @@
             <version>1.0</version>
             <scope>compile</scope>
         </dependency>
-        
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-jta_1.1_spec</artifactId>
-            <version>1.1.1</version>
-            <scope>compile</scope>
-        </dependency>
 
         <dependency>
             <groupId>org.apache.geronimo.specs</groupId>
@@ -187,13 +160,6 @@
 
         <dependency>
             <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-jpa_1.0_spec</artifactId>
-            <version>1.1.2</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-servlet_3.0_spec</artifactId>
             <version>1.0</version>
             <scope>provided</scope>
@@ -201,8 +167,8 @@
 
         <dependency>
             <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-el_1.0_spec</artifactId>
-            <version>1.0.2</version>
+            <artifactId>geronimo-el_2.2_spec</artifactId>
+            <version>1.0.4</version>
             <scope>provided</scope>
         </dependency>
 
@@ -212,48 +178,48 @@
             <version>1.6.1</version>
         </dependency>
 
-        <!-- OpenWebBeans -->
-        <dependency>
-            <groupId>org.apache.openwebbeans</groupId>
-            <artifactId>openwebbeans-impl</artifactId>
-            <version>${openwebbeans.version}</version>
-            <scope>runtime</scope>
-        </dependency>
+        <!--        &lt;!&ndash; OpenWebBeans &ndash;&gt;
+                <dependency>
+                    <groupId>org.apache.openwebbeans</groupId>
+                    <artifactId>openwebbeans-impl</artifactId>
+                    <version>${openwebbeans.version}</version>
+                    <scope>runtime</scope>
+                </dependency>
 
-        <dependency>
-            <groupId>org.apache.openwebbeans</groupId>
-            <artifactId>openwebbeans-jsf</artifactId>
-            <version>${openwebbeans.version}</version>
-            <scope>runtime</scope>
-        </dependency>
+                <dependency>
+                    <groupId>org.apache.openwebbeans</groupId>
+                    <artifactId>openwebbeans-jsf</artifactId>
+                    <version>${openwebbeans.version}</version>
+                    <scope>runtime</scope>
+                </dependency>
 
-        <dependency>
-            <groupId>org.apache.openwebbeans</groupId>
-            <artifactId>openwebbeans-web</artifactId>
-            <version>${openwebbeans.version}</version>
-            <scope>runtime</scope>
-        </dependency>
+                <dependency>
+                    <groupId>org.apache.openwebbeans</groupId>
+                    <artifactId>openwebbeans-web</artifactId>
+                    <version>${openwebbeans.version}</version>
+                    <scope>runtime</scope>
+                </dependency>
 
-        <dependency>
-            <groupId>org.apache.openwebbeans</groupId>
-            <artifactId>openwebbeans-spi</artifactId>
-            <version>${openwebbeans.version}</version>
-            <scope>runtime</scope>
-        </dependency>
+                <dependency>
+                    <groupId>org.apache.openwebbeans</groupId>
+                    <artifactId>openwebbeans-spi</artifactId>
+                    <version>${openwebbeans.version}</version>
+                    <scope>runtime</scope>
+                </dependency>
 
-        <dependency>
-            <groupId>org.apache.openwebbeans</groupId>
-            <artifactId>openwebbeans-resource</artifactId>
-            <version>${openwebbeans.version}</version>
-            <scope>runtime</scope>
-        </dependency>
+                <dependency>
+                    <groupId>org.apache.openwebbeans</groupId>
+                    <artifactId>openwebbeans-resource</artifactId>
+                    <version>${openwebbeans.version}</version>
+                    <scope>runtime</scope>
+                </dependency>-->
 
-        
+
         <!-- test dependencies -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.8.1</version>
+            <version>4.10</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

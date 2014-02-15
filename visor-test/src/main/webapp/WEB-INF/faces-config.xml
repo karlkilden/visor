@@ -1,4 +1,5 @@
-/*
+<?xml version="1.0"?>
+<!--
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -15,45 +16,10 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
-*/
-package org.os890.cdi;
+-->
+<faces-config version="2.0"
+              xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
 
-import org.apache.deltaspike.core.api.scope.WindowScoped;
-
-import java.io.Serializable;
-
-import javax.inject.Named;
-import javax.inject.Inject;
-
-/*
- * generated
- */
-@Named("helloWorld")
-@WindowScoped
-public class HelloWorldController implements Serializable
-{
-    @Inject
-    private GreetingService greetingService;
-
-    private String name;
-
-    public String send()
-    {
-        return "result.xhtml";
-    }
-
-    public String getGreeting()
-    {
-        return greetingService.createGreeting(name);
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-}
+</faces-config>

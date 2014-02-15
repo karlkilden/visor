@@ -1,5 +1,4 @@
-<?xml version="1.0"?>
-<!--
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -16,11 +15,20 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
--->
-<faces-config version="2.0"
-    xmlns="http://java.sun.com/xml/ns/javaee"
-    xmlns:xi="http://www.w3.org/2001/XInclude"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
+*/
+package org.os890.cdi;
 
-</faces-config>
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Named;
+
+/*
+ * generated
+ */
+@Named
+@ApplicationScoped
+public class GreetingService {
+    public String createGreeting(String name) {
+        return "Hello " + name + ". We hope you enjoy Apache DeltaSpike!";
+    }
+
+}
