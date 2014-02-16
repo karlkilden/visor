@@ -19,12 +19,11 @@
  *
  */
 
-/**
- * <p>File created: 2014-02-15 11:36</p>
- *
- * @version 1.0
- * @author: Karl Kildén
- * @since 1.0
- */
-public class Test {
+package com.kildeen.visor.core.context;
+
+import org.apache.deltaspike.security.api.authorization.AccessDecisionVoter;
+
+public interface DecisionVoter extends AccessDecisionVoter {
+
+    public void setPage(String page);
 }

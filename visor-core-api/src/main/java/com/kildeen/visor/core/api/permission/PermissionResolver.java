@@ -19,12 +19,16 @@
  *
  */
 
+package com.kildeen.visor.core.api.permission;
+
 /**
- * <p>File created: 2014-02-15 11:36</p>
+ * <p>File created: 2014-02-16 01:50</p>
  *
  * @version 1.0
  * @author: Karl Kildén
  * @since 1.0
  */
-public class Test {
+public interface PermissionResolver {
+
+    public void getPermission();
 }

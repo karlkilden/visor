@@ -19,12 +19,19 @@
  *
  */
 
+package com.kildeen.visor.core.context;
+
+import org.apache.deltaspike.core.api.config.view.ViewConfig;
+import org.apache.deltaspike.jsf.api.config.view.View;
+import org.apache.deltaspike.security.api.authorization.Secured;
+
 /**
- * <p>File created: 2014-02-15 11:36</p>
+ * <p>File created: 2014-02-16 17:55</p>
  *
  * @version 1.0
  * @author: Karl Kildén
  * @since 1.0
  */
-public class Test {
+@Secured(value = DecisionVoter.class)
+public class Admin implements ViewConfig {
 }

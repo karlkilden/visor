@@ -19,12 +19,29 @@
  *
  */
 
+package com.kildeen.visor.core.permission;
+
+import java.util.HashSet;
+import java.util.Set;
+
 /**
- * <p>File created: 2014-02-15 11:36</p>
+ * <p>File created: 2014-02-16 21:35</p>
  *
  * @version 1.0
  * @author: Karl Kildén
  * @since 1.0
  */
-public class Test {
+public class DuplicatePartPermissionValidator {
+    Set<String> usedPermissions = new HashSet<>();
+
+
+    public void add(String partPermission) throws Exception {
+        synchronized (usedPermissions) {
+            if (usedPermissions.contains(partPermission)) {
+                throw new Exception("Duplicate partPermission detected");
+            } else {
+                usedPermissions.add(partPermission);
+            }
+        }
+    }
 }

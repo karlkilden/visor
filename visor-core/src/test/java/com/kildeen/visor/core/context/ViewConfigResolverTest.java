@@ -19,12 +19,35 @@
  *
  */
 
+package com.kildeen.visor.core.context;
+
+import junit.framework.Assert;
+import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigResolver;
+import org.apache.deltaspike.security.api.authorization.Secured;
+import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import javax.inject.Inject;
+
 /**
- * <p>File created: 2014-02-15 11:36</p>
+ * <p>File created: 2014-02-16 17:55</p>
  *
  * @version 1.0
  * @author: Karl Kildén
  * @since 1.0
  */
-public class Test {
+
+@RunWith(CdiTestRunner.class)
+public class ViewConfigResolverTest {
+
+@Inject
+    ViewConfigResolver viewConfigResolver;
+
+    @Test
+
+    public void test(){
+        Object o = viewConfigResolver.getConfigDescriptors().get(0).getCallbackDescriptor(Secured.class);
+        Assert.assertNotNull(o);
+    }
 }

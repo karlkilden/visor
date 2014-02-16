@@ -19,12 +19,20 @@
  *
  */
 
+package com.kildeen.visor.core.api.permission;
+
+import java.io.Serializable;
+import java.util.Set;
+
 /**
- * <p>File created: 2014-02-15 11:36</p>
+ * <p>File created: 2014-02-15 15:56</p>
  *
  * @version 1.0
  * @author: Karl Kildén
  * @since 1.0
  */
-public class Test {
+public interface PermissionHolder extends Serializable {
+
+    public Set<Permission> getPermissions();
+
 }
