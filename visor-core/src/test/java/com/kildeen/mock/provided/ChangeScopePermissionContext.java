@@ -19,30 +19,22 @@
  *
  */
 
-package com.kildeen.visor.core.api.permission;
+package com.kildeen.mock.provided;
 
-import java.io.Serializable;
-import java.util.Collection;
+import com.kildeen.visor.core.api.context.PermissionContext;
+import com.kildeen.visor.core.context.PermissionContextImpl;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Specializes;
 
 /**
- * <p>File created: 2014-02-16 01:35</p>
+ * <p>File created: 2014-02-16 22:45</p>
  *
  * @version 1.0
  * @author: Karl Kildén
  * @since 1.0
  */
-public interface PermissionConverter extends Serializable {
-
-
-    public String getPermission(Class<?> permissionClass);
-    public String getPartPermission(Class<?> permissionClass);
-    public String serialize(Permission permission);
-
-    public Permission deserialize(String deserializedPermission);
-
-    public Collection<String> serializeAll(Collection<Permission> permissions);
-
-    public Collection<Permission> deserializeAll(Collection<String> deserializedPermissions);
-
-
+@ApplicationScoped
+@Specializes
+public class ChangeScopePermissionContext extends PermissionContextImpl {
 }

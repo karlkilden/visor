@@ -38,7 +38,7 @@ public class DuplicatePartPermissionValidator {
     public void add(String partPermission) throws Exception {
         synchronized (usedPermissions) {
             if (usedPermissions.contains(partPermission)) {
-                throw new Exception("Duplicate partPermission detected");
+                throw new Exception("Duplicate partPermission detected " + partPermission);
             } else {
                 usedPermissions.add(partPermission);
             }

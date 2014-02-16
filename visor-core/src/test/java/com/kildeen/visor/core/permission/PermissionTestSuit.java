@@ -19,30 +19,24 @@
  *
  */
 
-package com.kildeen.visor.core.api.permission;
+package com.kildeen.visor.core.permission;
 
-import java.io.Serializable;
-import java.util.Collection;
+import org.apache.deltaspike.testcontrol.api.junit.CdiTestSuiteRunner;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
 /**
- * <p>File created: 2014-02-16 01:35</p>
+ * <p>File created: 2014-02-16 22:56</p>
  *
  * @version 1.0
  * @author: Karl Kildén
  * @since 1.0
  */
-public interface PermissionConverter extends Serializable {
-
-
-    public String getPermission(Class<?> permissionClass);
-    public String getPartPermission(Class<?> permissionClass);
-    public String serialize(Permission permission);
-
-    public Permission deserialize(String deserializedPermission);
-
-    public Collection<String> serializeAll(Collection<Permission> permissions);
-
-    public Collection<Permission> deserializeAll(Collection<String> deserializedPermissions);
-
-
+@RunWith(CdiTestSuiteRunner.class)
+@Suite.SuiteClasses({
+        PermissionContextTest.class,
+})
+public class PermissionTestSuit
+{
 }
+

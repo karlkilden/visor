@@ -46,6 +46,8 @@ public class SubjectPermissionMapper implements Serializable {
 
     private Map<String, Permission> mappedPermissions;
 
+    public static final Permission NOT_FOUND = new Permission();
+
     @PostConstruct
     private void init() {
         ImmutableMap.Builder<String, Permission> builder = ImmutableMap.<String, Permission>builder();
@@ -68,6 +70,12 @@ public class SubjectPermissionMapper implements Serializable {
     }
 
     public Permission getPermission(String permission) {
-        return mappedPermissions.get(permission);
+        Permission p = mappedPermissions.get(permission);
+        if (p == null) {
+            return NOT_FOUND;
+        }
+        else {
+            return p;
+        }
     }
 }

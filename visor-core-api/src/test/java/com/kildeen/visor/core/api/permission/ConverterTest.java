@@ -61,8 +61,8 @@ public class ConverterTest {
         String json = converter.serialize(p);
         Permission p2 = converter.deserialize(json);
 
-        assertEquals(p.isCreate(), p2.isCreate());
-        assertEquals(p.isRead(), p2.isRead());
+        assertEquals(p.hasCreate(), p2.hasCreate());
+        assertEquals(p.hasRead(), p2.hasRead());
         assertEquals(p.getChildren().iterator().next().getPermission(), p2.getChildren().iterator().next().getPermission());
 
 

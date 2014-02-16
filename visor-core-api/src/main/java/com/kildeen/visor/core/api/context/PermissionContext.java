@@ -21,6 +21,8 @@
 
 package com.kildeen.visor.core.api.context;
 
+import java.io.Serializable;
+
 /**
  * The current PermissionContext is similar to FacesContext. It contains state for the current request and is the main
  * interaction point with the visor flow.
@@ -32,7 +34,7 @@ package com.kildeen.visor.core.api.context;
  * @since 1.0
  */
 
-public interface PermissionContext {
+public interface PermissionContext extends Serializable {
     /**
      * The current view is considered to be secured if {@link org.apache.deltaspike.security.api.authorization.Secured}
      * is part of it's viewMetaData as per the definition from DeltaSpike.
@@ -57,4 +59,12 @@ public interface PermissionContext {
     public boolean hasDelete();
 
     public boolean hasPartPermission(String stringRepresentation);
+
+    public boolean hasCreate(String partPermission);
+
+    public boolean hasRead(String partPermission);
+
+    public boolean hasUpdate(String partPermission);
+
+    public boolean hasDelete(String partPermission);
 }

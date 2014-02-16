@@ -19,30 +19,17 @@
  *
  */
 
-package com.kildeen.visor.core.api.permission;
+package com.kildeen.visor.core.context;
 
-import java.io.Serializable;
-import java.util.Collection;
+import org.apache.deltaspike.core.api.config.view.ViewConfig;
+import org.apache.deltaspike.security.api.authorization.Secured;
 
 /**
- * <p>File created: 2014-02-16 01:35</p>
+ * <p>File created: 2014-02-16 17:55</p>
  *
  * @version 1.0
  * @author: Karl Kildén
  * @since 1.0
  */
-public interface PermissionConverter extends Serializable {
-
-
-    public String getPermission(Class<?> permissionClass);
-    public String getPartPermission(Class<?> permissionClass);
-    public String serialize(Permission permission);
-
-    public Permission deserialize(String deserializedPermission);
-
-    public Collection<String> serializeAll(Collection<Permission> permissions);
-
-    public Collection<Permission> deserializeAll(Collection<String> deserializedPermissions);
-
-
+public class Login implements ViewConfig {
 }

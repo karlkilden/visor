@@ -19,30 +19,25 @@
  *
  */
 
-package com.kildeen.visor.core.api.permission;
+package com.kildeen.visor.core.permission;
 
-import java.io.Serializable;
-import java.util.Collection;
+import org.junit.Test;
 
 /**
- * <p>File created: 2014-02-16 01:35</p>
+ * <p>File created: 2014-02-16 22:27</p>
  *
  * @version 1.0
  * @author: Karl Kildén
  * @since 1.0
  */
-public interface PermissionConverter extends Serializable {
+public class DuplicatePartPermissionValidatorTest {
+    private DuplicatePartPermissionValidator validator = new DuplicatePartPermissionValidator();
 
-
-    public String getPermission(Class<?> permissionClass);
-    public String getPartPermission(Class<?> permissionClass);
-    public String serialize(Permission permission);
-
-    public Permission deserialize(String deserializedPermission);
-
-    public Collection<String> serializeAll(Collection<Permission> permissions);
-
-    public Collection<Permission> deserializeAll(Collection<String> deserializedPermissions);
-
-
+    @Test(expected = Exception.class)
+    public void duplicate_validator_should_throw_error_if_value_is_duplicated() throws Exception {
+        validator.add("1");
+        validator.add("2");
+        validator.add("3");
+        validator.add("1");
+    }
 }

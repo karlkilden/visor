@@ -24,6 +24,7 @@ package com.kildeen.mock.provided;
 import com.kildeen.visor.core.api.permission.Permission;
 import com.kildeen.visor.core.api.permission.PermissionHolder;
 
+import javax.enterprise.context.ApplicationScoped;
 import java.util.Set;
 
 /**
@@ -33,9 +34,16 @@ import java.util.Set;
  * @author: Karl Kildén
  * @since 1.0
  */
+@ApplicationScoped
 public class MockPermissionHolder implements PermissionHolder {
+    private Set<Permission> permissions;
+
     @Override
     public Set<Permission> getPermissions() {
-        return null;
+        return permissions;
+    }
+
+    public void setPermissions(final Set<Permission> permissions) {
+        this.permissions = permissions;
     }
 }

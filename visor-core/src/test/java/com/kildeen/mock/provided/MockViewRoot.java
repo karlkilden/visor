@@ -19,30 +19,26 @@
  *
  */
 
-package com.kildeen.visor.core.api.permission;
+package com.kildeen.mock.provided;
 
-import java.io.Serializable;
-import java.util.Collection;
+import javax.faces.component.UIViewRoot;
 
 /**
- * <p>File created: 2014-02-16 01:35</p>
+ * <p>File created: 2014-02-16 22:40</p>
  *
  * @version 1.0
  * @author: Karl Kildén
  * @since 1.0
  */
-public interface PermissionConverter extends Serializable {
+public class MockViewRoot extends UIViewRoot {
+    private String mockId;
 
-
-    public String getPermission(Class<?> permissionClass);
-    public String getPartPermission(Class<?> permissionClass);
-    public String serialize(Permission permission);
-
-    public Permission deserialize(String deserializedPermission);
-
-    public Collection<String> serializeAll(Collection<Permission> permissions);
-
-    public Collection<Permission> deserializeAll(Collection<String> deserializedPermissions);
-
-
+    @Override
+    public void setId(String id) {
+        this.mockId = id;
+    }
+    @Override
+    public String getViewId() {
+        return mockId;
+    }
 }

@@ -34,6 +34,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.Serializable;
 
 /**
  * <p>File created: 2014-02-15 16:28</p>
@@ -43,7 +44,7 @@ import javax.inject.Named;
  * @since 1.0
  */
 @ViewScoped
-@Named("PrivilegeContext")
+@Named("PermissionContext")
 public class PermissionContextImpl implements PermissionContext {
 
     private static final Permission NOT_SECURED_DEFAULT = new Permission();
@@ -72,11 +73,11 @@ public class PermissionContextImpl implements PermissionContext {
         viewConfigDescriptor = viewConfigResolver.getViewConfigDescriptor(facesContext.getViewRoot().getViewId());
         permission = subjectPermissionMapper.getPermission(permissionConverter.getPermission(viewConfigDescriptor.getConfigClass()));
         secured = viewConfigDescriptor.getCallbackDescriptor(Secured.class) != null;
-        if (permission == null && secured) {
+        if (permission == SubjectPermissionMapper.NOT_FOUND && secured) {
             // not allowed
             allowed = false;
         }
-        else if (permission == null) {
+        else if (permission == SubjectPermissionMapper.NOT_FOUND) {
             permission = NOT_SECURED_DEFAULT;
             allowed = true;
         }
@@ -115,6 +116,26 @@ public class PermissionContextImpl implements PermissionContext {
     @Override
     public boolean hasPartPermission(final String stringRepresentation) {
     return subjectPermissionMapper.getPermission(stringRepresentation) != null;
+    }
+
+    @Override
+    public boolean hasCreate(final String partPermission) {
+        return subjectPermissionMapper.getPermission(partPermission).hasCreate();
+    }
+
+    @Override
+    public boolean hasRead(final String partPermission) {
+        return subjectPermissionMapper.getPermission(partPermission).hasRead();
+    }
+
+    @Override
+    public boolean hasUpdate(final String partPermission) {
+        return subjectPermissionMapper.getPermission(partPermission).hasUpdate();
+    }
+
+    @Override
+    public boolean hasDelete(final String partPermission) {
+        return subjectPermissionMapper.getPermission(partPermission).hasDelete();
     }
 
     @Override
