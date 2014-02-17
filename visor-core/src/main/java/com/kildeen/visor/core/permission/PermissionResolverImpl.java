@@ -45,7 +45,7 @@ import java.util.List;
  * @since 1.0
  */
 @ApplicationScoped
-public class ViewConfigAsPermissionResolver implements Serializable {
+public class PermissionResolverImpl implements PermissionResolver {
 
     @Inject
     private ViewConfigResolver viewConfigResolver;
@@ -53,15 +53,17 @@ public class ViewConfigAsPermissionResolver implements Serializable {
     private PermissionConverter permissionConverter;
     private DuplicatePartPermissionValidator duplicatePartPermissionValidator = new DuplicatePartPermissionValidator();
 
-    private static final Logger log = LoggerFactory.getLogger(ViewConfigAsPermissionResolver.class);
+    private static final Logger log = LoggerFactory.getLogger(PermissionResolverImpl.class);
     private List<Permission> permissions = new ArrayList<>();
 
     @PostConstruct
     public void init() {
+        log.info("ViewConfigDescriptors will now be mapped to Permissions");
         for (ViewConfigDescriptor viewConfigDescriptor : viewConfigResolver.getViewConfigDescriptors()) {
-            if (viewConfigDescriptor.getCallbackDescriptor(Secured.class) != null) {
-                Permission permission = new Permission();
-                permission.setPermission(permissionConverter.getPermission(viewConfigDescriptor.getConfigClass()));
+            List<Secured> anno = viewConfigDescriptor.getMetaData(Secured.class);
+            if (viewConfigDescriptor.getCallbackDescriptor(Secured.class) != null || anno != null && anno.isEmpty()==false) {
+                String stringPermission = permissionConverter.getPermission(viewConfigDescriptor.getConfigClass());
+                Permission permission = new Permission(stringPermission, viewConfigDescriptor.getViewId());
                 addChildren(viewConfigDescriptor, permission);
                 permissions.add(permission);
             }
@@ -71,25 +73,39 @@ public class ViewConfigAsPermissionResolver implements Serializable {
     private void addChildren(final ViewConfigDescriptor viewConfigDescriptor, final Permission permission) {
         for (Class<?> partPermission : viewConfigDescriptor.getConfigClass().getDeclaredClasses()) {
             if (partPermission.isAssignableFrom(PartPermission.class)) {
-                Permission child = new Permission();
-                String p = getValidatedPartPermission(partPermission, child);
-                child.setPermission(p);
+                String p = getValidatedPartPermission((Class<? extends PartPermission>) partPermission);
+                Permission child = new Permission(p, viewConfigDescriptor.getViewId());
                 permission.getChildren().add(child);
             }
         }
     }
 
-    private String getValidatedPartPermission(final Class<?> partPermission, final Permission child) {
+    private String getValidatedPartPermission(final Class<? extends PartPermission> partPermission) {
         String p = permissionConverter.getPartPermission(partPermission);
         try {
             duplicatePartPermissionValidator.add(p);
         } catch (Exception e) {
-            log.error("Duplicate PartPermission found {}", child.getClass().getName());
-            throw new RuntimeException("Duplicate PartPermission found " + child.getClass().getName());
+            log.error("Duplicate PartPermission found {}", partPermission.getName());
+            throw new RuntimeException("Duplicate PartPermission found " + partPermission.getName());
         }
         return p;
     }
 
+
+    @Override
+    public List<Permission> getPermissions() {
+        List<Permission> clonedPermissions = new ArrayList<>(this.permissions.size());
+        for (Permission permission : this.permissions) {
+            Permission clone = new Permission(permission);
+            clonedPermissions.add(new Permission(permission));
+        }
+        return clonedPermissions;
+    }
+
+    @Override
+    public void boot() {
+        log.debug("Eager booting was triggered");
+    }
 
 
 }

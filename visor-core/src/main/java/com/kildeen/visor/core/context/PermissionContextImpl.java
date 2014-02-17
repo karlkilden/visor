@@ -28,6 +28,8 @@ import com.kildeen.visor.core.permission.SubjectPermissionMapper;
 import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigDescriptor;
 import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigResolver;
 import org.apache.deltaspike.security.api.authorization.Secured;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ViewScoped;
@@ -37,6 +39,12 @@ import javax.inject.Named;
 import java.io.Serializable;
 
 /**
+ * This is the central implementation for PermissionContext. It uses {@link javax.faces.bean.ViewScoped} and as
+ * a consequence it's dependent on Deltaspike porting this to CDI. This is to ensure interoperability between
+ * JSF 2.x and JSF 2.2.
+ *
+ *  {@inheritDoc}
+ *
  * <p>File created: 2014-02-15 16:28</p>
  *
  * @version 1.0
@@ -46,14 +54,17 @@ import java.io.Serializable;
 @ViewScoped
 @Named("PermissionContext")
 public class PermissionContextImpl implements PermissionContext {
+    // This is only used when security information is requested but the current view is unsecured.
+    private static final String DEFAULT="DEFAULT";
+    private static final Permission NOT_SECURED_DEFAULT = new Permission(DEFAULT, DEFAULT);
 
-    private static final Permission NOT_SECURED_DEFAULT = new Permission();
     static {
         NOT_SECURED_DEFAULT.setCreate(true);
         NOT_SECURED_DEFAULT.setRead(true);
         NOT_SECURED_DEFAULT.setUpdate(true);
         NOT_SECURED_DEFAULT.setRead(true);
     }
+
     @Inject
     private ViewConfigResolver viewConfigResolver;
     @Inject
@@ -68,19 +79,30 @@ public class PermissionContextImpl implements PermissionContext {
     private boolean secured;
     private boolean allowed;
 
+    private static final Logger log = LoggerFactory.getLogger(PermissionContextImpl.class);
+
     @PostConstruct
     private void init() {
         viewConfigDescriptor = viewConfigResolver.getViewConfigDescriptor(facesContext.getViewRoot().getViewId());
-        permission = subjectPermissionMapper.getPermission(permissionConverter.getPermission(viewConfigDescriptor.getConfigClass()));
         secured = viewConfigDescriptor.getCallbackDescriptor(Secured.class) != null;
-        if (permission == SubjectPermissionMapper.NOT_FOUND && secured) {
-            // not allowed
-            allowed = false;
+
+        if (secured) {
+            if (hasPermission()) {
+                allowed = true;
+            }
         }
-        else if (permission == SubjectPermissionMapper.NOT_FOUND) {
+
+
+        else if (secured == false) {
             permission = NOT_SECURED_DEFAULT;
             allowed = true;
+            log.info("PermissionContextImpl created but the page was not secured. Page: {}", viewConfigDescriptor.getViewId());
         }
+    }
+
+    private boolean hasPermission() {
+        permission = subjectPermissionMapper.getPermission(permissionConverter.getPermission(viewConfigDescriptor.getConfigClass()));
+        return permission != SubjectPermissionMapper.NOT_FOUND;
     }
 
     @Override
@@ -90,7 +112,7 @@ public class PermissionContextImpl implements PermissionContext {
 
     @Override
     public boolean isPrivileged() {
-        return  permission.isPrivileged();
+        return permission.isPrivileged();
     }
 
     @Override
@@ -115,7 +137,7 @@ public class PermissionContextImpl implements PermissionContext {
 
     @Override
     public boolean hasPartPermission(final String stringRepresentation) {
-    return subjectPermissionMapper.getPermission(stringRepresentation) != null;
+        return subjectPermissionMapper.getPermission(stringRepresentation) != null;
     }
 
     @Override

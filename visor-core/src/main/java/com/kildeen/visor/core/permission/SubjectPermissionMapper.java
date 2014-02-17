@@ -46,7 +46,7 @@ public class SubjectPermissionMapper implements Serializable {
 
     private Map<String, Permission> mappedPermissions;
 
-    public static final Permission NOT_FOUND = new Permission();
+    public static final Permission NOT_FOUND = new Permission("","");
 
     @PostConstruct
     private void init() {

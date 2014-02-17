@@ -35,6 +35,8 @@ import org.junit.runners.Suite;
 @RunWith(CdiTestSuiteRunner.class)
 @Suite.SuiteClasses({
         PermissionContextTest.class,
+        DuplicatePartPermissionValidatorTest.class,
+        PermissionResolverTest.class
 })
 public class PermissionTestSuit
 {

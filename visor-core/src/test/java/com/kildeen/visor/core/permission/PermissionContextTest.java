@@ -57,19 +57,6 @@ public class PermissionContextTest {
     @Inject
     private MockPermissionHolder permissionHolder;
 
-    @Before
-    public void setUp() throws Exception {
-
-        Permission p = new Permission();
-        p.setPermission("");
-        Set<Permission> permissionSet = new HashSet<>();
-        permissionSet.add(p);
-        Permission p2 = new Permission();
-        p2.setPermission("testTrue");
-        permissionSet.add(p2);
-        permissionHolder.setPermissions(permissionSet);
-    }
-
     @Test
     public void permission_should_not_be_granted_if_not_in_subjectPermissionMapper () throws Exception {
         facesContext.setId("/admin.xhtml");

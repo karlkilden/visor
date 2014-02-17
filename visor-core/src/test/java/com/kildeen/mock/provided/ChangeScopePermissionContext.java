@@ -25,6 +25,7 @@ import com.kildeen.visor.core.api.context.PermissionContext;
 import com.kildeen.visor.core.context.PermissionContextImpl;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Specializes;
 
 /**
@@ -34,7 +35,7 @@ import javax.enterprise.inject.Specializes;
  * @author: Karl Kildén
  * @since 1.0
  */
-@ApplicationScoped
+@RequestScoped
 @Specializes
 public class ChangeScopePermissionContext extends PermissionContextImpl {
 }

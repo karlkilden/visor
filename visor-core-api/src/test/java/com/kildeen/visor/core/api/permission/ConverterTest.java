@@ -46,16 +46,13 @@ public class ConverterTest {
     public void serialized_should_be_as_was_when_deserialized() {
         DefaultPermissionConverter converter = new DefaultPermissionConverter();
 
-        Permission p = new Permission();
+        Permission p = new Permission("this.that", "viewid");
 
         p.setCreate(true);
         p.setRead(true);
         p.setUpdate(true);
         p.setDelete(true);
-        p.setPermission("this.that");
-
-        Permission child = new Permission();
-        child.setPermission("this.that.do");
+        Permission child = new Permission("this.that.do", "viewId2");
         p.getChildren().add(child);
 
         String json = converter.serialize(p);

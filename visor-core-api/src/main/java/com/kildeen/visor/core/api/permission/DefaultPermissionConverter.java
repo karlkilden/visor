@@ -46,7 +46,7 @@ public class DefaultPermissionConverter implements PermissionConverter {
     }
 
     @Override
-    public String getPartPermission(final Class<?> permissionClass) {
+    public String getPartPermission(final Class<? extends PartPermission> permissionClass) {
         String permission = WordUtils.uncapitalize(permissionClass.getEnclosingClass()
                 .getSimpleName())+permissionClass.getSimpleName();
         return permission;

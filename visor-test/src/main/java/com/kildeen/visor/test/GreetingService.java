@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
 */
-package org.os890.cdi;
+package com.kildeen.visor.test;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;

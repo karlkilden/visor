@@ -50,12 +50,10 @@ public class SubjectPermissionMapperTest {
     SubjectPermissionMapper subjectPermissionMapper;
     @Test
     public void holder_Should_be_mapped_by_string_representation() {
-        Permission p = new Permission();
-        p.setPermission("tip.tap");
+        Permission p = new Permission("tip.tap", "");
         Set<Permission> permissionSet = new HashSet<>();
         permissionSet.add(p);
-        Permission p2 = new Permission();
-        p2.setPermission("testTrue");
+        Permission p2 = new Permission("testTrue", "");
         permissionSet.add(p2);
         permissionHolder.setPermissions(permissionSet);
 

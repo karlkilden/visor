@@ -16,10 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
 */
-package org.os890.cdi;
+package com.kildeen.visor.test;
 
+import com.kildeen.visor.core.permission.PermissionResolver;
 import org.apache.deltaspike.core.api.scope.WindowScoped;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -32,6 +34,9 @@ import java.io.Serializable;
 public class HelloWorldController implements Serializable {
     @Inject
     private GreetingService greetingService;
+
+    @Inject
+    PermissionResolver permissionResolver;
 
     private String name;
 
@@ -49,5 +54,10 @@ public class HelloWorldController implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @PostConstruct
+    private void init() {
+        permissionResolver.getPermissions();
     }
 }

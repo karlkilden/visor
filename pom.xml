@@ -44,7 +44,7 @@
     </properties>
 
     <build>
-        <finalName>javaweb-cdi-ds-project-template</finalName>
+        <finalName>visor-test</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

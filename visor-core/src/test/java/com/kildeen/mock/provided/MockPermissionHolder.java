@@ -24,7 +24,9 @@ package com.kildeen.mock.provided;
 import com.kildeen.visor.core.api.permission.Permission;
 import com.kildeen.visor.core.api.permission.PermissionHolder;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -45,5 +47,14 @@ public class MockPermissionHolder implements PermissionHolder {
 
     public void setPermissions(final Set<Permission> permissions) {
         this.permissions = permissions;
+    }
+
+    @PostConstruct
+    private void init() {
+        Permission p = new Permission("","");
+        permissions = new HashSet<>();
+        permissions.add(p);
+        Permission p2 = new Permission("testTrue", "");
+        permissions.add(p2);
     }
 }

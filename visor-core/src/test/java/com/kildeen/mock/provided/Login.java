@@ -19,7 +19,7 @@
  *
  */
 
-package com.kildeen.visor.core.context;
+package com.kildeen.mock.provided;
 
 import org.apache.deltaspike.core.api.config.view.ViewConfig;
 import org.apache.deltaspike.security.api.authorization.Secured;
@@ -31,7 +31,5 @@ import org.apache.deltaspike.security.api.authorization.Secured;
  * @author: Karl Kildén
  * @since 1.0
  */
-@Secured(DecisionVoter.class)
-public interface Report extends ViewConfig {
-    public class CustomerReport implements ViewConfig {}
+public class Login implements ViewConfig {
 }

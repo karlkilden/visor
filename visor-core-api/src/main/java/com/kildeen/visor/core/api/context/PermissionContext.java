@@ -24,8 +24,8 @@ package com.kildeen.visor.core.api.context;
 import java.io.Serializable;
 
 /**
- * The current PermissionContext is similar to FacesContext. It contains state for the current request and is the main
- * interaction point with the visor flow.
+ * The current PermissionContext. It contains state for the current request and is the main
+ * interaction point with the permission flow that visor offers. It is also used internally by all security mechanisms.
  * <p/>
  * <p>File created: 2014-02-15 13:51</p>
  *
