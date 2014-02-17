@@ -18,7 +18,7 @@
 */
 package com.kildeen.visor.test;
 
-import com.kildeen.visor.core.permission.PermissionResolver;
+import com.kildeen.visor.core.api.permission.PermissionResolver;
 import org.apache.deltaspike.core.api.scope.WindowScoped;
 
 import javax.annotation.PostConstruct;
@@ -36,7 +36,7 @@ public class HelloWorldController implements Serializable {
     private GreetingService greetingService;
 
     @Inject
-    PermissionResolver permissionResolver;
+    private PermissionResolver permissionResolver;
 
     private String name;
 

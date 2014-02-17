@@ -52,6 +52,14 @@ public class DefaultPermissionConverter implements PermissionConverter {
         return permission;
     }
 
+    /*
+     * Here for symmetry only
+     */
+    @Override
+    public String getPermissionFolder(final Class<?> permissionFolderClass) {
+       return getPermission(permissionFolderClass);
+    }
+
     @Override
     public String serialize(final Permission permission) {
         Gson gson = new Gson();

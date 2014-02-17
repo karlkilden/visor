@@ -33,5 +33,6 @@ import java.util.List;
 public interface PermissionResolver {
 
     public List<Permission> getPermissions();
+    public List<PermissionFolder> getPermissionFolders();
     public void boot();
 }

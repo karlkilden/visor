@@ -22,11 +22,9 @@
 package com.kildeen.visor.core.permission;
 
 import com.kildeen.visor.core.api.context.PermissionAccessDecisionVoter;
-import com.kildeen.visor.core.api.permission.PartPermission;
-import com.kildeen.visor.core.api.permission.Permission;
-import com.kildeen.visor.core.api.permission.PermissionConverter;
-import com.kildeen.visor.core.api.permission.PermissionResolver;
+import com.kildeen.visor.core.api.permission.*;
 import org.apache.deltaspike.core.api.config.view.metadata.CallbackDescriptor;
+import org.apache.deltaspike.core.api.config.view.metadata.ConfigDescriptor;
 import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigDescriptor;
 import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigResolver;
 import org.apache.deltaspike.security.api.authorization.Secured;
@@ -36,9 +34,10 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>File created: 2014-02-16 21:13</p>
@@ -58,25 +57,57 @@ public class PermissionResolverImpl implements PermissionResolver {
 
     private static final Logger log = LoggerFactory.getLogger(PermissionResolverImpl.class);
     private List<Permission> permissions = new ArrayList<>();
+    private Map<Class<?>, Permission> mappedPermissions = new HashMap<>();
+    private List<PermissionFolder> permissionFolders = new ArrayList<>();
 
     @PostConstruct
     public void init() {
+        mapPermissions();
+        mapPermissionFolders();
+    }
+
+    private void mapPermissionFolders() {
+        for (ConfigDescriptor<?> configDescriptor : viewConfigResolver.getConfigDescriptors()) {
+            if (configDescriptor.getConfigClass().isInterface()) {
+                CallbackDescriptor callback = configDescriptor.getCallbackDescriptor(Secured.class);
+                boolean isSecured = checkIfSecured(callback);
+                if (isSecured) {
+                    List<Permission> folderPermissions = new ArrayList<>();
+                    for (Class<?> child : configDescriptor.getConfigClass().getDeclaredClasses()) {
+                        if (mappedPermissions.containsKey(child)) {
+                            folderPermissions.add(mappedPermissions.get(child));
+                        }
+                    }
+                    PermissionFolder permissionFolder = new PermissionFolder(folderPermissions,
+                            permissionConverter.getPermissionFolder(configDescriptor.getConfigClass()));
+                    permissionFolders.add(permissionFolder);
+                }
+            }
+        }
+    }
+
+    private void mapPermissions() {
         log.info("ViewConfigDescriptors will now be mapped to Permissions");
         for (ViewConfigDescriptor viewConfigDescriptor : viewConfigResolver.getViewConfigDescriptors()) {
             CallbackDescriptor callback = viewConfigDescriptor.getCallbackDescriptor(Secured.class);
-            boolean isSecured = false;
-            if (callback != null && callback.getCallbackMethods() != null) {
-                if (callback.getCallbackMethods().containsKey(PermissionAccessDecisionVoter.class)) {
-                    isSecured = true;
-                }
-            }
+            boolean isSecured = checkIfSecured(callback);
             if (isSecured) {
                 String stringPermission = permissionConverter.getPermission(viewConfigDescriptor.getConfigClass());
                 Permission permission = new Permission(stringPermission, viewConfigDescriptor.getViewId());
                 addChildren(viewConfigDescriptor, permission);
+                mappedPermissions.put(viewConfigDescriptor.getConfigClass(), permission);
                 permissions.add(permission);
             }
         }
+    }
+
+    private boolean checkIfSecured(CallbackDescriptor callback) {
+        if (callback != null && callback.getCallbackMethods() != null) {
+            if (callback.getCallbackMethods().containsKey(PermissionAccessDecisionVoter.class)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void addChildren(final ViewConfigDescriptor viewConfigDescriptor, final Permission permission) {
@@ -109,6 +140,11 @@ public class PermissionResolverImpl implements PermissionResolver {
             clonedPermissions.add(new Permission(permission));
         }
         return clonedPermissions;
+    }
+
+    @Override
+    public List<PermissionFolder> getPermissionFolders() {
+        return permissionFolders;
     }
 
     @Override

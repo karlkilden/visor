@@ -59,6 +59,14 @@ public interface PermissionConverter extends Serializable {
 
     /**
      *
+     * @param permissionFolderClass class to Convert.
+     * @return  Default implementation is exact same as {@link #getPermission(Class)}
+     */
+    public String getPermissionFolder(Class<?> permissionFolderClass);
+
+
+    /**
+     *
      * @param permission  Permission that should be converted to a String to simplify persisting etc.
      * @return  Default turns it into a default json string object.
      */

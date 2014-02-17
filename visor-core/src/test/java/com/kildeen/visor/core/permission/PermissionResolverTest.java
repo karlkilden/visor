@@ -14,6 +14,8 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.util.List;
 
+import static junit.framework.Assert.*;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Karl Kildén
@@ -50,8 +52,8 @@ public class PermissionResolverTest {
             }
         }
 
-        Assert.assertTrue(nestedExists);
-        Assert.assertTrue(adminExists);
+        assertTrue(nestedExists);
+        assertTrue(adminExists);
 
     }
 
@@ -59,5 +61,11 @@ public class PermissionResolverTest {
     public void part_permissions_should_have_parent_simpleName_uncapitalized_simpleName_as_string_representation() throws Exception {
         mockFacesContext.setId("/pages/secured.xhtml");
         permissionContext.hasPartPermission("secured.Part1");
+    }
+
+    @Test
+    public void permissionFolders_should_return_all_folders() throws Exception {
+        assertNotNull(permissionResolver.getPermissionFolders());
+        assertEquals("kildeen.mock.provided.Pages.Secured", permissionResolver.getPermissionFolders().get(0).getPermissions().get(0).getMasterPermission());
     }
 }
