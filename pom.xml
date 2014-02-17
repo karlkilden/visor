@@ -31,7 +31,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>visor-core</module>
-        <module>visor-core-api</module>
+        <module>visor-api</module>
         <module>visor-test</module>
     </modules>
 
