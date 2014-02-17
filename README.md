@@ -6,7 +6,7 @@ As you will notice Deltaspikes JSF module is in turn integrated with Deltaspike 
 
 Any `@Secured(PermissionAccessDecisionVoter.class)` will be managed by Visor. Other security hooks can still run in parallel with other voters configured.
 
-**How Does Visors security work?**
+**How Does Visor work?**
 This explanation will use a CRUD application with regular users and admin users as example.
 
 Each page you secure with Visor (how is defined above) will be mapped to a `Permission`. These permissions are the central security concept in Visor.
