@@ -9,7 +9,7 @@ import java.util.List;
  * @author: Karl Kildén
  * @since 1.0
  */
-public class PermissionFolder {
+public class PermissionFolder implements PermissionModel {
     private List<Permission> permissions;
     private String folderName;
 
@@ -24,5 +24,10 @@ public class PermissionFolder {
     public PermissionFolder(final List<Permission> permissions, String folderName) {
         this.permissions = permissions;
         this.folderName = folderName;
+    }
+
+    @Override
+    public String getId() {
+        return folderName;
     }
 }

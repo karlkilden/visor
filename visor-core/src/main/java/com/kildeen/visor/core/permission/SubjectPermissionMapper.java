@@ -23,7 +23,7 @@ package com.kildeen.visor.core.permission;
 
 import com.google.common.collect.ImmutableMap;
 import com.kildeen.visor.core.api.permission.Permission;
-import com.kildeen.visor.core.api.permission.PermissionHolder;
+import com.kildeen.visor.core.api.context.PermissionHolder;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;

@@ -1,9 +1,8 @@
 package com.kildeen.visor.test;
 
 import com.kildeen.visor.core.api.permission.Permission;
-import com.kildeen.visor.core.api.permission.PermissionHolder;
+import com.kildeen.visor.core.api.context.PermissionHolder;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 

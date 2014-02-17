@@ -21,6 +21,7 @@
 
 package com.kildeen.visor.core.api.permission;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,7 +32,7 @@ import java.util.Set;
  * @author: Karl Kildén
  * @since 1.0
  */
-public class Permission {
+public class Permission implements PermissionModel {
 
     private String masterPermission;
     private Set<Permission> children = new HashSet<>();
@@ -107,5 +108,16 @@ public class Permission {
         this.update = masterPermission.update;
         this.delete = masterPermission.delete;
         this.viewId = masterPermission.viewId;
+    }
+
+    @Override
+    public String getId() {
+        return masterPermission;
+    }
+
+    @Override
+    public Collection<PermissionModel> getAllChildren() {
+        Collection c = children;
+        return c;
     }
 }

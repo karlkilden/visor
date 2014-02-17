@@ -24,19 +24,11 @@ package com.kildeen.visor.core.permission;
 import com.kildeen.mock.provided.MockFacesContext;
 import com.kildeen.mock.provided.MockPermissionHolder;
 import com.kildeen.visor.core.api.context.PermissionContext;
-import com.kildeen.visor.core.api.permission.Permission;
-import com.kildeen.visor.core.api.permission.PermissionHolder;
 import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-
-import java.util.HashSet;
-import java.util.Set;
 
 import static org.junit.Assert.*;
 

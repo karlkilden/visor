@@ -19,7 +19,9 @@
  *
  */
 
-package com.kildeen.visor.core.api.permission;
+package com.kildeen.visor.core.api.context;
+
+import com.kildeen.visor.core.api.permission.Permission;
 
 import java.io.Serializable;
 import java.util.Set;
