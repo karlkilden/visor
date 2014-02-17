@@ -57,6 +57,7 @@ public class PermissionResolverImpl implements PermissionResolver {
 
     private static final Logger log = LoggerFactory.getLogger(PermissionResolverImpl.class);
     private List<Permission> permissions = new ArrayList<>();
+    // cleared again when mapping is completed
     private Map<Class<?>, Permission> mappedPermissions = new HashMap<>();
     private List<PermissionFolder> permissionFolders = new ArrayList<>();
 
@@ -64,9 +65,12 @@ public class PermissionResolverImpl implements PermissionResolver {
     public void init() {
         mapPermissions();
         mapPermissionFolders();
+        mappedPermissions = null;
     }
 
     private void mapPermissionFolders() {
+        log.info("ViewConfigDescriptors will now be mapped to permissionFolders");
+
         for (ConfigDescriptor<?> configDescriptor : viewConfigResolver.getConfigDescriptors()) {
             if (configDescriptor.getConfigClass().isInterface()) {
                 CallbackDescriptor callback = configDescriptor.getCallbackDescriptor(Secured.class);
