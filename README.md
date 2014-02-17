@@ -1,6 +1,6 @@
 #Visor
 
-A small JSF security framework based on Type Safe View configs from [Deltaspikes JSF Module][1]. To use visor simply use the definitions explained in deltaspikes documentation.
+A small JSF security framework based on Type Safe View configs from [Deltaspikes JSF Module][1]. To define permissions with Visor, simply use the definitions explained in deltaspikes documentation.
 
 As you will notice Deltaspikes JSF module is in turn integrated with Deltaspike Security and offers an integration point for third part security. This is where Visor hooks in.
 
