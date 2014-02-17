@@ -21,9 +21,12 @@
 
 package com.kildeen.visor.core.permission;
 
+import com.kildeen.visor.core.api.context.PermissionAccessDecisionVoter;
 import com.kildeen.visor.core.api.permission.PartPermission;
 import com.kildeen.visor.core.api.permission.Permission;
 import com.kildeen.visor.core.api.permission.PermissionConverter;
+import com.kildeen.visor.core.api.permission.PermissionResolver;
+import org.apache.deltaspike.core.api.config.view.metadata.CallbackDescriptor;
 import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigDescriptor;
 import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigResolver;
 import org.apache.deltaspike.security.api.authorization.Secured;
@@ -60,8 +63,14 @@ public class PermissionResolverImpl implements PermissionResolver {
     public void init() {
         log.info("ViewConfigDescriptors will now be mapped to Permissions");
         for (ViewConfigDescriptor viewConfigDescriptor : viewConfigResolver.getViewConfigDescriptors()) {
-            List<Secured> anno = viewConfigDescriptor.getMetaData(Secured.class);
-            if (viewConfigDescriptor.getCallbackDescriptor(Secured.class) != null || anno != null && anno.isEmpty()==false) {
+            CallbackDescriptor callback = viewConfigDescriptor.getCallbackDescriptor(Secured.class);
+            boolean isSecured = false;
+            if (callback != null && callback.getCallbackMethods() != null) {
+                if (callback.getCallbackMethods().containsKey(PermissionAccessDecisionVoter.class)) {
+                    isSecured = true;
+                }
+            }
+            if (isSecured) {
                 String stringPermission = permissionConverter.getPermission(viewConfigDescriptor.getConfigClass());
                 Permission permission = new Permission(stringPermission, viewConfigDescriptor.getViewId());
                 addChildren(viewConfigDescriptor, permission);

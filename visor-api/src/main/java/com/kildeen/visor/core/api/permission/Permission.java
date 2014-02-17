@@ -21,8 +21,6 @@
 
 package com.kildeen.visor.core.api.permission;
 
-import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigDescriptor;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,7 +33,7 @@ import java.util.Set;
  */
 public class Permission {
 
-    private String permission;
+    private String masterPermission;
     private Set<Permission> children = new HashSet<>();
     private boolean create;
     private boolean read;
@@ -43,8 +41,8 @@ public class Permission {
     private boolean delete;
     private String viewId;
 
-    public Permission(String permission, String viewId) {
-        this.permission = permission;
+    public Permission(String masterPermission, String viewId) {
+        this.masterPermission = masterPermission;
         this.viewId = viewId;
     }
 
@@ -85,8 +83,8 @@ public class Permission {
     }
 
 
-    public String getPermission() {
-        return permission;
+    public String getMasterPermission() {
+        return masterPermission;
     }
 
     public Set<Permission> getChildren() {
@@ -101,13 +99,13 @@ public class Permission {
         return viewId;
     }
 
-    public Permission (Permission permission) {
-        this.permission = permission.permission;
-        this.children = permission.children;
-        this.create = permission.create;
-        this.read = permission.read;
-        this.update = permission.update;
-        this.delete = permission.delete;
-        this.viewId = permission.viewId;
+    public Permission (Permission masterPermission) {
+        this.masterPermission = masterPermission.masterPermission;
+        this.children = masterPermission.children;
+        this.create = masterPermission.create;
+        this.read = masterPermission.read;
+        this.update = masterPermission.update;
+        this.delete = masterPermission.delete;
+        this.viewId = masterPermission.viewId;
     }
 }

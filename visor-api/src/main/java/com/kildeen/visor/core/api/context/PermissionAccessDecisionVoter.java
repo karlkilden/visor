@@ -12,7 +12,7 @@ import java.util.Set;
  * User: Karl Kildén
  * Date: 2014-02-17
  */
-public class DefaultAccessDecisionVoter implements AccessDecisionVoter {
+public class PermissionAccessDecisionVoter implements AccessDecisionVoter {
 
     @Inject
     private PermissionContext permissionContext;

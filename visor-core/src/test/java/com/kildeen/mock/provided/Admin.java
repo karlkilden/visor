@@ -21,7 +21,7 @@
 
 package com.kildeen.mock.provided;
 
-import com.kildeen.visor.core.context.DecisionVoter;
+import com.kildeen.visor.core.api.context.PermissionAccessDecisionVoter;
 import org.apache.deltaspike.core.api.config.view.ViewConfig;
 import org.apache.deltaspike.jsf.api.config.view.View;
 import org.apache.deltaspike.security.api.authorization.Secured;
@@ -33,6 +33,6 @@ import org.apache.deltaspike.security.api.authorization.Secured;
  * @author: Karl Kildén
  * @since 1.0
  */
-@Secured(value = DecisionVoter.class)
+@Secured(PermissionAccessDecisionVoter.class)
 public class Admin implements ViewConfig {
 }

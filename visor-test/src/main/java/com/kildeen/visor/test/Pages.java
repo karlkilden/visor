@@ -1,6 +1,6 @@
 package com.kildeen.visor.test;
 
-import com.kildeen.visor.core.api.context.DefaultAccessDecisionVoter;
+import com.kildeen.visor.core.api.context.PermissionAccessDecisionVoter;
 import org.apache.deltaspike.core.api.config.view.ViewConfig;
 import org.apache.deltaspike.security.api.authorization.Secured;
 
@@ -9,7 +9,7 @@ import org.apache.deltaspike.security.api.authorization.Secured;
  * User: Karl Kildén
  * Date: 2014-02-17
  */
-@Secured(value= DefaultAccessDecisionVoter.class)
+@Secured(PermissionAccessDecisionVoter.class)
 public interface Pages extends ViewConfig, SecuredPages {
     public class Secured {}
 }

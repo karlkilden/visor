@@ -60,7 +60,7 @@ public class ConverterTest {
 
         assertEquals(p.hasCreate(), p2.hasCreate());
         assertEquals(p.hasRead(), p2.hasRead());
-        assertEquals(p.getChildren().iterator().next().getPermission(), p2.getChildren().iterator().next().getPermission());
+        assertEquals(p.getChildren().iterator().next().getMasterPermission(), p2.getChildren().iterator().next().getMasterPermission());
 
 
 

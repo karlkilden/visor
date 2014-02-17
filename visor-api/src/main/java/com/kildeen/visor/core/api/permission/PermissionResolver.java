@@ -21,6 +21,8 @@
 
 package com.kildeen.visor.core.api.permission;
 
+import java.util.List;
+
 /**
  * <p>File created: 2014-02-16 01:50</p>
  *
@@ -30,5 +32,6 @@ package com.kildeen.visor.core.api.permission;
  */
 public interface PermissionResolver {
 
-    public void getPermission();
+    public List<Permission> getPermissions();
+    public void boot();
 }

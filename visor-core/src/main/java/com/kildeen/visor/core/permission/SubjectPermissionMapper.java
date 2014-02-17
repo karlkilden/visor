@@ -59,7 +59,7 @@ public class SubjectPermissionMapper implements Serializable {
     }
 
     private void map(final ImmutableMap.Builder<String, Permission> builder, Permission permission) {
-        builder.put(permission.getPermission(), permission);
+        builder.put(permission.getMasterPermission(), permission);
         for (Permission child : permission.getChildren()) {
             map(builder, child);
         }
