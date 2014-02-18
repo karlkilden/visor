@@ -12,4 +12,5 @@ import java.util.Collection;
 public interface PermissionModel {
     public String getId();
     public Collection<PermissionModel> getAllChildren();
+    public boolean hasChildren();
 }

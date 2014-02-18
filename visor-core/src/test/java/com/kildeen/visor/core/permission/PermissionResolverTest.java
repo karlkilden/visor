@@ -66,6 +66,11 @@ public class PermissionResolverTest {
     @Test
     public void permissionFolders_should_return_all_folders() throws Exception {
         assertNotNull(permissionResolver.getPermissionFolders());
-        assertEquals("kildeen.mock.provided.Pages.Secured", permissionResolver.getPermissionFolders().get(0).getPermissions().get(0).getMasterPermission());
+        assertEquals("kildeen.mock.provided.Pages.Secured", permissionResolver.getPermissionFolders().get(0).getPermissions().get(0).getId());
+    }
+
+    @Test
+    public void nested_security_should_be_mapped() throws Exception {
+
     }
 }

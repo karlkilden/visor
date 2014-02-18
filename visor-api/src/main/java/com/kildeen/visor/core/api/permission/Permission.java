@@ -117,7 +117,12 @@ public class Permission implements PermissionModel {
 
     @Override
     public Collection<PermissionModel> getAllChildren() {
-        Collection c = children;
+        Collection c =  children;
         return c;
+    }
+
+    @Override
+    public boolean hasChildren() {
+        return !children.isEmpty();
     }
 }

@@ -15,4 +15,9 @@ public interface Pages extends ViewConfig, SecuredPages {
     public class Secured implements Pages {
         public class Part1 implements PartPermission  {}
     }
+    public class NotSecure implements ViewConfig {}
+
+    public interface NestedSecured extends Pages {
+        public class NestedSecuredChild implements NestedSecured {}
+    }
 }
