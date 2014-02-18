@@ -16,7 +16,7 @@ import javax.inject.Inject;
  * @since 1.0
  */
 @RunWith(CdiTestRunner.class)
-public class PermissionFolderTest {
+public class PermissionGroupTest {
 
     @Inject
     private PermissionResolver resolver;
@@ -24,6 +24,6 @@ public class PermissionFolderTest {
     @Test
     public void permissionFolder_should_have_correct_name() throws Exception {
 
-        Assert.assertEquals("kildeen.mock.provided.Pages", resolver.getPermissionFolders().get(0).getFolderName());
+        Assert.assertEquals("kildeen.mock.provided.Pages", resolver.getPermissionGroups().get(0).getId());
     }
 }

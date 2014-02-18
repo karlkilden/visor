@@ -22,6 +22,7 @@
 package com.kildeen.visor.core.api.context;
 
 import com.kildeen.visor.core.api.permission.Permission;
+import com.kildeen.visor.core.api.permission.PermissionModel;
 
 import java.io.Serializable;
 import java.util.Set;
@@ -35,6 +36,6 @@ import java.util.Set;
  */
 public interface PermissionHolder extends Serializable {
 
-    public Set<Permission> getPermissions();
+    public Set<PermissionModel> getPermissions();
 
 }

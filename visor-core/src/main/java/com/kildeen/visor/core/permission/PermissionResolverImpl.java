@@ -23,6 +23,7 @@ package com.kildeen.visor.core.permission;
 
 import com.kildeen.visor.core.api.context.PermissionAccessDecisionVoter;
 import com.kildeen.visor.core.api.permission.*;
+import org.apache.commons.collections4.set.ListOrderedSet;
 import org.apache.deltaspike.core.api.config.view.metadata.CallbackDescriptor;
 import org.apache.deltaspike.core.api.config.view.metadata.ConfigDescriptor;
 import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigDescriptor;
@@ -54,7 +55,7 @@ public class PermissionResolverImpl implements PermissionResolver {
 
     private static final Logger log = LoggerFactory.getLogger(PermissionResolverImpl.class);
     private List<Permission> permissions = new ArrayList<>();
-    private List<PermissionFolder> permissionFolders = new ArrayList<>();
+    private List<PermissionGroup> permissionGroups = new ArrayList<>();
 
     // cleared again when mapping is completed
     private Map<Class<?>, Permission> securedPermissions = new HashMap<>();
@@ -64,39 +65,52 @@ public class PermissionResolverImpl implements PermissionResolver {
     public void init() {
         mapPermissions();
         mapPermissionFolders();
-        securedPermissions = null;
-        securedFolders = null;
+        cleanup();
     }
 
+
     private void mapPermissionFolders() {
-        log.info("ViewConfigDescriptors will now be mapped to permissionFolders");
+        log.info("ViewConfigDescriptors will now be mapped to permissionGroups");
         //When we find folders in the hierarchy we have no way of knowing if they are
         // secured and we need the full picture beforehand
         findSecuredFolders();
         for (ConfigDescriptor<?> configDescriptor : viewConfigResolver.getConfigDescriptors()) {
             Class<?> clazz = configDescriptor.getConfigClass();
-            PermissionFolder folder = new PermissionFolder(new ArrayList<PermissionModel>(), "root", "");
-            mapStructure(configDescriptor, clazz, folder);
+            if (isUnmapped(clazz)) {
+                PermissionGroup permissionGroup =
+                        mapStructure(configDescriptor, clazz, null);
+                permissionGroups.add(permissionGroup);
+
+            }
         }
     }
 
-    private void mapStructure(ConfigDescriptor<?> configDescriptor, Class<?> clazz, PermissionFolder folder) {
+    private boolean isUnmapped(final Class<?> clazz) {
+
+        return true;
+    }
+
+    private PermissionGroup mapStructure(ConfigDescriptor<?> configDescriptor, Class<?> clazz, PermissionGroup permissionGroupParent) {
         if (isFolder(clazz) && folderIsSecured(configDescriptor)) {
-            List<PermissionModel> folderPermissions = new ArrayList<>();
+            Set<PermissionModel> permissions = new ListOrderedSet<>();
             for (Class<?> child : clazz.getDeclaredClasses()) {
                 if (securedPermissions.containsKey(child)) {
-                    folderPermissions.add(securedPermissions.get(child));
+                    permissions.add(securedPermissions.get(child));
                 } else if (securedFolders.contains(child)) {
-                    mapStructure(configDescriptor, clazz, folder);
+                    mapStructure(configDescriptor, child, permissionGroupParent);
                 }
 
             }
-            PermissionFolder permissionFolder = new PermissionFolder(folderPermissions,
-                    permissionConverter.getPermissionFolder(clazz), configDescriptor.getPath());
-            permissionFolders.add(permissionFolder);
-            folder.getAllChildren().add(permissionFolder);
+            PermissionGroup newGroup = new PermissionGroup(permissionConverter.getPermissionFolder(clazz), permissions, configDescriptor);
+            if (permissionGroupParent != null) {
+                permissionGroupParent.getChildren().add(newGroup);
+                return permissionGroupParent;
+            }
+            return newGroup;
 
         }
+        //No children found to add
+        return null;
     }
 
     private boolean folderIsSecured(ConfigDescriptor<?> configDescriptor) {
@@ -122,12 +136,12 @@ public class PermissionResolverImpl implements PermissionResolver {
 
     private void mapPermissions() {
         log.info("ViewConfigDescriptors will now be mapped to Permissions");
-        for (ViewConfigDescriptor viewConfigDescriptor : viewConfigResolver.getViewConfigDescriptors()) {
+        for (ConfigDescriptor viewConfigDescriptor : viewConfigResolver.getConfigDescriptors()) {
             boolean isSecured = folderIsSecured(viewConfigDescriptor);
             if (isSecured) {
                 String stringPermission = permissionConverter.getPermission(viewConfigDescriptor.getConfigClass());
-                Permission permission = new Permission(stringPermission, viewConfigDescriptor.getViewId());
-                addChildren(viewConfigDescriptor, permission);
+                Set<PermissionModel> children = getChildren(viewConfigDescriptor);
+                Permission permission = new Permission(stringPermission, children, viewConfigDescriptor);
                 securedPermissions.put(viewConfigDescriptor.getConfigClass(), permission);
                 permissions.add(permission);
             }
@@ -143,14 +157,16 @@ public class PermissionResolverImpl implements PermissionResolver {
         return false;
     }
 
-    private void addChildren(final ViewConfigDescriptor viewConfigDescriptor, final Permission permission) {
+    private Set<PermissionModel> getChildren(final ConfigDescriptor viewConfigDescriptor) {
+        final Set<PermissionModel> children = new ListOrderedSet<>();
         for (Class<?> partPermission : viewConfigDescriptor.getConfigClass().getDeclaredClasses()) {
             if (partPermission.isAssignableFrom(PartPermission.class)) {
                 String p = getValidatedPartPermission((Class<? extends PartPermission>) partPermission);
-                Permission child = new Permission(p, viewConfigDescriptor.getViewId());
-                permission.getChildren().add(child);
+                Permission child = new Permission(p, null, viewConfigDescriptor);
+                children.add(child);
             }
         }
+        return children;
     }
 
     private String getValidatedPartPermission(final Class<? extends PartPermission> partPermission) {
@@ -165,6 +181,12 @@ public class PermissionResolverImpl implements PermissionResolver {
     }
 
 
+    private void cleanup() {
+        securedPermissions = null;
+        securedFolders = null;
+    }
+
+
     @Override
     public List<Permission> getPermissions() {
         List<Permission> clonedPermissions = new ArrayList<>(this.permissions.size());
@@ -176,8 +198,8 @@ public class PermissionResolverImpl implements PermissionResolver {
     }
 
     @Override
-    public List<PermissionFolder> getPermissionFolders() {
-        return permissionFolders;
+    public List<PermissionGroup> getPermissionGroups() {
+        return permissionGroups;
     }
 
     @Override

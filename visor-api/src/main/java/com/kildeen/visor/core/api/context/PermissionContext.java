@@ -43,11 +43,6 @@ public interface PermissionContext extends Serializable {
      */
     public boolean isSecured();
 
-    /**
-     * @return true if the user has full CRUD rights.
-     */
-    public boolean isPrivileged();
-
     public boolean isAllowed();
 
     public boolean hasCreate();

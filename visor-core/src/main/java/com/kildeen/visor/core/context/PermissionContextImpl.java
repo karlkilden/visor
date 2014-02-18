@@ -24,6 +24,7 @@ package com.kildeen.visor.core.context;
 import com.kildeen.visor.core.api.context.PermissionContext;
 import com.kildeen.visor.core.api.permission.Permission;
 import com.kildeen.visor.core.api.permission.PermissionConverter;
+import com.kildeen.visor.core.api.permission.PermissionModel;
 import com.kildeen.visor.core.permission.SubjectPermissionMapper;
 import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigDescriptor;
 import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigResolver;
@@ -36,7 +37,6 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.Serializable;
 
 /**
  * This is the central implementation for PermissionContext. It uses {@link javax.faces.bean.ViewScoped} and as
@@ -56,7 +56,7 @@ import java.io.Serializable;
 public class PermissionContextImpl implements PermissionContext {
     // This is only used when security information is requested but the current view is unsecured.
     private static final String DEFAULT="DEFAULT";
-    private static final Permission NOT_SECURED_DEFAULT = new Permission(DEFAULT, DEFAULT);
+    private static final Permission NOT_SECURED_DEFAULT = new Permission(DEFAULT, null,null);
 
     static {
         NOT_SECURED_DEFAULT.setCreate(true);
@@ -101,18 +101,13 @@ public class PermissionContextImpl implements PermissionContext {
     }
 
     private boolean hasPermission() {
-        permission = subjectPermissionMapper.getPermission(permissionConverter.getPermission(viewConfigDescriptor.getConfigClass()));
+        permission = (Permission) subjectPermissionMapper.getPermission(permissionConverter.getPermission(viewConfigDescriptor.getConfigClass()));
         return permission != SubjectPermissionMapper.NOT_FOUND;
     }
 
     @Override
     public boolean isSecured() {
         return secured;
-    }
-
-    @Override
-    public boolean isPrivileged() {
-        return permission.isPrivileged();
     }
 
     @Override
@@ -141,24 +136,25 @@ public class PermissionContextImpl implements PermissionContext {
     }
 
     @Override
-    public boolean hasCreate(final String partPermission) {
-        return subjectPermissionMapper.getPermission(partPermission).hasCreate();
+    public boolean hasCreate(final String id) {
+        Permission p = (Permission) subjectPermissionMapper.getPermission(id);
+        return p.hasCreate();
     }
 
     @Override
     public boolean hasRead(final String partPermission) {
-        return subjectPermissionMapper.getPermission(partPermission).hasRead();
+        return false;
     }
 
     @Override
-    public boolean hasUpdate(final String partPermission) {
-        return subjectPermissionMapper.getPermission(partPermission).hasUpdate();
-    }
+    public boolean hasUpdate(final String id) {
+        Permission p = (Permission) subjectPermissionMapper.getPermission(id);
+        return p.hasUpdate();    }
 
     @Override
-    public boolean hasDelete(final String partPermission) {
-        return subjectPermissionMapper.getPermission(partPermission).hasDelete();
-    }
+    public boolean hasDelete(final String id) {
+        Permission p = (Permission) subjectPermissionMapper.getPermission(id);
+        return p.hasDelete();    }
 
     @Override
     public boolean isAllowed() {

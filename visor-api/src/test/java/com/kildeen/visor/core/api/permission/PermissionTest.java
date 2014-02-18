@@ -13,10 +13,10 @@ public class PermissionTest {
 
     @Test
     public void permission_should_return_children_as_model() throws Exception {
-        Permission permission = new Permission("", "");
-        Permission child = new Permission("2", "2");
+        Permission permission = new Permission("", null,null);
+        Permission child = new Permission("2", null,null);
         permission.getChildren().add(child);
 
-        Assert.assertEquals(child, permission.getAllChildren().iterator().next());
+        Assert.assertEquals(child, permission.getChildren().iterator().next());
     }
 }

@@ -21,8 +21,9 @@
 
 package com.kildeen.visor.core.api.permission;
 
-import java.util.Collection;
-import java.util.HashSet;
+import org.apache.deltaspike.core.api.config.view.metadata.ConfigDescriptor;
+import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigDescriptor;
+
 import java.util.Set;
 
 /**
@@ -32,19 +33,24 @@ import java.util.Set;
  * @author: Karl Kildén
  * @since 1.0
  */
-public class Permission implements PermissionModel {
-
-    private String masterPermission;
-    private Set<Permission> children = new HashSet<>();
+public class Permission extends AbstractPermissionModel {
     private boolean create;
     private boolean read;
     private boolean update;
     private boolean delete;
-    private String viewId;
+    private boolean isPartPermission;
 
-    public Permission(String masterPermission, String viewId) {
-        this.masterPermission = masterPermission;
-        this.viewId = viewId;
+    public Permission(final String id, final Set<PermissionModel> children, final ConfigDescriptor viewConfigDescriptor) {
+        super(id, children, viewConfigDescriptor);
+    }
+
+    public Permission(Permission permission) {
+        super(permission.id, permission.children, permission.configDescriptor);
+        this.create = permission.create;
+        this.read = permission.create;
+        this.update = permission.create;
+        this.delete = permission.create;
+        this.isPartPermission = permission.isPartPermission();
     }
 
     public boolean hasCreate() {
@@ -63,7 +69,7 @@ public class Permission implements PermissionModel {
         this.read = read;
     }
 
-    public boolean gasUpdate() {
+    public boolean hasUpdate() {
         return update;
     }
 
@@ -77,52 +83,5 @@ public class Permission implements PermissionModel {
 
     public void setDelete(final boolean delete) {
         this.delete = delete;
-    }
-
-    public boolean isPrivileged() {
-        return create && read && update && delete;
-    }
-
-
-    public String getMasterPermission() {
-        return masterPermission;
-    }
-
-    public Set<Permission> getChildren() {
-        return children;
-    }
-
-    public boolean hasUpdate() {
-        return update;
-    }
-
-    public String getViewId() {
-        return viewId;
-    }
-
-    public Permission (Permission masterPermission) {
-        this.masterPermission = masterPermission.masterPermission;
-        this.children = masterPermission.children;
-        this.create = masterPermission.create;
-        this.read = masterPermission.read;
-        this.update = masterPermission.update;
-        this.delete = masterPermission.delete;
-        this.viewId = masterPermission.viewId;
-    }
-
-    @Override
-    public String getId() {
-        return masterPermission;
-    }
-
-    @Override
-    public Collection<PermissionModel> getAllChildren() {
-        Collection c =  children;
-        return c;
-    }
-
-    @Override
-    public boolean hasChildren() {
-        return !children.isEmpty();
     }
 }

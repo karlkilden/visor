@@ -4,13 +4,11 @@ import com.kildeen.mock.provided.MockFacesContext;
 import com.kildeen.visor.core.api.context.PermissionContext;
 import com.kildeen.visor.core.api.permission.Permission;
 import com.kildeen.visor.core.api.permission.PermissionResolver;
-import junit.framework.Assert;
 import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.util.List;
 
@@ -43,11 +41,11 @@ public class PermissionResolverTest {
         boolean nestedExists = false;
         boolean adminExists = false;
         for (Permission p : permissions) {
-            if (p.getViewId().equals("/pages/secured.xhtml")) {
+            if (p.getId().equals("/pages/secured.xhtml")) {
                 nestedExists = true;
             }
 
-            if (p.getViewId().equals("/admin.xhtml")) {
+            if (p.getId().equals("/admin.xhtml")) {
                 adminExists = true;
             }
         }
@@ -65,8 +63,8 @@ public class PermissionResolverTest {
 
     @Test
     public void permissionFolders_should_return_all_folders() throws Exception {
-        assertNotNull(permissionResolver.getPermissionFolders());
-        assertEquals("kildeen.mock.provided.Pages.Secured", permissionResolver.getPermissionFolders().get(0).getPermissions().get(0).getId());
+        assertNotNull(permissionResolver.getPermissionGroups());
+        assertEquals("kildeen.mock.provided.Pages.Secured", permissionResolver.getPermissionGroups().get(0).getChildren().iterator().next());
     }
 
     @Test

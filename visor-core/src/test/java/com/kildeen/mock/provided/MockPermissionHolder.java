@@ -23,6 +23,7 @@ package com.kildeen.mock.provided;
 
 import com.kildeen.visor.core.api.permission.Permission;
 import com.kildeen.visor.core.api.context.PermissionHolder;
+import com.kildeen.visor.core.api.permission.PermissionModel;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -38,23 +39,23 @@ import java.util.Set;
  */
 @ApplicationScoped
 public class MockPermissionHolder implements PermissionHolder {
-    private Set<Permission> permissions;
+    private Set<PermissionModel> permissions;
 
     @Override
-    public Set<Permission> getPermissions() {
+    public Set<PermissionModel> getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(final Set<Permission> permissions) {
+    public void setPermissions(final Set<PermissionModel> permissions) {
         this.permissions = permissions;
     }
 
     @PostConstruct
     private void init() {
-        Permission p = new Permission("","");
+        Permission p = new Permission("",null,null);
         permissions = new HashSet<>();
         permissions.add(p);
-        Permission p2 = new Permission("testTrue", "");
+        Permission p2 = new Permission("testTrue", null,null);
         permissions.add(p2);
     }
 }
