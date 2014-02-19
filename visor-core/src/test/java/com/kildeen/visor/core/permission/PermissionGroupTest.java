@@ -24,6 +24,6 @@ public class PermissionGroupTest {
     @Test
     public void permissionFolder_should_have_correct_name() throws Exception {
 
-        Assert.assertEquals("kildeen.mock.provided.Pages", resolver.getPermissionGroups().get(0).getId());
+        Assert.assertEquals("kildeen.mock.provided.Pages", resolver.getRootNodes().get(0).getId());
     }
 }

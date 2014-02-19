@@ -33,6 +33,6 @@ import java.util.List;
 public interface PermissionResolver {
 
     public List<Permission> getPermissions();
-    public List<PermissionGroup> getPermissionGroups();
+    public List<PermissionModel> getRootNodes();
     public void boot();
 }

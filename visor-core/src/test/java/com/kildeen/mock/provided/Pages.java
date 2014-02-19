@@ -12,6 +12,7 @@ import org.apache.deltaspike.security.api.authorization.Secured;
  */
 @Secured(value= PermissionAccessDecisionVoter.class)
 public interface Pages extends ViewConfig, SecuredPages {
+
     public class Secured implements Pages {
         public class Part1 implements PartPermission  {}
     }

@@ -27,6 +27,7 @@ import com.kildeen.visor.core.api.permission.PermissionModel;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -52,10 +53,10 @@ public class MockPermissionHolder implements PermissionHolder {
 
     @PostConstruct
     private void init() {
-        Permission p = new Permission("",null,null);
+        Permission p = new Permission("", Collections.<PermissionModel>emptySet(),null);
         permissions = new HashSet<>();
         permissions.add(p);
-        Permission p2 = new Permission("testTrue", null,null);
+        Permission p2 = new Permission("testTrue", Collections.<PermissionModel>emptySet(),null);
         permissions.add(p2);
     }
 }

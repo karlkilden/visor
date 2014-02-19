@@ -41,11 +41,11 @@ public class PermissionResolverTest {
         boolean nestedExists = false;
         boolean adminExists = false;
         for (Permission p : permissions) {
-            if (p.getId().equals("/pages/secured.xhtml")) {
+            if (p.getPath().equals("/pages/secured.xhtml")) {
                 nestedExists = true;
             }
 
-            if (p.getId().equals("/admin.xhtml")) {
+            if (p.getPath().equals("/admin.xhtml")) {
                 adminExists = true;
             }
         }
@@ -62,9 +62,7 @@ public class PermissionResolverTest {
     }
 
     @Test
-    public void permissionFolders_should_return_all_folders() throws Exception {
-        assertNotNull(permissionResolver.getPermissionGroups());
-        assertEquals("kildeen.mock.provided.Pages.Secured", permissionResolver.getPermissionGroups().get(0).getChildren().iterator().next());
+    public void root_nodes_should_be_top() throws Exception {
     }
 
     @Test

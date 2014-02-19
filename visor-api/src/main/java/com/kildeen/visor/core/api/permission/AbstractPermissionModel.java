@@ -15,7 +15,6 @@ import java.util.Set;
 public abstract class AbstractPermissionModel implements PermissionModel {
     protected transient ConfigDescriptor configDescriptor;
     protected String id;
-    protected String path;
     protected Set<PermissionModel> children = new ListOrderedSet<>();
     protected boolean isParent;
     protected boolean isPartPermission;

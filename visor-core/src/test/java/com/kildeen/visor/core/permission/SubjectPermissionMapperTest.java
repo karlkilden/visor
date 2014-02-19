@@ -29,6 +29,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -50,10 +51,10 @@ public class SubjectPermissionMapperTest {
     SubjectPermissionMapper subjectPermissionMapper;
     @Test
     public void holder_Should_be_mapped_by_string_representation() {
-        PermissionModel p = new Permission("tip.tap", null,null);
+        PermissionModel p = new Permission("tip.tap", Collections.<PermissionModel>emptySet(),null);
         Set<PermissionModel> permissionSet = new HashSet<>();
         permissionSet.add(p);
-        Permission p2 = new Permission("testTrue", null,null);
+        Permission p2 = new Permission("testTrue", Collections.<PermissionModel>emptySet(),null);
         permissionSet.add(p2);
         permissionHolder.setPermissions(permissionSet);
 
