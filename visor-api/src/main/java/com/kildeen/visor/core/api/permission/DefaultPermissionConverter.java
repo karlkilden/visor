@@ -66,7 +66,7 @@ public class DefaultPermissionConverter implements PermissionConverter {
      * Here for symmetry only
      */
     @Override
-    public String getPermissionGroupId(final Class<?> permissionFolderClass) {
+    public String getPermissionModelId(final Class<?> permissionFolderClass) {
         return getPermissionId(permissionFolderClass);
     }
 
@@ -78,7 +78,7 @@ public class DefaultPermissionConverter implements PermissionConverter {
 
     @Override
     public Permission deserialize(final String deserialized) {
-        Gson gson = new GsonBuilder().registerTypeAdapter(PermissionModel.class, new MoneyInstanceCreator(deserialized)).create();
+        Gson gson = new GsonBuilder().create();
         return gson.fromJson(deserialized, Permission.class);
 
     }
@@ -129,31 +129,4 @@ public class DefaultPermissionConverter implements PermissionConverter {
         return result;
     }
 
-    private class MoneyInstanceCreator implements InstanceCreator<PermissionModel> {
-        String id;
-
-        public MoneyInstanceCreator(String deserialized) {
-            id = deserialized;
-        }
-
-        public PermissionModel createInstance(Type type) {
-            // t stands for type. 0 means Permission and PermissionGroup == 1.
-            if (id.startsWith("{\"t\":0"))
-                return new Permission("apa", null, null);
-            else if (id.startsWith("{\"t\":1"))
-                return new PermissionGroup("apa", null, null);
-            else
-                throw new RuntimeException("illegal type");
-        }
-
-        public class ObjectDeserializer implements JsonDeserializer<PermissionModel> {
-
-            @Override
-            public PermissionModel deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
-                String value = element.getAsString();
-                return null;
-            }
-
-        }
-    }
 }

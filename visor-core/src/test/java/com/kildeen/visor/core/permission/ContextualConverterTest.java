@@ -1,10 +1,7 @@
 package com.kildeen.visor.core.permission;
 
 import com.kildeen.mock.provided.MockPermissionHolder;
-import com.kildeen.visor.core.api.permission.Permission;
-import com.kildeen.visor.core.api.permission.PermissionConverter;
-import com.kildeen.visor.core.api.permission.PermissionModel;
-import com.kildeen.visor.core.api.permission.TruncatedPermissionModel;
+import com.kildeen.visor.core.api.permission.*;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
 import org.junit.Test;
@@ -30,6 +27,10 @@ public class ContextualConverterTest {
     @Inject
     MockPermissionHolder permissionHolder;
 
+    @Inject
+    TruncatedPermissionBuilder builder;
+
+
     @Test
     public void truncate_should_create_one_to_one() throws Exception {
         Permission p = new Permission("kildeen.mock.provided.Pages.NestedSecured.NestedSecuredChild", new ListOrderedSet<PermissionModel>(),null);
@@ -43,7 +44,7 @@ public class ContextualConverterTest {
 
         List<PermissionModel> list = new ArrayList<>();
         list.add(p);
-        TruncatedPermissionModel truncated = new TruncatedPermissionModel(list);
+        TruncatedPermissionModel truncated =  builder.map(list);
         assertEquals(2, truncated.getTruncatedPermissionModel().size());
         List<PermissionModel> expanded = permissionConverter.expand(truncated.getTruncatedPermissionModel());
          assertTrue(expanded.contains(p));

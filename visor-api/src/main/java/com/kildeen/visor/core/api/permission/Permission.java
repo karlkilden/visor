@@ -21,6 +21,7 @@
 
 package com.kildeen.visor.core.api.permission;
 
+import org.apache.commons.collections4.set.ListOrderedSet;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.deltaspike.core.api.config.view.metadata.ConfigDescriptor;
 import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigDescriptor;
@@ -34,15 +35,21 @@ import java.util.Set;
  * @author: Karl Kildén
  * @since 1.0
  */
-public class Permission extends AbstractPermissionModel {
+public class Permission implements PermissionModel {
     private int t = 0;
+    protected transient ConfigDescriptor configDescriptor;
+    protected String id;
+    protected Set<Permission> children = new ListOrderedSet<>();
     private boolean create;
     private boolean read;
     private boolean update;
     private boolean delete;
 
-    public Permission(final String id, final Set<PermissionModel> children, final ConfigDescriptor viewConfigDescriptor) {
-        super(id, children, viewConfigDescriptor);
+    public Permission(final String id, final Set<PermissionModel> children, final ConfigDescriptor configDescriptor) {
+        //We want no trouble with Json so we cheat here.
+        this.children = (Set) children;
+        this.id = id;
+        this.configDescriptor = configDescriptor;
     }
 
     public Permission() {
@@ -55,47 +62,88 @@ public class Permission extends AbstractPermissionModel {
     }
 
     public Permission(Permission permission) {
-        super(permission.id, permission.children, permission.configDescriptor);
+        this.children = (Set) permission.children;
+        this.id = permission.id;
+        this.configDescriptor = permission.configDescriptor;
         this.create = permission.create;
         this.read = permission.create;
         this.update = permission.create;
         this.delete = permission.create;
     }
 
+    @Override
     public boolean hasCreate() {
         return create;
     }
 
+    @Override
     public void setCreate(final boolean create) {
         this.create = create;
     }
 
+    @Override
     public boolean hasRead() {
         return read;
     }
 
+    @Override
     public void setRead(final boolean read) {
         this.read = read;
     }
 
+    @Override
     public boolean hasUpdate() {
         return update;
     }
 
+    @Override
     public void setUpdate(final boolean update) {
         this.update = update;
     }
 
+    @Override
     public boolean hasDelete() {
         return delete;
     }
 
+    @Override
     public void setDelete(final boolean delete) {
         this.delete = delete;
     }
 
+    @Override
     public boolean isPrivileged() {
-            return create && read && update && delete;
+        return create && read && update && delete;
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public boolean isCreate() {
+        return create;
+    }
+
+    @Override
+    public boolean isRead() {
+        return read;
+    }
+
+    @Override
+    public boolean isUpdate() {
+        return update;
+    }
+
+    @Override
+    public boolean isDelete() {
+        return delete;
+    }
+
+    @Override
+    public String getPath() {
+        return configDescriptor.getPath();
     }
 
     @Override
@@ -114,10 +162,16 @@ public class Permission extends AbstractPermissionModel {
         return false;
     }
 
+    @Override
     public void privilege() {
         create = true;
         read = true;
         update = true;
         delete = true;
+    }
+
+    @Override
+    public Set<PermissionModel> getChildren() {
+        return (Set)children;
     }
 }

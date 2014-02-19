@@ -75,7 +75,7 @@ public class PermissionResolverTest {
     @Test
     public void nested_security_should_be_to_a_nested_group_hierarchy() throws Exception {
         PermissionModel model = permissionResolver.getPermissionModel("kildeen.mock.provided.Pages");
-        assertEquals(PermissionGroup.class, model.getClass());
+        assertEquals(Permission.class, model.getClass());
         assertTrue(model.isParent());
         PermissionModel expectedChild = permissionResolver.getPermissionModel("kildeen.mock.provided.Pages.Secured");
         assertTrue(model.getChildren().contains(expectedChild));
@@ -84,22 +84,13 @@ public class PermissionResolverTest {
         assertTrue(expectedChild.getChildren().contains(expectedGrandChild));
     }
 
-    @Test
-    public void all_groups_must_have_children() {
-        for (PermissionModel model : permissionResolver.getPermissionModels()) {
-            if (model instanceof PermissionGroup) {
-                if (model.getChildren().isEmpty()) {
-                    fail("Found a Group with no children. It is illegal, it should have been a Permission not a PermissionGroup");
-                }
-            }
-        }
-    }
+
 
     @Test
     public void all_representations_must_be_equal() {
         List<String> ids = new ArrayList<>();
         for (ConfigDescriptor configDescriptor : configResolver.getConfigDescriptors()) {
-            //We know that getPermissionId and getPermissionGroup is the same
+            //We know that getPermissionId and getPermissionModel is the same
             PermissionMappingContext context = new PermissionMappingContext(configResolver.getConfigDescriptors());
             if (context.isSecured(configDescriptor)) {
                 ids.add(permissionConverter.getPermissionId(configDescriptor.getConfigClass()));

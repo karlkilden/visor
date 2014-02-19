@@ -10,15 +10,47 @@ import java.util.Set;
  * @since 1.0
  */
 public interface PermissionModel {
-    String getId();
 
-    String getPath();
-
-    Set<PermissionModel> getChildren();
 
     boolean isParent();
 
-    public Permission asPermission();
-    public
+    boolean hasCreate();
 
+    void setCreate(boolean create);
+
+    boolean hasRead();
+
+    void setRead(boolean read);
+
+    boolean hasUpdate();
+
+    void setUpdate(boolean update);
+
+    boolean hasDelete();
+
+    void setDelete(boolean delete);
+
+    boolean isPrivileged();
+
+    @Override
+    int hashCode();
+
+    @Override
+    boolean equals(Object permissionModel);
+
+    public Set<PermissionModel> getChildren();
+
+    void privilege();
+
+    String getId();
+
+    boolean isCreate();
+
+    boolean isRead();
+
+    boolean isUpdate();
+
+    boolean isDelete();
+
+    String getPath();
 }

@@ -1,6 +1,5 @@
 package com.kildeen.visor.core.api.permission;
 
-import org.omg.CORBA.Request;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
@@ -40,7 +39,7 @@ public class TruncatedPermissionBuilder implements Serializable {
                     }
                 }
             } else {
-                if (useShortHand((PermissionGroup)model))  {
+                if (useShortHand((PermissionModel)model))  {
                     truncatedPermissionModel.add(model.getId());
                 }
 
@@ -52,8 +51,8 @@ public class TruncatedPermissionBuilder implements Serializable {
     }
 
 
-    private boolean useShortHand(PermissionGroup permission) {
-        PermissionGroup toMatch = (PermissionGroup) resolver.getPermissionModel(permission.getId());
+    private boolean useShortHand(PermissionModel permission) {
+        PermissionModel toMatch = (PermissionModel) resolver.getPermissionModel(permission.getId());
         if (permission.getChildren().size() == toMatch.getChildren().size()) {
             boolean shorthand = false;
             for (PermissionModel child : permission.getChildren()) {
@@ -63,7 +62,7 @@ public class TruncatedPermissionBuilder implements Serializable {
                         return false;
                     }
                 } else {
-                    shorthand = useShortHand((PermissionGroup)child);
+                    shorthand = useShortHand((PermissionModel)child);
                     if (shorthand == false)   {
                         return false;
                     }

@@ -95,6 +95,7 @@ public class PermissionResolverImpl implements PermissionResolver {
               p.privilege();
 
         }
+        return null;
     }
 
     private void createStructure() {
@@ -110,7 +111,7 @@ public class PermissionResolverImpl implements PermissionResolver {
      * This method will create the structure recursively. Whenever it finds another subfolder that will get created
      * first. Only when a node contains nothing but Permissions will a group get created.
      */
-    private PermissionModel mapToStructure(ConfigDescriptor<?> configDescriptor, Class<?> childClass, PermissionGroup permissionGroupParent) {
+    private PermissionModel mapToStructure(ConfigDescriptor<?> configDescriptor, Class<?> childClass, PermissionModel PermissionModelParent) {
         Class<?> clazz = childClass;
         if (clazz == null) {
             //This is a root call and not a recursive call thus no child
@@ -122,7 +123,7 @@ public class PermissionResolverImpl implements PermissionResolver {
                 if (mappingContext.getMappedPermissionModels().containsKey(child)) {
                     if (mappingContext.isFolder(child)) {
                         ConfigDescriptor descriptor = mappingContext.getMappedPermissionModels().get(child);
-                        PermissionModel model =  mapToStructure(descriptor, child, permissionGroupParent);
+                        PermissionModel model =  mapToStructure(descriptor, child, PermissionModelParent);
                         children.add(model);
                         state.add(model, false);
 
@@ -140,10 +141,10 @@ public class PermissionResolverImpl implements PermissionResolver {
             PermissionModel rootPermission = mapPermissionToStructure(viewDescriptor, true);
             return rootPermission;
         }
-        PermissionGroup newGroup = new PermissionGroup(permissionConverter.getPermissionGroupId(clazz), children, configDescriptor);
-        if (permissionGroupParent != null) {
-            permissionGroupParent.getChildren().add(newGroup);
-            return permissionGroupParent;
+        PermissionModel newGroup = new Permission(permissionConverter.getPermissionModelId(clazz), children, configDescriptor);
+        if (PermissionModelParent != null) {
+            PermissionModelParent.getChildren().add(newGroup);
+            return PermissionModelParent;
         }
         return newGroup;
     }

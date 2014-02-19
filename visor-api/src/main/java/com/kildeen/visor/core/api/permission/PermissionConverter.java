@@ -63,7 +63,7 @@ public interface PermissionConverter extends Serializable {
      * @param permissionFolderClass class to Convert.
      * @return  Default implementation is exact same as {@link #getPermissionId(Class)}
      */
-    public String getPermissionGroupId(Class<?> permissionFolderClass);
+    public String getPermissionModelId(Class<?> permissionFolderClass);
 
 
     /**

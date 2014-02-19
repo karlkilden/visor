@@ -16,7 +16,7 @@ import javax.inject.Inject;
  * @since 1.0
  */
 @RunWith(CdiTestRunner.class)
-public class PermissionGroupTest {
+public class PermissionModelTest {
 
     @Inject
     private PermissionResolver resolver;
