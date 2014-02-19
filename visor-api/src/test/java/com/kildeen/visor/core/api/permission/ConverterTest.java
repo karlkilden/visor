@@ -21,6 +21,7 @@
 
 package com.kildeen.visor.core.api.permission;
 
+import org.apache.commons.collections4.set.ListOrderedSet;
 import org.junit.Test;
 
 import static junit.framework.Assert.*;
@@ -46,13 +47,13 @@ public class ConverterTest {
     public void serialized_should_be_as_was_when_deserialized() {
         DefaultPermissionConverter converter = new DefaultPermissionConverter();
 
-        Permission p = new Permission("this.that", null,null);
+        Permission p = new Permission("this.that", new ListOrderedSet<PermissionModel>(),null);
 
         p.setCreate(true);
         p.setRead(true);
         p.setUpdate(true);
         p.setDelete(true);
-        Permission child = new Permission("this.that.do",null,null);
+        Permission child = new Permission("this.that.do",new ListOrderedSet<PermissionModel>(),null);
         p.getChildren().add(child);
 
         String json = converter.serialize(p);

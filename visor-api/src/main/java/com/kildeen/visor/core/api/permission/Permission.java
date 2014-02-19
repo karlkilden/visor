@@ -34,14 +34,18 @@ import java.util.Set;
  * @since 1.0
  */
 public class Permission extends AbstractPermissionModel {
+    private int t = 0;
     private boolean create;
     private boolean read;
     private boolean update;
     private boolean delete;
-    private boolean isPartPermission;
 
     public Permission(final String id, final Set<PermissionModel> children, final ConfigDescriptor viewConfigDescriptor) {
         super(id, children, viewConfigDescriptor);
+    }
+
+    public Permission() {
+
     }
 
     @Override

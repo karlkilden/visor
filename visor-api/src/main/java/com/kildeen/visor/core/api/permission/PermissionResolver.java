@@ -32,7 +32,7 @@ import java.util.List;
  */
 public interface PermissionResolver {
 
-    public List<Permission> getPermissions();
+    public List<PermissionModel> getPermissions();
     public List<PermissionModel> getPermissionModels();
     public List<PermissionModel> getRootPermissionModels();
     public PermissionModel getPermissionModel (String id);

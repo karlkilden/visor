@@ -2,6 +2,7 @@ package com.kildeen.visor.core.permission;
 
 import com.kildeen.visor.core.api.permission.Permission;
 import com.kildeen.visor.core.api.permission.PermissionModel;
+import org.apache.commons.collections4.set.ListOrderedSet;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,9 +16,9 @@ import java.util.Map;
  */
 public class PermissionResolverState {
     private final PermissionMappingContext mappingContext;
-    private List<Permission> permissions = new ArrayList<>();
-    private List<PermissionModel> permissionModels = new ArrayList<>();
-    private List<PermissionModel> rootPermissionModels = new ArrayList<>();
+    private ListOrderedSet<Permission> permissions = new ListOrderedSet<>();
+    private ListOrderedSet<PermissionModel> permissionModels = new ListOrderedSet<>();
+    private ListOrderedSet<PermissionModel> rootPermissionModels = new ListOrderedSet<>();
     private Map<String, PermissionModel> mappedPermissionModels = new HashMap<>();
 
     public PermissionResolverState(PermissionMappingContext mappingContext) {
@@ -39,15 +40,15 @@ public class PermissionResolverState {
     }
 
     public List<Permission> getPermissions() {
-        return permissions;
+        return permissions.asList();
     }
 
     public List<PermissionModel> getPermissionModels() {
-        return permissionModels;
+        return permissionModels.asList();
     }
 
     public List<PermissionModel> getRootPermissionModels() {
-        return rootPermissionModels;
+        return rootPermissionModels.asList();
     }
 
     public Map<String, PermissionModel> getMappedPermissionModels() {

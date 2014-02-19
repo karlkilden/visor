@@ -12,9 +12,12 @@ import java.util.Set;
  * @since 1.0
  */
 public class PermissionGroup extends AbstractPermissionModel {
-
+    private int t = 1;
     public PermissionGroup(final String id, final Set<PermissionModel> children, final ConfigDescriptor configDescriptor) {
         super(id, children, configDescriptor);
+    }
+
+    public PermissionGroup() {
     }
 
     @Override

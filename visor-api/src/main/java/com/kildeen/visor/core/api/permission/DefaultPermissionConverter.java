@@ -21,9 +21,11 @@
 
 package com.kildeen.visor.core.api.permission;
 
-import com.google.gson.Gson;
+import com.google.gson.*;
 import org.apache.commons.lang3.text.WordUtils;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 
 /**
@@ -47,7 +49,7 @@ public class DefaultPermissionConverter implements PermissionConverter {
     @Override
     public String getPartPermissionId(final Class<? extends PartPermission> permissionClass) {
         String permission = WordUtils.uncapitalize(permissionClass.getEnclosingClass()
-                .getSimpleName())+permissionClass.getSimpleName();
+                .getSimpleName()) + permissionClass.getSimpleName();
         return permission;
     }
 
@@ -56,19 +58,19 @@ public class DefaultPermissionConverter implements PermissionConverter {
      */
     @Override
     public String getPermissionGroupId(final Class<?> permissionFolderClass) {
-       return getPermissionId(permissionFolderClass);
+        return getPermissionId(permissionFolderClass);
     }
 
     @Override
-    public String serialize(final Permission permission) {
+    public String serialize(final PermissionModel permission) {
         Gson gson = new Gson();
-        return gson.toJson(permission, Permission.class);
+        return gson.toJson(permission, permission.getClass());
     }
 
     @Override
-    public Permission deserialize(final String deserializedPermission) {
-        Gson gson = new Gson();
-        return gson.fromJson(deserializedPermission, Permission.class);
+    public Permission deserialize(final String deserialized) {
+        Gson gson = new GsonBuilder().registerTypeAdapter(PermissionModel.class, new ObjectDeserializer()).create();
+        return gson.fromJson(deserialized, Permission.class);
 
     }
 
@@ -76,19 +78,46 @@ public class DefaultPermissionConverter implements PermissionConverter {
     public Collection<String> serializeAll(final Collection<Permission> permissions) {
         List<String> serializedPermissions = new ArrayList<>();
         for (Permission permission : permissions) {
-/*
             serializedPermissions.add(serialize(permission));
-*/
         }
         return serializedPermissions;
     }
 
     @Override
-    public Collection<Permission> deserializeAll(final Collection<String> serializedPermissions) {
+    public Collection<Permission> deserializeAll(final Collection<String> deserialized) {
         List<Permission> deserializedPermissions = new ArrayList<>();
-        for (String deserializedPermission : serializedPermissions) {
-            deserializedPermissions.add(deserialize(deserializedPermission));
+        for (String permission : deserialized) {
+            deserializedPermissions.add(deserialize(permission));
         }
         return deserializedPermissions;
+    }
+
+    private class MoneyInstanceCreator implements InstanceCreator<PermissionModel> {
+        String id;
+
+        public MoneyInstanceCreator(String deserialized) {
+            id = deserialized;
+        }
+
+        public PermissionModel createInstance(Type type) {
+            // t stands for type. 0 means Permission and PermissionGroup == 1.
+            if (id.startsWith("{\"t\":0"))
+                return new Permission();
+            else if (id.startsWith("{\"t\":1"))
+                return new PermissionGroup();
+            else
+                throw new RuntimeException("illegal type");
+        }
+
+
+    }
+    public class ObjectDeserializer implements JsonDeserializer<PermissionModel> {
+
+        @Override
+        public PermissionModel deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
+            String value = element.getAs
+            return null;
+        }
+
     }
 }

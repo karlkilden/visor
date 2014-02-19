@@ -70,19 +70,19 @@ public interface PermissionConverter extends Serializable {
      * @param permission  Permission that should be converted to a String to simplify persisting etc.
      * @return  Default turns it into a default json string object.
      */
-    public String serialize(Permission permission);
+    public String serialize(PermissionModel permission);
 
     /**
      *
-     * @param deserializedPermission  A String constructed by using {@link #serialize(Permission)}
-     * @return  A permission as was before {@link #serialize(Permission)} was used.
+     * @param deserializedPermission  A String constructed by using {@link #serialize(PermissionModel)}
+     * @return  A permission as was before {@link #serialize(PermissionModel)} was used.
      */
     public Permission deserialize(String deserializedPermission);
 
     /**
      *
      * @param permissions to serialize.
-     * @return Convenience method, Default uses {@link #serialize(Permission)} for all entries.
+     * @return Convenience method, Default uses {@link #serialize(PermissionModel)} for all entries.
      */
     public Collection<String> serializeAll(Collection<Permission> permissions);
 

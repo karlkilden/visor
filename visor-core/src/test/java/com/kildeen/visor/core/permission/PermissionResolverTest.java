@@ -100,8 +100,35 @@ public class PermissionResolverTest {
         List<String> ids = new ArrayList<>();
         for (ConfigDescriptor configDescriptor : configResolver.getConfigDescriptors()) {
             //We know that getPermissionId and getPermissionGroup is the same
-            ids.add(permissionConverter.getPermissionId(configDescriptor.getConfigClass()));
+            PermissionMappingContext context = new PermissionMappingContext(configResolver.getConfigDescriptors());
+            if (context.isSecured(configDescriptor)) {
+                ids.add(permissionConverter.getPermissionId(configDescriptor.getConfigClass()));
+            }
         }
         assertEquals(ids.size(), permissionResolver.getPermissionModels().size());
+
+            for (PermissionModel model : permissionResolver.getPermissionModels()) {
+                if (ids.contains(model.getId())) {
+                    // OK
+                }
+                else {
+                    fail("Id is missing from the mapped Models");
+                }
+            }
+        for (PermissionModel root : permissionResolver.getRootPermissionModels()) {
+            validateExistence(root);
+        }
+
+        for (PermissionModel permission : permissionResolver.getPermissions()) {
+            validateExistence(permission);
+        }
+
+    }
+
+    private void validateExistence(PermissionModel root) {
+        assertEquals(root.getId(), permissionResolver.getPermissionModel(root.getId()).getId());
+        for (PermissionModel child : root.getChildren()) {
+            validateExistence(child);
+        }
     }
 }
