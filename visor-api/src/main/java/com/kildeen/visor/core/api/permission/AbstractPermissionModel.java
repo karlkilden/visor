@@ -1,6 +1,7 @@
 package com.kildeen.visor.core.api.permission;
 
 import org.apache.commons.collections4.set.ListOrderedSet;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.deltaspike.core.api.config.view.metadata.ConfigDescriptor;
 
 import java.util.Set;
@@ -44,5 +45,18 @@ public abstract class AbstractPermissionModel implements PermissionModel {
 
     protected void setChildren(final Set<PermissionModel> children) {
         this.children = children;
+    }
+
+    @Override
+    public boolean equals (Object permissionModel) {
+        if (this == permissionModel) {
+            return true;
+        }
+        if (this.getClass() != permissionModel.getClass()) {
+            return false;
+        }
+
+        PermissionModel model = (PermissionModel) permissionModel;
+        return this.id.equals(model.getId());
     }
 }

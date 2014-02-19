@@ -1,5 +1,6 @@
 package com.kildeen.visor.core.api.permission;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.deltaspike.core.api.config.view.metadata.ConfigDescriptor;
 
 import java.util.Set;
@@ -23,5 +24,10 @@ public class PermissionGroup extends AbstractPermissionModel {
     @Override
     public boolean isParent() {
         return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(13,17).append(id).append(t).build();
     }
 }

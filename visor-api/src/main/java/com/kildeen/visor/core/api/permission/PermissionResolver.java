@@ -36,5 +36,7 @@ public interface PermissionResolver {
     public List<PermissionModel> getPermissionModels();
     public List<PermissionModel> getRootPermissionModels();
     public PermissionModel getPermissionModel (String id);
+    public PermissionModel getMaximized(String permission);
     public void boot();
+
 }

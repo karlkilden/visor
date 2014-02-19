@@ -21,9 +21,12 @@
 
 package com.kildeen.visor.core.api.permission;
 
+import com.google.common.base.Splitter;
 import com.google.gson.*;
 import org.apache.commons.lang3.text.WordUtils;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
@@ -35,7 +38,13 @@ import java.util.*;
  * @author: Karl Kildén
  * @since 1.0
  */
+@ApplicationScoped
 public class DefaultPermissionConverter implements PermissionConverter {
+
+    @Inject
+    PermissionResolver permissionResolver;
+
+    private static final Splitter splitter = Splitter.on("*");
 
 
     @Override
@@ -69,7 +78,7 @@ public class DefaultPermissionConverter implements PermissionConverter {
 
     @Override
     public Permission deserialize(final String deserialized) {
-        Gson gson = new GsonBuilder().registerTypeAdapter(PermissionModel.class, new ObjectDeserializer()).create();
+        Gson gson = new GsonBuilder().registerTypeAdapter(PermissionModel.class, new MoneyInstanceCreator(deserialized)).create();
         return gson.fromJson(deserialized, Permission.class);
 
     }
@@ -92,6 +101,34 @@ public class DefaultPermissionConverter implements PermissionConverter {
         return deserializedPermissions;
     }
 
+    @Override
+    public List<PermissionModel> expand(Collection<String> truncatedPermissions) {
+        List<PermissionModel> result = new ArrayList<>();
+        for (String permission : truncatedPermissions) {
+
+            if (permission.contains("*")) {
+                List<String> permissionData = splitter.splitToList(permission);
+                Permission actual = (Permission) permissionResolver.getPermissionModel(permissionData.get(0));
+                if (permissionData.get(1).isEmpty()) {
+                    // do nothing
+                } else {
+                    String crud = permissionData.get(1);
+                    actual.setCreate(crud.contains("C"));
+                    actual.setRead(crud.contains("R"));
+                    actual.setUpdate(crud.contains("U"));
+                    actual.setDelete(crud.contains("D"));
+
+                }
+                result.add(actual);
+            }
+            else {
+                 PermissionModel m = permissionResolver.getMaximized(permission);
+            }
+        }
+
+        return result;
+    }
+
     private class MoneyInstanceCreator implements InstanceCreator<PermissionModel> {
         String id;
 
@@ -102,22 +139,21 @@ public class DefaultPermissionConverter implements PermissionConverter {
         public PermissionModel createInstance(Type type) {
             // t stands for type. 0 means Permission and PermissionGroup == 1.
             if (id.startsWith("{\"t\":0"))
-                return new Permission();
+                return new Permission("apa", null, null);
             else if (id.startsWith("{\"t\":1"))
-                return new PermissionGroup();
+                return new PermissionGroup("apa", null, null);
             else
                 throw new RuntimeException("illegal type");
         }
 
+        public class ObjectDeserializer implements JsonDeserializer<PermissionModel> {
 
-    }
-    public class ObjectDeserializer implements JsonDeserializer<PermissionModel> {
+            @Override
+            public PermissionModel deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
+                String value = element.getAsString();
+                return null;
+            }
 
-        @Override
-        public PermissionModel deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException {
-            String value = element.getAs
-            return null;
         }
-
     }
 }

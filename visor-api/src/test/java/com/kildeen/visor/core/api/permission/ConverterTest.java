@@ -24,6 +24,9 @@ package com.kildeen.visor.core.api.permission;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static junit.framework.Assert.*;
 
 /**
@@ -42,6 +45,8 @@ public class ConverterTest {
         String expected =   "kildeen.visor.core.api.permission.ConverterTest";
         assertEquals(expected, converter.getPermissionId(this.getClass()));
     }
+
+
 
     @Test
     public void serialized_should_be_as_was_when_deserialized() {

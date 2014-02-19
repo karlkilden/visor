@@ -23,6 +23,7 @@ package com.kildeen.visor.core.api.permission;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Permissions are string based. The conversion between the
@@ -92,6 +93,9 @@ public interface PermissionConverter extends Serializable {
      * @return  Convenience method, Default uses {@link #deserialize(String)}} for all entries.
      */
     public Collection<Permission> deserializeAll(Collection<String> deserializedPermissions);
+
+    public List<PermissionModel> expand(Collection<String> truncatedPermissions);
+
 
 
 }

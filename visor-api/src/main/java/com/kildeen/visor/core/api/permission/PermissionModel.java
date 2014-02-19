@@ -17,4 +17,8 @@ public interface PermissionModel {
     Set<PermissionModel> getChildren();
 
     boolean isParent();
+
+    public Permission asPermission();
+    public
+
 }

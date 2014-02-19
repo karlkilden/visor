@@ -33,7 +33,7 @@ public class PermissionResolverTest {
 
     @Inject
     MockFacesContext mockFacesContext;
-    private List<Permission> permissions;
+    private List<PermissionModel> permissions;
     @Inject
     private PermissionContext permissionContext;
 
@@ -50,7 +50,7 @@ public class PermissionResolverTest {
 
         boolean nestedExists = false;
         boolean adminExists = false;
-        for (Permission p : permissions) {
+        for (PermissionModel p : permissions) {
             if (p.getPath().equals("/pages/secured.xhtml")) {
                 nestedExists = true;
             }

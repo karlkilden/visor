@@ -21,6 +21,7 @@
 
 package com.kildeen.visor.core.api.permission;
 
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.deltaspike.core.api.config.view.metadata.ConfigDescriptor;
 import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigDescriptor;
 
@@ -91,5 +92,32 @@ public class Permission extends AbstractPermissionModel {
 
     public void setDelete(final boolean delete) {
         this.delete = delete;
+    }
+
+    public boolean isPrivileged() {
+            return create && read && update && delete;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(3, 7).append(id).append(t).
+                append(create).append(read).append(update).append(delete).build();
+    }
+
+    @Override
+    public boolean equals(Object permissionModel) {
+        if (super.equals(permissionModel)) {
+            Permission permission = (Permission) permissionModel;
+            return this.create == permission.create && this.read == permission.read && this.update == permission.update
+                    && this.delete == permission.delete;
+        }
+        return false;
+    }
+
+    public void privilege() {
+        create = true;
+        read = true;
+        update = true;
+        delete = true;
     }
 }

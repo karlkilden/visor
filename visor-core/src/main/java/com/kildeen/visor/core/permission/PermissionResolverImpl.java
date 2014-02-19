@@ -63,8 +63,8 @@ public class PermissionResolverImpl implements PermissionResolver {
     }
 
     @Override
-    public List<Permission> getPermissions() {
-        List<Permission> clonedPermissions = new ArrayList<>(state.getPermissions().size());
+    public List<PermissionModel> getPermissions() {
+        List<PermissionModel> clonedPermissions = new ArrayList<>(state.getPermissions().size());
         for (Permission permission : state.getPermissions()) {
             Permission clone = new Permission(permission);
             clonedPermissions.add(new Permission(permission));
@@ -85,6 +85,16 @@ public class PermissionResolverImpl implements PermissionResolver {
     @Override
     public PermissionModel getPermissionModel(String id) {
         return state.getMappedPermissionModels().get(id);
+    }
+
+    @Override
+    public PermissionModel getMaximized(String id) {
+        PermissionModel model = state.getMappedPermissionModels().get(id);
+        if (model instanceof Permission) {
+            Permission p = (Permission) model;
+              p.privilege();
+
+        }
     }
 
     private void createStructure() {
