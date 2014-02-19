@@ -22,6 +22,7 @@
 package com.kildeen.visor.core.api.permission;
 
 import org.apache.commons.collections4.set.ListOrderedSet;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.deltaspike.core.api.config.view.metadata.ConfigDescriptor;
 import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigDescriptor;
@@ -36,20 +37,26 @@ import java.util.Set;
  * @since 1.0
  */
 public class Permission implements PermissionModel {
-    private int t = 0;
-    protected transient ConfigDescriptor configDescriptor;
-    protected String id;
-    protected Set<Permission> children = new ListOrderedSet<>();
+    private transient ConfigDescriptor configDescriptor;
+    private String id;
+    private String path;
+    private Set<Permission> children = new ListOrderedSet<>();
     private boolean create;
     private boolean read;
     private boolean update;
     private boolean delete;
+    private boolean group;
 
     public Permission(final String id, final Set<PermissionModel> children, final ConfigDescriptor configDescriptor) {
         //We want no trouble with Json so we cheat here.
         this.children = (Set) children;
         this.id = id;
-        this.configDescriptor = configDescriptor;
+        if (configDescriptor != null) {
+            this.path = configDescriptor.getPath();
+            if (configDescriptor instanceof ViewConfigDescriptor) {
+                group = true;
+            }
+        }
     }
 
     public Permission() {
@@ -78,7 +85,7 @@ public class Permission implements PermissionModel {
 
     @Override
     public void setCreate(final boolean create) {
-        this.create = create;
+        updateState(Crud.CREATE, create);
     }
 
     @Override
@@ -88,7 +95,7 @@ public class Permission implements PermissionModel {
 
     @Override
     public void setRead(final boolean read) {
-        this.read = read;
+        updateState(Crud.READ, read);
     }
 
     @Override
@@ -98,7 +105,7 @@ public class Permission implements PermissionModel {
 
     @Override
     public void setUpdate(final boolean update) {
-        this.update = update;
+        updateState(Crud.UPDATE, update);
     }
 
     @Override
@@ -108,7 +115,7 @@ public class Permission implements PermissionModel {
 
     @Override
     public void setDelete(final boolean delete) {
-        this.delete = delete;
+        updateState(Crud.DELETE, delete);
     }
 
     @Override
@@ -146,21 +153,6 @@ public class Permission implements PermissionModel {
         return configDescriptor.getPath();
     }
 
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder(3, 7).append(id).append(t).
-                append(create).append(read).append(update).append(delete).build();
-    }
-
-    @Override
-    public boolean equals(Object permissionModel) {
-        if (super.equals(permissionModel)) {
-            Permission permission = (Permission) permissionModel;
-            return this.create == permission.create && this.read == permission.read && this.update == permission.update
-                    && this.delete == permission.delete;
-        }
-        return false;
-    }
 
     @Override
     public void privilege() {
@@ -172,6 +164,44 @@ public class Permission implements PermissionModel {
 
     @Override
     public Set<PermissionModel> getChildren() {
-        return (Set)children;
+        return (Set) children;
+    }
+
+    private void updateState(Crud crud, boolean state) {
+        if (group) {
+            for (Permission permission : children) {
+                permission.updateState(crud, state);
+            }
+        }
+        switch (crud) {
+            case CREATE:
+                create = state;
+            case READ:
+                read = state;
+            case UPDATE:
+                update = state;
+            case DELETE:
+                delete = state ;
+        }
+    }
+
+    @Override
+    public boolean equals(Object permissionModel) {
+        Permission permission = (Permission) permissionModel;
+        return new EqualsBuilder().append(this.id, permission.id).append(this.create,
+                permission.create).append(this.read, permission.read).append(this.update,
+                permission.update).append(this.delete, permission.delete).build();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(3, 7).append(id).
+                append(create).append(read).append(update).append(delete).build();
+    }
+
+    private enum Crud {
+        CREATE, READ, UPDATE, DELETE;
     }
 }
+
+
