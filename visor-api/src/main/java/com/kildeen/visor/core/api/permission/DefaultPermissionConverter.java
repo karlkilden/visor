@@ -37,7 +37,7 @@ public class DefaultPermissionConverter implements PermissionConverter {
 
 
     @Override
-    public String getPermission(Class<?> permissionClass) {
+    public String getPermissionId(Class<?> permissionClass) {
         String permission = permissionClass.getCanonicalName();
         int firstFolderIndex = permission.indexOf(".");
         firstFolderIndex++; // remove dot too.
@@ -45,7 +45,7 @@ public class DefaultPermissionConverter implements PermissionConverter {
     }
 
     @Override
-    public String getPartPermission(final Class<? extends PartPermission> permissionClass) {
+    public String getPartPermissionId(final Class<? extends PartPermission> permissionClass) {
         String permission = WordUtils.uncapitalize(permissionClass.getEnclosingClass()
                 .getSimpleName())+permissionClass.getSimpleName();
         return permission;
@@ -55,8 +55,8 @@ public class DefaultPermissionConverter implements PermissionConverter {
      * Here for symmetry only
      */
     @Override
-    public String getPermissionFolder(final Class<?> permissionFolderClass) {
-       return getPermission(permissionFolderClass);
+    public String getPermissionGroupId(final Class<?> permissionFolderClass) {
+       return getPermissionId(permissionFolderClass);
     }
 
     @Override

@@ -17,10 +17,4 @@ public interface PermissionModel {
     Set<PermissionModel> getChildren();
 
     boolean isParent();
-
-    boolean isPartPermission();
-
-    boolean isPermission();
-
-    boolean isPermissionGroup();
 }

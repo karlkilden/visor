@@ -44,13 +44,17 @@ public class Permission extends AbstractPermissionModel {
         super(id, children, viewConfigDescriptor);
     }
 
+    @Override
+    public boolean isParent() {
+        return children.isEmpty() == false;
+    }
+
     public Permission(Permission permission) {
         super(permission.id, permission.children, permission.configDescriptor);
         this.create = permission.create;
         this.read = permission.create;
         this.update = permission.create;
         this.delete = permission.create;
-        this.isPartPermission = permission.isPartPermission();
     }
 
     public boolean hasCreate() {

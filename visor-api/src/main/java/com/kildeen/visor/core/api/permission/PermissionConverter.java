@@ -45,7 +45,7 @@ public interface PermissionConverter extends Serializable {
      * @return The result of the conversion. Default will use #getCanonicalName() and then strip the first "folder".
      * The intention is to dropout words such as "com", "org" since they offer no value.
      */
-    public String getPermission(Class<?> permissionClass);
+    public String getPermissionId(Class<?> permissionClass);
 
     /**
      * A PartPermission is a nested class nested inside a ViewConfig that implements {@link PartPermission}. Default
@@ -55,14 +55,14 @@ public interface PermissionConverter extends Serializable {
      * @param partPermissionClass  The partPermission that should be converted
      * @return conversion result
      */
-    public String getPartPermission(Class<? extends PartPermission> partPermissionClass);
+    public String getPartPermissionId(Class<? extends PartPermission> partPermissionClass);
 
     /**
      *
      * @param permissionFolderClass class to Convert.
-     * @return  Default implementation is exact same as {@link #getPermission(Class)}
+     * @return  Default implementation is exact same as {@link #getPermissionId(Class)}
      */
-    public String getPermissionFolder(Class<?> permissionFolderClass);
+    public String getPermissionGroupId(Class<?> permissionFolderClass);
 
 
     /**

@@ -16,10 +16,7 @@ public abstract class AbstractPermissionModel implements PermissionModel {
     protected transient ConfigDescriptor configDescriptor;
     protected String id;
     protected Set<PermissionModel> children = new ListOrderedSet<>();
-    protected boolean isParent;
-    protected boolean isPartPermission;
-    protected boolean isPermission;
-    protected boolean isPermissionGroup;
+
 
     protected AbstractPermissionModel(final String id, final Set<PermissionModel> children, final ConfigDescriptor configDescriptor) {
         this.children = children;
@@ -43,26 +40,6 @@ public abstract class AbstractPermissionModel implements PermissionModel {
     @Override
     public Set<PermissionModel> getChildren() {
         return children;
-    }
-
-    @Override
-    public boolean isParent() {
-        return isParent;
-    }
-
-    @Override
-    public boolean isPartPermission() {
-        return isPartPermission;
-    }
-
-    @Override
-    public boolean isPermission() {
-        return isPermission;
-    }
-
-    @Override
-    public boolean isPermissionGroup() {
-        return isPermissionGroup;
     }
 
     protected void setChildren(final Set<PermissionModel> children) {

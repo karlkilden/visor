@@ -24,7 +24,6 @@ package com.kildeen.visor.core.context;
 import com.kildeen.visor.core.api.context.PermissionContext;
 import com.kildeen.visor.core.api.permission.Permission;
 import com.kildeen.visor.core.api.permission.PermissionConverter;
-import com.kildeen.visor.core.api.permission.PermissionModel;
 import com.kildeen.visor.core.permission.SubjectPermissionMapper;
 import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigDescriptor;
 import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigResolver;
@@ -101,7 +100,7 @@ public class PermissionContextImpl implements PermissionContext {
     }
 
     private boolean hasPermission() {
-        permission = (Permission) subjectPermissionMapper.getPermission(permissionConverter.getPermission(viewConfigDescriptor.getConfigClass()));
+        permission = (Permission) subjectPermissionMapper.getPermission(permissionConverter.getPermissionId(viewConfigDescriptor.getConfigClass()));
         return permission != SubjectPermissionMapper.NOT_FOUND;
     }
 

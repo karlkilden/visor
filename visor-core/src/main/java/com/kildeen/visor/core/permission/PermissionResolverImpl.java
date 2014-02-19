@@ -31,9 +31,7 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * <p>File created: 2014-02-16 21:13</p>
@@ -52,21 +50,22 @@ public class PermissionResolverImpl implements PermissionResolver {
 
 
     private static final Logger log = LoggerFactory.getLogger(PermissionResolverImpl.class);
-    private List<Permission> permissions = new ArrayList<>();
     private PermissionMappingContext mappingContext;
-    private List<PermissionModel> rootPermissionModels = new ArrayList<>();
+    private PermissionResolverState state;
+
 
     @PostConstruct
     public void init() {
         mappingContext = new PermissionMappingContext(viewConfigResolver.getConfigDescriptors());
+        state = new PermissionResolverState(mappingContext);
         createStructure();
         mappingContext = null;
     }
 
     @Override
     public List<Permission> getPermissions() {
-        List<Permission> clonedPermissions = new ArrayList<>(this.permissions.size());
-        for (Permission permission : this.permissions) {
+        List<Permission> clonedPermissions = new ArrayList<>(state.getPermissions().size());
+        for (Permission permission : state.getPermissions()) {
             Permission clone = new Permission(permission);
             clonedPermissions.add(new Permission(permission));
         }
@@ -74,15 +73,26 @@ public class PermissionResolverImpl implements PermissionResolver {
     }
 
     @Override
-    public List<PermissionModel> getRootNodes() {
-        return rootPermissionModels;
+    public List<PermissionModel> getPermissionModels() {
+        return state.getRootPermissionModels();
+    }
+
+    @Override
+    public List<PermissionModel> getRootPermissionModels() {
+        return state.getRootPermissionModels();
+    }
+
+    @Override
+    public PermissionModel getPermissionModel(String id) {
+        return state.getMappedPermissionModels().get(id);
     }
 
     private void createStructure() {
         log.info("ViewConfigDescriptors will now be mapped");
         for (ConfigDescriptor<?> configDescriptor : viewConfigResolver.getConfigDescriptors()) {
-            if (mappingContext.shouldMap(configDescriptor)) {
-               rootPermissionModels.add(mapToStructure(configDescriptor, null, null));
+            if (mappingContext.isSecuredRoot(configDescriptor)) {
+                rootPermissionModels.add();
+                state.add(mapToStructure(configDescriptor, null, null), true);
             }
         }
     }
@@ -117,7 +127,9 @@ public class PermissionResolverImpl implements PermissionResolver {
             PermissionModel rootPermission = mapPermissionToStructure(viewDescriptor);
             return rootPermission;
         }
-        PermissionGroup newGroup = new PermissionGroup(permissionConverter.getPermissionFolder(clazz), children, configDescriptor);
+        PermissionGroup newGroup = new PermissionGroup(permissionConverter.getPermissionGroupId(clazz), children, configDescriptor);
+        addToRelevantCollections(newGroup, false);
+
         if (permissionGroupParent != null) {
             permissionGroupParent.getChildren().add(newGroup);
             return permissionGroupParent;
@@ -126,12 +138,26 @@ public class PermissionResolverImpl implements PermissionResolver {
     }
 
     private PermissionModel mapPermissionToStructure(ConfigDescriptor configDescriptor) {
-        String id = permissionConverter.getPermission(configDescriptor.getConfigClass());
+        String id = permissionConverter.getPermissionId(configDescriptor.getConfigClass());
         Set<PermissionModel> children = getChildren(configDescriptor);
         Permission permission = new Permission(id, children, configDescriptor);
-        permissions.add(permission);
+        addToRelevantCollections(permission, true);
         return permission;
     }
+
+    private void addToRelevantCollections(PermissionModel permissionModel, boolean isPermission) {
+        if (isPermission) {
+            permissions.add((Permission) permissionModel);
+
+        }
+        permissionModels.add(permissionModel);
+        mappedPermissionModels.put(permissionModel.getId(), permissionModel);
+        if (mappingContext.isRoot(viewConfigResolver.getConfigDescriptor(permissionModel.getPath()).getConfigClass())) {
+           rootPermissionModels.add(permissionModel);
+        }
+    }
+
+
 
 
     private Set<PermissionModel> getChildren(final ConfigDescriptor viewConfigDescriptor) {
@@ -147,7 +173,7 @@ public class PermissionResolverImpl implements PermissionResolver {
     }
 
     private String getValidatedPartPermission(final Class<? extends PartPermission> partPermission) {
-        String p = permissionConverter.getPartPermission(partPermission);
+        String p = permissionConverter.getPartPermissionId(partPermission);
         try {
             mappingContext.addPermissionIdToUniqueCheckList(p);
         } catch (Exception e) {

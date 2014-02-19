@@ -16,4 +16,9 @@ public class PermissionGroup extends AbstractPermissionModel {
     public PermissionGroup(final String id, final Set<PermissionModel> children, final ConfigDescriptor configDescriptor) {
         super(id, children, configDescriptor);
     }
+
+    @Override
+    public boolean isParent() {
+        return true;
+    }
 }

@@ -39,7 +39,7 @@ public class ConverterTest {
          DefaultPermissionConverter converter = new DefaultPermissionConverter();
 
         String expected =   "kildeen.visor.core.api.permission.ConverterTest";
-        assertEquals(expected, converter.getPermission(this.getClass()));
+        assertEquals(expected, converter.getPermissionId(this.getClass()));
     }
 
     @Test

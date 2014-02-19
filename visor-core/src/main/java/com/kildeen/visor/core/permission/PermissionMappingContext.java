@@ -1,8 +1,6 @@
 package com.kildeen.visor.core.permission;
 
 import com.kildeen.visor.core.api.context.PermissionAccessDecisionVoter;
-import com.kildeen.visor.core.api.permission.Permission;
-import com.kildeen.visor.core.api.permission.PermissionModel;
 import org.apache.deltaspike.core.api.config.view.metadata.CallbackDescriptor;
 import org.apache.deltaspike.core.api.config.view.metadata.ConfigDescriptor;
 import org.apache.deltaspike.security.api.authorization.Secured;
@@ -42,15 +40,15 @@ public class PermissionMappingContext {
     }
 
 
-    protected boolean shouldMap(ConfigDescriptor<?> configDescriptor) {
+    protected boolean isSecuredRoot(ConfigDescriptor<?> configDescriptor) {
         //Only map folders that are secured and lacking secured parent
         return isSecured(configDescriptor)
-                && shouldBeManagedByParent(configDescriptor.getConfigClass()) == false;
+                && isRoot(configDescriptor.getConfigClass());
     }
 
-    //If parent is secured then that parent will map this folder (or already have)
-    protected boolean shouldBeManagedByParent(Class<?> clazz) {
-       return (clazz.getEnclosingClass() != null && isFolder(clazz.getEnclosingClass()) && mappedPermissionModels.containsKey(clazz));
+
+    protected boolean isRoot(Class<?> clazz) {
+       return !(clazz.getEnclosingClass() != null && isFolder(clazz.getEnclosingClass()) && mappedPermissionModels.containsKey(clazz));
     }
 
     protected boolean isFolder(Class<?> configClass) {
