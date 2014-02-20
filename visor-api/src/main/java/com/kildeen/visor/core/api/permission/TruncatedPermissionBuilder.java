@@ -2,7 +2,6 @@ package com.kildeen.visor.core.api.permission;
 
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,22 +27,14 @@ public class TruncatedPermissionBuilder implements Serializable {
     public TruncatedPermissionModel map(Collection<PermissionModel> permissionModels) {
 
         for (PermissionModel model : permissionModels) {
-            if (model instanceof Permission) {
-                if (useShortHand((Permission) model)) {
-                    Permission p = (Permission) model;
-                    truncatedPermissionModel.add(model.getId());
-                } else {
-                    truncatedPermissionModel.add(model.getId() + getCrudInfo(model));
-                    for (PermissionModel child : model.getChildren()) {
-                        truncatedPermissionModel.add(child.getId() + getCrudInfo(child));
-                    }
-                }
+            if (useShortHand(model)) {
+                Permission p = (Permission) model;
+                truncatedPermissionModel.add(model.getId());
             } else {
-                if (useShortHand((PermissionModel)model))  {
-                    truncatedPermissionModel.add(model.getId());
+                truncatedPermissionModel.add(model.getId() + getCrudInfo(model));
+                for (PermissionModel child : model.getChildren()) {
+                    truncatedPermissionModel.add(child.getId() + getCrudInfo(child));
                 }
-
-                map(model.getChildren());
             }
         }
         TruncatedPermissionModel truncatedModel = new TruncatedPermissionModel(truncatedPermissionModel, truncatedPermissionModel, permissionRevisionWriter.getVersion());
@@ -52,18 +43,18 @@ public class TruncatedPermissionBuilder implements Serializable {
 
 
     private boolean useShortHand(PermissionModel permission) {
-        PermissionModel toMatch = (PermissionModel) resolver.getPermissionModel(permission.getId());
-        if (permission.getChildren().size() == toMatch.getChildren().size()) {
+        PermissionModel toMatch = resolver.getPermissionModel(permission.getId());
+        if (permission.getChildren().size() == toMatch.getChildren().size() && permission.isPrivileged()) {
             boolean shorthand = false;
             for (PermissionModel child : permission.getChildren()) {
                 if (child instanceof Permission) {
-                    shorthand = useShortHand((Permission)child);
-                    if (shorthand == false)   {
+                    shorthand = useShortHand((Permission) child);
+                    if (shorthand == false) {
                         return false;
                     }
                 } else {
-                    shorthand = useShortHand((PermissionModel)child);
-                    if (shorthand == false)   {
+                    shorthand = useShortHand( child);
+                    if (shorthand == false) {
                         return false;
                     }
                 }

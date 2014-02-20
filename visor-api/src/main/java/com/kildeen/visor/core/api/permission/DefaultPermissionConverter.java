@@ -123,6 +123,7 @@ public class DefaultPermissionConverter implements PermissionConverter {
             }
             else {
                  PermissionModel m = permissionResolver.getMaximized(permission);
+                result.add(m);
             }
         }
 

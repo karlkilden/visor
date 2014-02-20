@@ -37,7 +37,6 @@ import java.util.Set;
  * @since 1.0
  */
 public class Permission implements PermissionModel {
-    private transient ConfigDescriptor configDescriptor;
     private String id;
     private String path;
     private Set<Permission> children = new ListOrderedSet<>();
@@ -54,14 +53,13 @@ public class Permission implements PermissionModel {
         if (configDescriptor != null) {
             this.path = configDescriptor.getPath();
             if (configDescriptor instanceof ViewConfigDescriptor) {
+            }
+            else {
                 group = true;
             }
         }
     }
 
-    public Permission() {
-
-    }
 
     @Override
     public boolean isParent() {
@@ -71,11 +69,12 @@ public class Permission implements PermissionModel {
     public Permission(Permission permission) {
         this.children = (Set) permission.children;
         this.id = permission.id;
-        this.configDescriptor = permission.configDescriptor;
         this.create = permission.create;
         this.read = permission.create;
         this.update = permission.create;
         this.delete = permission.create;
+        this.path = permission.path;
+        this.group = permission.group;
     }
 
     @Override
@@ -150,16 +149,22 @@ public class Permission implements PermissionModel {
 
     @Override
     public String getPath() {
-        return configDescriptor.getPath();
+        return path;
     }
 
+    @Override
+    public boolean isGroup() {
+        return group;
+    }
 
     @Override
     public void privilege() {
-        create = true;
-        read = true;
-        update = true;
-        delete = true;
+        updateState(Crud.CREATE, true);
+        updateState(Crud.READ, true);
+        updateState(Crud.UPDATE, true);
+        updateState(Crud.DELETE, true);
+
+
     }
 
     @Override

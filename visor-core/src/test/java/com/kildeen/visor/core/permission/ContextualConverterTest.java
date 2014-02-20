@@ -40,9 +40,9 @@ public class ContextualConverterTest {
         p.setUpdate(true);
         p.setDelete(true);
         Permission child = new Permission("kildeen.mock.provided.Pages.Secured",new ListOrderedSet<PermissionModel>(),null);
-        p.getChildren().add(child);
 
         List<PermissionModel> list = new ArrayList<>();
+        list.add(child);
         list.add(p);
         TruncatedPermissionModel truncated =  builder.map(list);
         assertEquals(2, truncated.getTruncatedPermissionModel().size());

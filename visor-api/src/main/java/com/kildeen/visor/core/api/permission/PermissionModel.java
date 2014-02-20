@@ -40,6 +40,8 @@ public interface PermissionModel {
 
     public Set<PermissionModel> getChildren();
 
+    boolean isGroup();
+
     void privilege();
 
     String getId();

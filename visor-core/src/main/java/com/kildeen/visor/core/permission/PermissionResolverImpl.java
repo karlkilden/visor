@@ -90,12 +90,8 @@ public class PermissionResolverImpl implements PermissionResolver {
     @Override
     public PermissionModel getMaximized(String id) {
         PermissionModel model = state.getMappedPermissionModels().get(id);
-        if (model instanceof Permission) {
-            Permission p = (Permission) model;
-              p.privilege();
-
-        }
-        return null;
+        model.privilege();
+        return model;
     }
 
     private void createStructure() {
