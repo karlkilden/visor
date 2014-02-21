@@ -24,9 +24,6 @@ package com.kildeen.visor.core.api.permission;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static junit.framework.Assert.*;
 
 /**
@@ -43,7 +40,7 @@ public class ConverterTest {
          DefaultPermissionConverter converter = new DefaultPermissionConverter();
 
         String expected =   "kildeen.visor.core.api.permission.ConverterTest";
-        assertEquals(expected, converter.getPermissionId(this.getClass()));
+        assertEquals(expected, converter.getId(this.getClass()));
     }
 
 
@@ -52,17 +49,17 @@ public class ConverterTest {
     public void serialized_should_be_as_was_when_deserialized() {
         DefaultPermissionConverter converter = new DefaultPermissionConverter();
 
-        Permission p = new Permission("this.that", new ListOrderedSet<PermissionModel>(),null);
+        PermissionImpl p = new PermissionImpl("this.that", new ListOrderedSet<Permission>(),null);
 
         p.setCreate(true);
         p.setRead(true);
         p.setUpdate(true);
         p.setDelete(true);
-        Permission child = new Permission("this.that.do",new ListOrderedSet<PermissionModel>(),null);
+        PermissionImpl child = new PermissionImpl("this.that.do",new ListOrderedSet<Permission>(),null);
         p.getChildren().add(child);
 
         String json = converter.serialize(p);
-        Permission p2 = converter.deserialize(json);
+        PermissionImpl p2 = converter.deserialize(json);
 
         assertEquals(p.hasCreate(), p2.hasCreate());
         assertEquals(p.hasRead(), p2.hasRead());

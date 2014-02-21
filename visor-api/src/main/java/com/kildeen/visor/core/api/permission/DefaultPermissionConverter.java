@@ -22,13 +22,14 @@
 package com.kildeen.visor.core.api.permission;
 
 import com.google.common.base.Splitter;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import com.google.gson.*;
+import org.apache.commons.collections4.set.ListOrderedSet;
 import org.apache.commons.lang3.text.WordUtils;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.*;
 
 /**
@@ -40,15 +41,21 @@ import java.util.*;
  */
 @ApplicationScoped
 public class DefaultPermissionConverter implements PermissionConverter {
+    private static final String PERMISSION ="{\"t\":0";
+    private static final String MINIMIZED_PERMISSION = "{\"t\":1";
 
     @Inject
-    PermissionResolver permissionResolver;
+    private PermissionResolver permissionResolver;
+    @Inject
+    private PermissionMinimizer minimizer;
+    @Inject
+    private PermissionRevisionWriter permissionRevisionWriter;
 
     private static final Splitter splitter = Splitter.on("*");
 
 
     @Override
-    public String getPermissionId(Class<?> permissionClass) {
+    public String getId(Class<?> permissionClass) {
         String permission = permissionClass.getCanonicalName();
         int firstFolderIndex = permission.indexOf(".");
         firstFolderIndex++; // remove dot too.
@@ -56,22 +63,14 @@ public class DefaultPermissionConverter implements PermissionConverter {
     }
 
     @Override
-    public String getPartPermissionId(final Class<? extends PartPermission> permissionClass) {
+    public String getPartId(final Class<? extends PartPermission> permissionClass) {
         String permission = WordUtils.uncapitalize(permissionClass.getEnclosingClass()
                 .getSimpleName()) + permissionClass.getSimpleName();
         return permission;
     }
 
-    /*
-     * Here for symmetry only
-     */
     @Override
-    public String getPermissionModelId(final Class<?> permissionFolderClass) {
-        return getPermissionId(permissionFolderClass);
-    }
-
-    @Override
-    public String serialize(final PermissionModel permission) {
+    public String serialize(final Permission permission) {
         Gson gson = new Gson();
         return gson.toJson(permission, permission.getClass());
     }
@@ -79,7 +78,7 @@ public class DefaultPermissionConverter implements PermissionConverter {
     @Override
     public Permission deserialize(final String deserialized) {
         Gson gson = new GsonBuilder().create();
-        return gson.fromJson(deserialized, Permission.class);
+        return gson.fromJson(deserialized, PermissionImpl.class);
 
     }
 
@@ -93,8 +92,8 @@ public class DefaultPermissionConverter implements PermissionConverter {
     }
 
     @Override
-    public Collection<Permission> deserializeAll(final Collection<String> deserialized) {
-        List<Permission> deserializedPermissions = new ArrayList<>();
+    public Set<Permission> deserializeAll(final Collection<String> deserialized) {
+        Set<Permission> deserializedPermissions = new ListOrderedSet<>();
         for (String permission : deserialized) {
             deserializedPermissions.add(deserialize(permission));
         }
@@ -102,13 +101,15 @@ public class DefaultPermissionConverter implements PermissionConverter {
     }
 
     @Override
-    public List<PermissionModel> expand(Collection<String> truncatedPermissions) {
-        List<PermissionModel> result = new ArrayList<>();
-        for (String permission : truncatedPermissions) {
+    public List<Permission> expand(String minimizedPermissions) {
+        Gson gson = new Gson();
+        MinimizedPermission minimizedPermission = gson.fromJson(minimizedPermissions, MinimizedPermission.class);
+        List<Permission> result = new ArrayList<>();
+        for (String permission : minimizedPermission.getTruncatedPermissionModel()) {
 
             if (permission.contains("*")) {
                 List<String> permissionData = splitter.splitToList(permission);
-                Permission actual = (Permission) permissionResolver.getPermissionModel(permissionData.get(0));
+                PermissionImpl actual = (PermissionImpl) permissionResolver.getPermissionModel(permissionData.get(0));
                 if (permissionData.get(1).isEmpty()) {
                     // do nothing
                 } else {
@@ -122,12 +123,49 @@ public class DefaultPermissionConverter implements PermissionConverter {
                 result.add(actual);
             }
             else {
-                 PermissionModel m = permissionResolver.getMaximized(permission);
+                 Permission m = permissionResolver.getMaximized(permission);
                 result.add(m);
             }
         }
 
         return result;
+    }
+
+    @Override
+    public String minimize(Collection<Permission> minimizedPermissions) {
+        MinimizedPermission result = minimizer.minimize(minimizedPermissions);
+        Gson gson = new Gson();
+        return gson.toJson(result);
+    }
+
+    @Override
+    public Set<Permission> automaticDeserializeAll(Collection<String> permissions) {
+        Set<Permission> deserializedPermissions = new ListOrderedSet<>();
+        for (String data : permissions) {
+            if (data.startsWith(PERMISSION)) {
+                deserializedPermissions.add(deserialize(data));
+            }
+            else if (data.startsWith(MINIMIZED_PERMISSION)) {
+                deserializedPermissions.addAll(expand(data));
+            }
+        }
+        return deserializedPermissions;
+    }
+
+    @Override
+    public Collection<String> automaticSerializeAll(Collection<Permission> permissions) {
+        if (permissionRevisionWriter.isActivated()) {
+            Multimap<String, Permission> hierarchy = ArrayListMultimap.create();
+            ListOrderedSet<String> hiearchyStrings = new ListOrderedSet<>();
+            for (Permission p : permissions) {
+                String[] strings = p.getId().split(".");
+                for (String s : strings) {
+                    hierarchy.put(s, p);
+                }
+                hiearchyStrings.addAll(new ArrayList<String>(Arrays.asList(strings)));
+            }
+
+        }
     }
 
 }

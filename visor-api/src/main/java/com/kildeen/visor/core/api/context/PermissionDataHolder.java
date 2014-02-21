@@ -33,9 +33,8 @@ import java.util.Set;
  * @author: Karl Kildén
  * @since 1.0
  */
-public interface PermissionHolder extends Serializable {
+public interface PermissionDataHolder extends Serializable {
 
-    public Set<Permission> getPermissions();
-    public boolean isAutomatic();
+    public Set<String> getPermissions();
 
 }

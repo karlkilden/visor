@@ -33,7 +33,7 @@ public class PermissionResolverTest {
 
     @Inject
     MockFacesContext mockFacesContext;
-    private List<PermissionModel> permissions;
+    private List<Permission> permissions;
     @Inject
     private PermissionContext permissionContext;
 
@@ -50,7 +50,7 @@ public class PermissionResolverTest {
 
         boolean nestedExists = false;
         boolean adminExists = false;
-        for (PermissionModel p : permissions) {
+        for (Permission p : permissions) {
             if (p.getPath().equals("/pages/secured.xhtml")) {
                 nestedExists = true;
             }
@@ -74,13 +74,13 @@ public class PermissionResolverTest {
 
     @Test
     public void nested_security_should_be_to_a_nested_group_hierarchy() throws Exception {
-        PermissionModel model = permissionResolver.getPermissionModel("kildeen.mock.provided.Pages");
-        assertEquals(Permission.class, model.getClass());
+        Permission model = permissionResolver.getPermissionModel("kildeen.mock.provided.Pages");
+        assertEquals(PermissionImpl.class, model.getClass());
         assertTrue(model.isParent());
-        PermissionModel expectedChild = permissionResolver.getPermissionModel("kildeen.mock.provided.Pages.Secured");
+        Permission expectedChild = permissionResolver.getPermissionModel("kildeen.mock.provided.Pages.Secured");
         assertTrue(model.getChildren().contains(expectedChild));
         expectedChild = permissionResolver.getPermissionModel("kildeen.mock.provided.Pages.NestedSecured");
-        PermissionModel expectedGrandChild = permissionResolver.getPermissionModel("kildeen.mock.provided.Pages.NestedSecured.NestedSecuredChild");
+        Permission expectedGrandChild = permissionResolver.getPermissionModel("kildeen.mock.provided.Pages.NestedSecured.NestedSecuredChild");
         assertTrue(expectedChild.getChildren().contains(expectedGrandChild));
     }
 
@@ -90,15 +90,15 @@ public class PermissionResolverTest {
     public void all_representations_must_be_equal() {
         List<String> ids = new ArrayList<>();
         for (ConfigDescriptor configDescriptor : configResolver.getConfigDescriptors()) {
-            //We know that getPermissionId and getPermissionModel is the same
+            //We know that getId and getPermissionModel is the same
             PermissionMappingContext context = new PermissionMappingContext(configResolver.getConfigDescriptors());
             if (context.isSecured(configDescriptor)) {
-                ids.add(permissionConverter.getPermissionId(configDescriptor.getConfigClass()));
+                ids.add(permissionConverter.getId(configDescriptor.getConfigClass()));
             }
         }
         assertEquals(ids.size(), permissionResolver.getPermissionModels().size());
 
-            for (PermissionModel model : permissionResolver.getPermissionModels()) {
+            for (Permission model : permissionResolver.getPermissionModels()) {
                 if (ids.contains(model.getId())) {
                     // OK
                 }
@@ -106,19 +106,19 @@ public class PermissionResolverTest {
                     fail("Id is missing from the mapped Models");
                 }
             }
-        for (PermissionModel root : permissionResolver.getRootPermissionModels()) {
+        for (Permission root : permissionResolver.getRootPermissionModels()) {
             validateExistence(root);
         }
 
-        for (PermissionModel permission : permissionResolver.getPermissions()) {
+        for (Permission permission : permissionResolver.getPermissions()) {
             validateExistence(permission);
         }
 
     }
 
-    private void validateExistence(PermissionModel root) {
+    private void validateExistence(Permission root) {
         assertEquals(root.getId(), permissionResolver.getPermissionModel(root.getId()).getId());
-        for (PermissionModel child : root.getChildren()) {
+        for (Permission child : root.getChildren()) {
             validateExistence(child);
         }
     }

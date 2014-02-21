@@ -1,10 +1,6 @@
 package com.kildeen.visor.core.api.permission;
 
-import com.kildeen.visor.core.api.permission.Permission;
-import com.kildeen.visor.core.api.permission.PermissionModel;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -12,11 +8,12 @@ import java.util.List;
  * User: Karl Kildén
  * Date: 2014-02-19
  */
-public class TruncatedPermissionModel {
+public class MinimizedPermission {
+    private int t=1;
     private int version;
     private List<String> truncatedPermissionModel = new ArrayList<>();
 
-    public TruncatedPermissionModel(List<String> truncatedPermissionModel, List<String> shortHands, int version) {
+    public MinimizedPermission(List<String> truncatedPermissionModel, List<String> shortHands, int version) {
         this.version = version;
         this.truncatedPermissionModel = truncatedPermissionModel;
     }

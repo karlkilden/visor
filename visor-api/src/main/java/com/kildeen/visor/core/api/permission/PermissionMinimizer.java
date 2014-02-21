@@ -14,7 +14,7 @@ import java.util.List;
  * Date: 2014-02-19
  */
 @ApplicationScoped
-public class TruncatedPermissionBuilder implements Serializable {
+public class PermissionMinimizer implements Serializable {
 
     @Inject
     private PermissionResolver resolver;
@@ -24,31 +24,31 @@ public class TruncatedPermissionBuilder implements Serializable {
 
     private List<String> truncatedPermissionModel = new ArrayList<>();
 
-    public TruncatedPermissionModel map(Collection<PermissionModel> permissionModels) {
+    public MinimizedPermission minimize(Collection<Permission> permissions) {
 
-        for (PermissionModel model : permissionModels) {
+        for (Permission model : permissions) {
             if (useShortHand(model)) {
-                Permission p = (Permission) model;
+                PermissionImpl p = (PermissionImpl) model;
                 truncatedPermissionModel.add(model.getId());
             } else {
                 truncatedPermissionModel.add(model.getId() + getCrudInfo(model));
-                for (PermissionModel child : model.getChildren()) {
+                for (Permission child : model.getChildren()) {
                     truncatedPermissionModel.add(child.getId() + getCrudInfo(child));
                 }
             }
         }
-        TruncatedPermissionModel truncatedModel = new TruncatedPermissionModel(truncatedPermissionModel, truncatedPermissionModel, permissionRevisionWriter.getVersion());
+        MinimizedPermission truncatedModel = new MinimizedPermission(truncatedPermissionModel, truncatedPermissionModel, permissionRevisionWriter.getVersion());
         return truncatedModel;
     }
 
 
-    private boolean useShortHand(PermissionModel permission) {
-        PermissionModel toMatch = resolver.getPermissionModel(permission.getId());
+    private boolean useShortHand(Permission permission) {
+        Permission toMatch = resolver.getPermissionModel(permission.getId());
         if (permission.getChildren().size() == toMatch.getChildren().size() && permission.isPrivileged()) {
             boolean shorthand = false;
-            for (PermissionModel child : permission.getChildren()) {
-                if (child instanceof Permission) {
-                    shorthand = useShortHand((Permission) child);
+            for (Permission child : permission.getChildren()) {
+                if (child instanceof PermissionImpl) {
+                    shorthand = useShortHand((PermissionImpl) child);
                     if (shorthand == false) {
                         return false;
                     }
@@ -64,11 +64,11 @@ public class TruncatedPermissionBuilder implements Serializable {
         return false;
     }
 
-    private boolean useShortHand(Permission permission) {
-        Permission toMatch = (Permission) resolver.getPermissionModel(permission.getId());
+    private boolean useShortHand(PermissionImpl permission) {
+        PermissionImpl toMatch = (PermissionImpl) resolver.getPermissionModel(permission.getId());
         if (permission.getChildren().size() == toMatch.getChildren().size()) {
-            for (PermissionModel child : permission.getChildren()) {
-                Permission childPermission = (Permission) child;
+            for (Permission child : permission.getChildren()) {
+                PermissionImpl childPermission = (PermissionImpl) child;
                 if (childPermission.isPrivileged()) {
                     //OK
                 } else {
@@ -80,8 +80,8 @@ public class TruncatedPermissionBuilder implements Serializable {
         return false;
     }
 
-    private Object getCrudInfo(PermissionModel model) {
-        Permission p = (Permission) model;
+    private Object getCrudInfo(Permission model) {
+        PermissionImpl p = (PermissionImpl) model;
         StringBuilder sb = new StringBuilder();
         sb.append("*");
         if (p.hasCreate()) {

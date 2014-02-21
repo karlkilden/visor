@@ -32,11 +32,11 @@ import java.util.List;
  */
 public interface PermissionResolver {
 
-    public List<PermissionModel> getPermissions();
-    public List<PermissionModel> getPermissionModels();
-    public List<PermissionModel> getRootPermissionModels();
-    public PermissionModel getPermissionModel (String id);
-    public PermissionModel getMaximized(String permission);
+    public List<Permission> getPermissions();
+    public List<Permission> getPermissionModels();
+    public List<Permission> getRootPermissionModels();
+    public Permission getPermissionModel (String id);
+    public Permission getMaximized(String permission);
     public void boot();
 
 }

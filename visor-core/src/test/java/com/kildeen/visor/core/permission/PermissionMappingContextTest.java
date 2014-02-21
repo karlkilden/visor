@@ -3,7 +3,7 @@ package com.kildeen.visor.core.permission;
 import com.kildeen.mock.provided.Admin;
 import com.kildeen.mock.provided.Pages;
 import com.kildeen.mock.provided.PermissionMappingContextDummy;
-import com.kildeen.visor.core.api.permission.PermissionModel;
+import com.kildeen.visor.core.api.permission.Permission;
 import com.kildeen.visor.core.api.permission.PermissionResolver;
 import junit.framework.Assert;
 import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigResolver;
@@ -51,7 +51,7 @@ public class PermissionMappingContextTest {
 
     @Test
     public void root_nodes_should_not_have_secured_parents() throws Exception {
-        for (PermissionModel rootNode : permissionResolver.getRootPermissionModels()) {
+        for (Permission rootNode : permissionResolver.getRootPermissionModels()) {
             if (permissionMappingContext.isSecuredRoot(configResolver.getConfigDescriptor(rootNode.getPath()))) {
                 // ok
             } else {

@@ -41,7 +41,7 @@ public class PermissionMappingContext {
 
 
     protected boolean isSecuredRoot(ConfigDescriptor<?> configDescriptor) {
-        //Only map folders that are secured and lacking secured parent
+        //Only minimize folders that are secured and lacking secured parent
         return isSecured(configDescriptor)
                 && isRoot(configDescriptor.getConfigClass());
     }

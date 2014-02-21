@@ -21,12 +21,13 @@
 
 package com.kildeen.mock.provided;
 
+import com.kildeen.visor.core.api.context.DefaultPermissionHolder;
 import com.kildeen.visor.core.api.permission.Permission;
-import com.kildeen.visor.core.api.context.PermissionHolder;
-import com.kildeen.visor.core.api.permission.PermissionModel;
+import com.kildeen.visor.core.api.permission.PermissionImpl;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Specializes;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -39,24 +40,25 @@ import java.util.Set;
  * @since 1.0
  */
 @ApplicationScoped
-public class MockPermissionHolder implements PermissionHolder {
-    private Set<PermissionModel> permissions;
+@Specializes
+public class MockPermissionHolder extends DefaultPermissionHolder {
+    private Set<Permission> permissions;
 
     @Override
-    public Set<PermissionModel> getPermissions() {
+    public Set<Permission> getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(final Set<PermissionModel> permissions) {
+    public void setPermissions(final Set<Permission> permissions) {
         this.permissions = permissions;
     }
 
     @PostConstruct
     private void init() {
-        Permission p = new Permission("", Collections.<PermissionModel>emptySet(),null);
+        PermissionImpl p = new PermissionImpl("", Collections.<Permission>emptySet(),null);
         permissions = new HashSet<>();
         permissions.add(p);
-        Permission p2 = new Permission("testTrue", Collections.<PermissionModel>emptySet(),null);
+        PermissionImpl p2 = new PermissionImpl("testTrue", Collections.<Permission>emptySet(),null);
         permissions.add(p2);
     }
 }

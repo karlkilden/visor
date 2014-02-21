@@ -24,6 +24,7 @@ package com.kildeen.visor.core.api.permission;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Permissions are string based. The conversion between the
@@ -46,7 +47,7 @@ public interface PermissionConverter extends Serializable {
      * @return The result of the conversion. Default will use #getCanonicalName() and then strip the first "folder".
      * The intention is to dropout words such as "com", "org" since they offer no value.
      */
-    public String getPermissionId(Class<?> permissionClass);
+    public String getId(Class<?> permissionClass);
 
     /**
      * A PartPermission is a nested class nested inside a ViewConfig that implements {@link PartPermission}. Default
@@ -56,34 +57,28 @@ public interface PermissionConverter extends Serializable {
      * @param partPermissionClass  The partPermission that should be converted
      * @return conversion result
      */
-    public String getPartPermissionId(Class<? extends PartPermission> partPermissionClass);
-
-    /**
-     *
-     * @param permissionFolderClass class to Convert.
-     * @return  Default implementation is exact same as {@link #getPermissionId(Class)}
-     */
-    public String getPermissionModelId(Class<?> permissionFolderClass);
+    public String getPartId(Class<? extends PartPermission> partPermissionClass);
 
 
     /**
      *
-     * @param permission  Permission that should be converted to a String to simplify persisting etc.
+     * @param permission  PermissionImpl that should be converted to a String to simplify persisting etc.
      * @return  Default turns it into a default json string object.
      */
-    public String serialize(PermissionModel permission);
+    public String serialize(Permission permission);
 
     /**
      *
-     * @param deserializedPermission  A String constructed by using {@link #serialize(PermissionModel)}
-     * @return  A permission as was before {@link #serialize(PermissionModel)} was used.
+     *
+     * @param deserializedPermission  A String constructed by using {@link #serialize(com.kildeen.visor.core.api.permission.Permission)}
+     * @return  A permission as was before {@link #serialize(Permission)} was used.
      */
     public Permission deserialize(String deserializedPermission);
 
     /**
      *
      * @param permissions to serialize.
-     * @return Convenience method, Default uses {@link #serialize(PermissionModel)} for all entries.
+     * @return Convenience method, Default uses {@link #serialize(Permission)} for all entries.
      */
     public Collection<String> serializeAll(Collection<Permission> permissions);
 
@@ -92,10 +87,13 @@ public interface PermissionConverter extends Serializable {
      * @param deserializedPermissions to deserialize.
      * @return  Convenience method, Default uses {@link #deserialize(String)}} for all entries.
      */
-    public Collection<Permission> deserializeAll(Collection<String> deserializedPermissions);
+    public Set<Permission> deserializeAll(Collection<String> deserializedPermissions);
 
-    public List<PermissionModel> expand(Collection<String> truncatedPermissions);
+    public List<Permission> expand(String minimizedPermissions);
 
+    public String minimize(Collection<Permission> minimizedPermissions);
 
+    public Set<Permission> automaticDeserializeAll(Collection<String> permissions);
 
+    public Collection<String> automaticSerializeAll(Collection<Permission> permissions);
 }

@@ -1,6 +1,6 @@
 package com.kildeen.visor.core.permission;
 
-import com.kildeen.visor.core.api.permission.PermissionModel;
+import com.kildeen.visor.core.api.permission.Permission;
 
 /**
  * <p>File created: 2014-02-17 22:40</p>
@@ -12,6 +12,6 @@ import com.kildeen.visor.core.api.permission.PermissionModel;
 public class PermissionTree {
 
     public static class PermissionTreeNode {
-        private PermissionModel permissionModel;
+        private Permission permission;
     }
 }

@@ -14,8 +14,8 @@ public class PermissionTest {
 
     @Test
     public void permission_should_return_children_as_model() throws Exception {
-        Permission permission = new Permission("", new ListOrderedSet<PermissionModel>(),null);
-        Permission child = new Permission("2", new ListOrderedSet<PermissionModel>(),null);
+        PermissionImpl permission = new PermissionImpl("", new ListOrderedSet<Permission>(),null);
+        PermissionImpl child = new PermissionImpl("2", new ListOrderedSet<Permission>(),null);
         permission.getChildren().add(child);
 
         Assert.assertEquals(child, permission.getChildren().iterator().next());

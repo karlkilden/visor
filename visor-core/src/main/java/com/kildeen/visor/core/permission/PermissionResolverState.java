@@ -1,10 +1,9 @@
 package com.kildeen.visor.core.permission;
 
 import com.kildeen.visor.core.api.permission.Permission;
-import com.kildeen.visor.core.api.permission.PermissionModel;
+import com.kildeen.visor.core.api.permission.PermissionImpl;
 import org.apache.commons.collections4.set.ListOrderedSet;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,46 +15,41 @@ import java.util.Map;
  */
 public class PermissionResolverState {
     private final PermissionMappingContext mappingContext;
-    private ListOrderedSet<Permission> permissions = new ListOrderedSet<>();
-    private ListOrderedSet<PermissionModel> permissionModels = new ListOrderedSet<>();
-    private ListOrderedSet<PermissionModel> rootPermissionModels = new ListOrderedSet<>();
-    private Map<String, PermissionModel> mappedPermissionModels = new HashMap<>();
+    private ListOrderedSet<PermissionImpl> permissions = new ListOrderedSet<>();
+    private ListOrderedSet<Permission> rootPermissions = new ListOrderedSet<>();
+    private Map<String, Permission> mappedPermissionModels = new HashMap<>();
 
     public PermissionResolverState(PermissionMappingContext mappingContext) {
 
         this.mappingContext = mappingContext;
     }
 
-    private void addToRelevantCollections(PermissionModel permissionModel, boolean isRoot) {
-        if (permissionModel instanceof Permission) {
-            permissions.add((Permission) permissionModel);
+    private void addToRelevantCollections(PermissionImpl permission, boolean isRoot) {
+        if (permission instanceof PermissionImpl) {
+            permissions.add((PermissionImpl) permission);
 
         }
         if (isRoot) {
-            rootPermissionModels.add(permissionModel);
+            rootPermissions.add(permission);
         }
-        permissionModels.add(permissionModel);
-        mappedPermissionModels.put(permissionModel.getId(), permissionModel);
+        permissions.add(permission);
+        mappedPermissionModels.put(permission.getId(), permission);
 
     }
 
-    public List<Permission> getPermissions() {
+    public List<PermissionImpl> getPermissions() {
         return permissions.asList();
     }
 
-    public List<PermissionModel> getPermissionModels() {
-        return permissionModels.asList();
+    public List<Permission> getRootPermissions() {
+        return rootPermissions.asList();
     }
 
-    public List<PermissionModel> getRootPermissionModels() {
-        return rootPermissionModels.asList();
-    }
-
-    public Map<String, PermissionModel> getMappedPermissionModels() {
+    public Map<String, Permission> getMappedPermissionModels() {
         return mappedPermissionModels;
     }
 
-    public void add(PermissionModel permissionModel, boolean isRoot) {
-        addToRelevantCollections(permissionModel, isRoot);
+    public void add(PermissionImpl permission, boolean isRoot) {
+        addToRelevantCollections(permission, isRoot);
     }
 }

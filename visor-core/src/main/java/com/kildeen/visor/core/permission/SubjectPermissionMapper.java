@@ -24,7 +24,7 @@ package com.kildeen.visor.core.permission;
 import com.google.common.collect.ImmutableMap;
 import com.kildeen.visor.core.api.permission.Permission;
 import com.kildeen.visor.core.api.context.PermissionHolder;
-import com.kildeen.visor.core.api.permission.PermissionModel;
+import com.kildeen.visor.core.api.permission.PermissionImpl;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -45,23 +45,23 @@ public class SubjectPermissionMapper implements Serializable {
     @Inject
     private PermissionHolder permissionHolder;
 
-    private Map<String, PermissionModel> mappedPermissions;
+    private Map<String, Permission> mappedPermissions;
 
-    public static final PermissionModel NOT_FOUND = new Permission(null, null, null);
+    public static final Permission NOT_FOUND = new PermissionImpl(null, null, null);
 
     @PostConstruct
     private void init() {
-        ImmutableMap.Builder<String, PermissionModel> builder = ImmutableMap.<String, PermissionModel>builder();
-        for (PermissionModel permission : permissionHolder.getPermissions()) {
+        ImmutableMap.Builder<String, Permission> builder = ImmutableMap.<String, Permission>builder();
+        for (Permission permission : permissionHolder.getPermissions()) {
             map(builder, permission);
         }
         mappedPermissions = builder.build();
 
     }
 
-    private void map(final ImmutableMap.Builder<String, PermissionModel> builder, PermissionModel permission) {
+    private void map(final ImmutableMap.Builder<String, Permission> builder, Permission permission) {
         builder.put(permission.getId(), permission);
-        for (PermissionModel child : permission.getChildren()) {
+        for (Permission child : permission.getChildren()) {
             map(builder, child);
         }
     }
@@ -70,8 +70,8 @@ public class SubjectPermissionMapper implements Serializable {
         return mappedPermissions.containsKey(permission);
     }
 
-    public PermissionModel getPermission(String permission) {
-        PermissionModel p = mappedPermissions.get(permission);
+    public Permission getPermission(String permission) {
+        Permission p = mappedPermissions.get(permission);
         if (p == null) {
             return NOT_FOUND;
         }

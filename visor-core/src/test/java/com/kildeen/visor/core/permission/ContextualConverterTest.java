@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
@@ -25,31 +26,50 @@ public class ContextualConverterTest {
     private PermissionConverter permissionConverter;
 
     @Inject
-    MockPermissionHolder permissionHolder;
+    private MockPermissionHolder permissionHolder;
 
     @Inject
-    TruncatedPermissionBuilder builder;
+    private PermissionMinimizer builder;
 
 
     @Test
-    public void truncate_should_create_one_to_one() throws Exception {
-        Permission p = new Permission("kildeen.mock.provided.Pages.NestedSecured.NestedSecuredChild", new ListOrderedSet<PermissionModel>(),null);
+    public void minimize_should_create_one_to_one() throws Exception {
+        PermissionImpl p = new PermissionImpl("kildeen.mock.provided.Pages.NestedSecured.NestedSecuredChild", new ListOrderedSet<Permission>(),null);
 
         p.setCreate(true);
         p.setRead(true);
         p.setUpdate(true);
         p.setDelete(true);
-        Permission child = new Permission("kildeen.mock.provided.Pages.Secured",new ListOrderedSet<PermissionModel>(),null);
+        PermissionImpl child = new PermissionImpl("kildeen.mock.provided.Pages.Secured",new ListOrderedSet<Permission>(),null);
 
-        List<PermissionModel> list = new ArrayList<>();
+        List<Permission> list = new ArrayList<>();
         list.add(child);
         list.add(p);
-        TruncatedPermissionModel truncated =  builder.map(list);
+        MinimizedPermission truncated =  builder.minimize(list);
         assertEquals(2, truncated.getTruncatedPermissionModel().size());
-        List<PermissionModel> expanded = permissionConverter.expand(truncated.getTruncatedPermissionModel());
-         assertTrue(expanded.contains(p));
-        assertTrue(expanded.contains(child));
+    }
 
+    @Test
+    public void minmize_should_be_serialize_and_deserialize() throws Exception {
+        PermissionImpl p = new PermissionImpl("kildeen.mock.provided.Pages.NestedSecured.NestedSecuredChild", new ListOrderedSet<Permission>(),null);
 
+        p.setCreate(true);
+        p.setRead(true);
+        p.setUpdate(true);
+        p.setDelete(false);
+        PermissionImpl child = new PermissionImpl("kildeen.mock.provided.Pages.Secured",new ListOrderedSet<Permission>(),null);
+
+        List<Permission> list = new ArrayList<>();
+        list.add(child);
+        list.add(p);
+        String s = permissionConverter.minimize(list);
+
+        Collection<Permission> back = permissionConverter.expand(s);
+        for (Permission permission : back) {
+            assertTrue(list.contains(permission));
+            if (p.equals(permission)) {
+                assertTrue(permission.isDelete() == false);
+            }
+        }
     }
 }
