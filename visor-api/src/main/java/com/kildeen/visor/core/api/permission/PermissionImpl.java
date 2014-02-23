@@ -37,7 +37,7 @@ import java.util.Set;
  * @since 1.0
  */
 public class PermissionImpl implements Permission {
-    private int t=0;
+    private int t = 0;
     private String id;
     private String path;
     private Set<PermissionImpl> children = new ListOrderedSet<>();
@@ -46,6 +46,7 @@ public class PermissionImpl implements Permission {
     private boolean update;
     private boolean delete;
     private boolean group;
+    private int count = 1;
 
     public PermissionImpl(final String id, final Set<Permission> children, final ConfigDescriptor configDescriptor) {
         //We want no trouble with Json so we cheat here.
@@ -57,6 +58,13 @@ public class PermissionImpl implements Permission {
             } else {
                 group = true;
             }
+        }
+        if (children != null) {
+            count = count + children.size();
+            for (Permission p : children) {
+                count = count + p.getChildren().size();
+            }
+
         }
     }
 
@@ -176,6 +184,11 @@ public class PermissionImpl implements Permission {
     @Override
     public boolean isGroup() {
         return group;
+    }
+
+    @Override
+    public int getCount() {
+        return count;
     }
 
     @Override

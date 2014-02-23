@@ -24,7 +24,8 @@ package com.kildeen.visor.core.api.permission;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -41,7 +42,7 @@ import java.util.*;
  */
 @ApplicationScoped
 public class DefaultPermissionConverter implements PermissionConverter {
-    private static final String PERMISSION ="{\"t\":0";
+    private static final String PERMISSION = "{\"t\":0";
     private static final String MINIMIZED_PERMISSION = "{\"t\":1";
 
     @Inject
@@ -52,6 +53,7 @@ public class DefaultPermissionConverter implements PermissionConverter {
     private PermissionRevisionWriter permissionRevisionWriter;
 
     private static final Splitter splitter = Splitter.on("*");
+    private static final Splitter dotSplitter = Splitter.on(".");
 
 
     @Override
@@ -121,9 +123,8 @@ public class DefaultPermissionConverter implements PermissionConverter {
 
                 }
                 result.add(actual);
-            }
-            else {
-                 Permission m = permissionResolver.getMaximized(permission);
+            } else {
+                Permission m = permissionResolver.getMaximized(permission);
                 result.add(m);
             }
         }
@@ -144,8 +145,7 @@ public class DefaultPermissionConverter implements PermissionConverter {
         for (String data : permissions) {
             if (data.startsWith(PERMISSION)) {
                 deserializedPermissions.add(deserialize(data));
-            }
-            else if (data.startsWith(MINIMIZED_PERMISSION)) {
+            } else if (data.startsWith(MINIMIZED_PERMISSION)) {
                 deserializedPermissions.addAll(expand(data));
             }
         }
@@ -153,19 +153,42 @@ public class DefaultPermissionConverter implements PermissionConverter {
     }
 
     @Override
-    public Collection<String> automaticSerializeAll(Collection<Permission> permissions) {
+    public String automaticSerializeAll(Collection<Permission> permissions) {
         if (permissionRevisionWriter.isActivated()) {
+            List<Permission> shortHand = new ArrayList<>();
             Multimap<String, Permission> hierarchy = ArrayListMultimap.create();
-            ListOrderedSet<String> hiearchyStrings = new ListOrderedSet<>();
             for (Permission p : permissions) {
-                String[] strings = p.getId().split(".");
-                for (String s : strings) {
-                    hierarchy.put(s, p);
+                String part = "";
+                for (String s : dotSplitter.split(p.getId())) {
+                    if (part.isEmpty()) {
+                        part = s;
+                    } else {
+                        part = part + "." + s;
+                    }
+                    hierarchy.put(part, p);
                 }
-                hiearchyStrings.addAll(new ArrayList<String>(Arrays.asList(strings)));
+            }
+            for (Map.Entry<String, Collection<Permission>> set : hierarchy.asMap().entrySet()) {
+                Permission p = permissionResolver.getPermissionModel(set.getKey());
+                if (shortHand != null) {
+                    if (p.getCount() == permissions.size()) {
+                        shortHand.add(p);
+                        return minimize(shortHand);
+                    }
+                }
             }
 
+            for (Map.Entry<String, Collection<Permission>> set : hierarchy.asMap().entrySet()) {
+                Permission p = permissionResolver.getPermissionModel(set.getKey());
+                if (shortHand != null) {
+                    if (p.getCount() < permissions.size()) {
+                        shortHand.add(p);
+                        return minimize(shortHand);
+                    }
+                }
+            }
         }
+        return null;
     }
 
 }

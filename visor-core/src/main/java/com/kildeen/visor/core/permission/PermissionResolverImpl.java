@@ -73,12 +73,7 @@ public class PermissionResolverImpl implements PermissionResolver {
     }
 
     @Override
-    public List<Permission> getPermissionModels() {
-        return (List)state.getPermissions();
-    }
-
-    @Override
-    public List<Permission> getRootPermissionModels() {
+    public List<Permission> getRootPermissions() {
         return state.getRootPermissions();
     }
 

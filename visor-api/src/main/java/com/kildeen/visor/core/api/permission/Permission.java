@@ -41,6 +41,8 @@ public interface Permission {
 
     boolean isGroup();
 
+    int getCount();
+
     void privilege();
 
     String getId();

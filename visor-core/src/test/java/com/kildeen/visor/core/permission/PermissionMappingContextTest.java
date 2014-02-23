@@ -51,7 +51,7 @@ public class PermissionMappingContextTest {
 
     @Test
     public void root_nodes_should_not_have_secured_parents() throws Exception {
-        for (Permission rootNode : permissionResolver.getRootPermissionModels()) {
+        for (Permission rootNode : permissionResolver.getRootPermissions()) {
             if (permissionMappingContext.isSecuredRoot(configResolver.getConfigDescriptor(rootNode.getPath()))) {
                 // ok
             } else {

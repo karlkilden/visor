@@ -96,9 +96,9 @@ public class PermissionResolverTest {
                 ids.add(permissionConverter.getId(configDescriptor.getConfigClass()));
             }
         }
-        assertEquals(ids.size(), permissionResolver.getPermissionModels().size());
+        assertEquals(ids.size(), permissionResolver.getPermissions().size());
 
-            for (Permission model : permissionResolver.getPermissionModels()) {
+            for (Permission model : permissionResolver.getPermissions()) {
                 if (ids.contains(model.getId())) {
                     // OK
                 }
@@ -106,7 +106,7 @@ public class PermissionResolverTest {
                     fail("Id is missing from the mapped Models");
                 }
             }
-        for (Permission root : permissionResolver.getRootPermissionModels()) {
+        for (Permission root : permissionResolver.getRootPermissions()) {
             validateExistence(root);
         }
 

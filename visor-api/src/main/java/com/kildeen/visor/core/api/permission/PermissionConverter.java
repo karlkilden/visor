@@ -95,5 +95,5 @@ public interface PermissionConverter extends Serializable {
 
     public Set<Permission> automaticDeserializeAll(Collection<String> permissions);
 
-    public Collection<String> automaticSerializeAll(Collection<Permission> permissions);
+    public String automaticSerializeAll(Collection<Permission> permissions);
 }

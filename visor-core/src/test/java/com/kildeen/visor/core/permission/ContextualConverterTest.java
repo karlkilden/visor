@@ -71,5 +71,7 @@ public class ContextualConverterTest {
                 assertTrue(permission.isDelete() == false);
             }
         }
+
+        permissionConverter.automaticSerializeAll(list);
     }
 }
