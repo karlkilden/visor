@@ -17,35 +17,34 @@
  * under the License.
  */
 
-package com.kildeen.visor.core.permission;
+package com.kildeen.visor.core.context;
 
-import com.kildeen.visor.core.api.permission.Permission;
-import com.kildeen.visor.core.api.permission.PermissionConverter;
-import com.kildeen.visor.core.api.permission.PermissionManager;
+import com.kildeen.visor.core.api.context.PermissionContext;
+import org.apache.deltaspike.security.api.authorization.AccessDecisionVoter;
+import org.apache.deltaspike.security.api.authorization.AccessDecisionVoterContext;
+import org.apache.deltaspike.security.api.authorization.SecurityViolation;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created with IntelliJ IDEA.
  * User: Karl Kildén
- * Date: 2014-02-21
+ * Date: 2014-02-17
  */
-@ApplicationScoped
-public class PermissionManagerImpl implements PermissionManager {
+public class PermissionAccessDecisionVoter implements AccessDecisionVoter {
 
     @Inject
-    private PermissionConverter permissionConverter;
+    private PermissionContext permissionContext;
+    public Set<SecurityViolation> checkPermission(AccessDecisionVoterContext accessDecisionVoterContext) {
 
-    @Override
-    public Collection<String> serialize(Collection<Permission> permissions) {
-        return permissionConverter.serializeAll(permissions);
-    }
-
-    @Override
-    public Set<Permission> deSerialize(Collection<String> permissions) {
-        return permissionConverter.deserializeAll(permissions);
+        if(permissionContext.isAllowed()) {
+            return null;
+        }
+        else {
+            Set<SecurityViolation> violations = new HashSet<>();
+            violations.add(new SecurityViolationImpl("Failed Visor Security check"));
+            return violations;
+        }
     }
 }

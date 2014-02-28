@@ -1,3 +1,22 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership. The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 package com.kildeen.visor.core.permission;
 
 import com.kildeen.mock.provided.MockFacesContext;
@@ -74,13 +93,13 @@ public class PermissionResolverTest {
 
     @Test
     public void nested_security_should_be_to_a_nested_group_hierarchy() throws Exception {
-        Permission model = permissionResolver.getPermissionModel("kildeen.mock.provided.Pages");
+        Permission model = permissionResolver.getPermission("kildeen.mock.provided.Pages");
         assertEquals(PermissionImpl.class, model.getClass());
         assertTrue(model.isParent());
-        Permission expectedChild = permissionResolver.getPermissionModel("kildeen.mock.provided.Pages.Secured");
+        Permission expectedChild = permissionResolver.getPermission("kildeen.mock.provided.Pages.Secured");
         assertTrue(model.getChildren().contains(expectedChild));
-        expectedChild = permissionResolver.getPermissionModel("kildeen.mock.provided.Pages.NestedSecured");
-        Permission expectedGrandChild = permissionResolver.getPermissionModel("kildeen.mock.provided.Pages.NestedSecured.NestedSecuredChild");
+        expectedChild = permissionResolver.getPermission("kildeen.mock.provided.Pages.NestedSecured");
+        Permission expectedGrandChild = permissionResolver.getPermission("kildeen.mock.provided.Pages.NestedSecured.NestedSecuredChild");
         assertTrue(expectedChild.getChildren().contains(expectedGrandChild));
     }
 
@@ -90,7 +109,7 @@ public class PermissionResolverTest {
     public void all_representations_must_be_equal() {
         List<String> ids = new ArrayList<>();
         for (ConfigDescriptor configDescriptor : configResolver.getConfigDescriptors()) {
-            //We know that getId and getPermissionModel is the same
+            //We know that getId and getPermission is the same
             PermissionMappingContext context = new PermissionMappingContext(configResolver.getConfigDescriptors());
             if (context.isSecured(configDescriptor)) {
                 ids.add(permissionConverter.getId(configDescriptor.getConfigClass()));
@@ -117,7 +136,7 @@ public class PermissionResolverTest {
     }
 
     private void validateExistence(Permission root) {
-        assertEquals(root.getId(), permissionResolver.getPermissionModel(root.getId()).getId());
+        assertEquals(root.getId(), permissionResolver.getPermission(root.getId()).getId());
         for (Permission child : root.getChildren()) {
             validateExistence(child);
         }

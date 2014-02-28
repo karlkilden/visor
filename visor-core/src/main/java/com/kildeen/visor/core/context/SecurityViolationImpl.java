@@ -17,20 +17,21 @@
  * under the License.
  */
 
-package com.kildeen.mock.provided;
+package com.kildeen.visor.core.context;
 
-import com.kildeen.visor.core.permission.PermissionMappingContext;
-import org.apache.deltaspike.core.api.config.view.metadata.ConfigDescriptor;
+import org.apache.deltaspike.security.api.authorization.SecurityViolation;
 
-import java.util.List;
+public class SecurityViolationImpl implements SecurityViolation {
+    private static final long serialVersionUID = -5017812464381395966L;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Karl Kildén
- * Date: 2014-02-19
- */
-public class PermissionMappingContextDummy extends PermissionMappingContext {
-    public PermissionMappingContextDummy(List<ConfigDescriptor<?>> configDescriptors) {
-        super(configDescriptors);
+    private final String reason;
+
+    SecurityViolationImpl(String reason) {
+        this.reason = reason;
+    }
+
+    @Override
+    public String getReason() {
+        return reason;
     }
 }
