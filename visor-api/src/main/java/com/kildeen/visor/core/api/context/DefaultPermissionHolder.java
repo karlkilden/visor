@@ -27,7 +27,7 @@ public class DefaultPermissionHolder implements PermissionHolder {
     @PostConstruct
     private void init() {
         if (isAutomatic() && permissionDataHolder.getPermissions() != null) {
-            permissions = permissionConverter.automaticDeserializeAll(permissionDataHolder.getPermissions());
+            permissions = permissionConverter.deserializeAll(permissionDataHolder.getPermissions());
         }
     }
 

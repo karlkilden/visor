@@ -88,12 +88,4 @@ public interface PermissionConverter extends Serializable {
      * @return  Convenience method, Default uses {@link #deserialize(String)}} for all entries.
      */
     public Set<Permission> deserializeAll(Collection<String> deserializedPermissions);
-
-    public List<Permission> expand(String minimizedPermissions);
-
-    public String minimize(Collection<Permission> minimizedPermissions);
-
-    public Set<Permission> automaticDeserializeAll(Collection<String> permissions);
-
-    public String automaticSerializeAll(Collection<Permission> permissions);
 }
