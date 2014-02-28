@@ -1,7 +1,6 @@
 package com.kildeen.visor.core.permission;
 
 import com.kildeen.visor.core.api.permission.Permission;
-import com.kildeen.visor.core.api.permission.PermissionImpl;
 import org.apache.commons.collections4.set.ListOrderedSet;
 
 import java.util.HashMap;

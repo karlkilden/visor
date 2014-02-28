@@ -21,12 +21,12 @@ public class PermissionManagerImpl implements PermissionManager {
     private PermissionConverter permissionConverter;
 
     @Override
-    public Collection<String> permissionToString(Collection<Permission> permissions) {
-        return permissionConverter.automaticSerializeAll(permissions);
+    public Collection<String> serialize(Collection<Permission> permissions) {
+        return permissionConverter.serializeAll(permissions);
     }
 
     @Override
-    public Set<Permission> permissionFromString(Collection<String> permissions) {
-        return permissionConverter.automaticDeserializeAll(permissions);
+    public Set<Permission> deSerialize(Collection<String> permissions) {
+        return permissionConverter.deserializeAll(permissions);
     }
 }

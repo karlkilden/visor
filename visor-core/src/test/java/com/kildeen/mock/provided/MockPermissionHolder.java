@@ -23,7 +23,7 @@ package com.kildeen.mock.provided;
 
 import com.kildeen.visor.core.api.context.DefaultPermissionHolder;
 import com.kildeen.visor.core.api.permission.Permission;
-import com.kildeen.visor.core.api.permission.PermissionImpl;
+import com.kildeen.visor.core.permission.PermissionImpl;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;

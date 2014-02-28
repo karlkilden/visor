@@ -22,7 +22,7 @@
 package com.kildeen.visor.core.context;
 
 import com.kildeen.visor.core.api.context.PermissionContext;
-import com.kildeen.visor.core.api.permission.PermissionImpl;
+import com.kildeen.visor.core.permission.PermissionImpl;
 import com.kildeen.visor.core.api.permission.PermissionConverter;
 import com.kildeen.visor.core.permission.SubjectPermissionMapper;
 import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigDescriptor;

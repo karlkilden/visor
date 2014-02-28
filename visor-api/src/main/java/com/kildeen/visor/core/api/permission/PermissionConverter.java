@@ -23,7 +23,6 @@ package com.kildeen.visor.core.api.permission;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 /**

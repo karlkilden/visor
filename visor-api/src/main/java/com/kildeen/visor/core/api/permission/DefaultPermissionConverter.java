@@ -22,8 +22,6 @@
 package com.kildeen.visor.core.api.permission;
 
 import com.google.common.base.Splitter;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.commons.collections4.set.ListOrderedSet;
@@ -31,7 +29,10 @@ import org.apache.commons.lang3.text.WordUtils;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 /**
  * <p>File created: 2014-02-16 01:35</p>
@@ -47,8 +48,7 @@ public class DefaultPermissionConverter implements PermissionConverter {
 
     @Inject
     private PermissionResolver permissionResolver;
-    @Inject
-    private PermissionMinimizer minimizer;
+
     @Inject
     private PermissionRevisionWriter permissionRevisionWriter;
 
@@ -80,8 +80,11 @@ public class DefaultPermissionConverter implements PermissionConverter {
     @Override
     public Permission deserialize(final String deserialized) {
         Gson gson = new GsonBuilder().create();
-        return gson.fromJson(deserialized, PermissionImpl.class);
-
+        try {
+            return (Permission) gson.fromJson(deserialized, Class.forName("com.kildeen.visor.core.permission.PermissionImpl"));
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("PermissionImpl missing", e);
+        }
     }
 
     @Override

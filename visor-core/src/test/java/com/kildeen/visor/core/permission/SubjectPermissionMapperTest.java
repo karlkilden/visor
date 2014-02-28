@@ -23,7 +23,6 @@ package com.kildeen.visor.core.permission;
 
 import com.kildeen.mock.provided.MockPermissionHolder;
 import com.kildeen.visor.core.api.permission.Permission;
-import com.kildeen.visor.core.api.permission.PermissionImpl;
 import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;

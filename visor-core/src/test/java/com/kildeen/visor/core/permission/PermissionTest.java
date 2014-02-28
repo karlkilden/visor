@@ -1,5 +1,6 @@
-package com.kildeen.visor.core.api.permission;
+package com.kildeen.visor.core.permission;
 
+import com.kildeen.visor.core.api.permission.Permission;
 import junit.framework.Assert;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.junit.Test;

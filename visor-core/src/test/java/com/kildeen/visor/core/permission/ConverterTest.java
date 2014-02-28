@@ -19,8 +19,10 @@
  *
  */
 
-package com.kildeen.visor.core.api.permission;
+package com.kildeen.visor.core.permission;
 
+import com.kildeen.visor.core.api.permission.DefaultPermissionConverter;
+import com.kildeen.visor.core.api.permission.Permission;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.junit.Test;
 
@@ -39,7 +41,7 @@ public class ConverterTest {
     public void default_converter_should_remove_first_package_folder() {
          DefaultPermissionConverter converter = new DefaultPermissionConverter();
 
-        String expected =   "kildeen.visor.core.api.permission.ConverterTest";
+        String expected =   "kildeen.visor.core.permission.ConverterTest";
         assertEquals(expected, converter.getId(this.getClass()));
     }
 

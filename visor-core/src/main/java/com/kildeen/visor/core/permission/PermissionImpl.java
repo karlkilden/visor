@@ -19,8 +19,9 @@
  *
  */
 
-package com.kildeen.visor.core.api.permission;
+package com.kildeen.visor.core.permission;
 
+import com.kildeen.visor.core.api.permission.Permission;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
