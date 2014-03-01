@@ -27,20 +27,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Karl Kildén
- * Date: 2014-02-19
+ * This class holds all state for the permission resolver
+ *
+ * @version 1.0
+ * @author: Karl Kildén
+ * @since 1.0
  */
-public class PermissionResolverState {
-    private final PermissionMappingContext mappingContext;
+final class PermissionResolverState {
     private ListOrderedSet<PermissionImpl> permissions = new ListOrderedSet<>();
     private ListOrderedSet<Permission> rootPermissions = new ListOrderedSet<>();
     private Map<String, Permission> mappedPermissions = new HashMap<>();
-
-    public PermissionResolverState(PermissionMappingContext mappingContext) {
-
-        this.mappingContext = mappingContext;
-    }
 
     private void addToRelevantCollections(PermissionImpl permission, boolean isRoot) {
         if (permission instanceof PermissionImpl) {

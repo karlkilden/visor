@@ -21,7 +21,6 @@ package com.kildeen.visor.core.permission;
 
 import com.kildeen.mock.provided.Admin;
 import com.kildeen.mock.provided.Pages;
-import com.kildeen.mock.provided.PermissionMappingContextDummy;
 import com.kildeen.visor.core.api.permission.Permission;
 import com.kildeen.visor.core.api.permission.PermissionResolver;
 import junit.framework.Assert;
@@ -41,7 +40,7 @@ import javax.inject.Inject;
 @RunWith(CdiTestRunner.class)
 public class PermissionMappingContextTest {
 
-    PermissionMappingContextDummy permissionMappingContext;
+    PermissionMappingContext permissionMappingContext;
     @Inject
     private ViewConfigResolver configResolver;
 
@@ -50,7 +49,7 @@ public class PermissionMappingContextTest {
 
     @Before
     public void setUp() throws Exception {
-        permissionMappingContext = new PermissionMappingContextDummy(configResolver.getConfigDescriptors());
+        permissionMappingContext = new PermissionMappingContext(configResolver.getConfigDescriptors());
 
     }
 

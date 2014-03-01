@@ -17,10 +17,11 @@
  * under the License.
  */
 
-package com.kildeen.visor.core.permission;
+package com.kildeen.visor.core.context;
 
 import com.kildeen.mock.provided.MockPermissionHolder;
 import com.kildeen.visor.core.api.permission.Permission;
+import com.kildeen.visor.core.permission.PermissionImpl;
 import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,12 +41,12 @@ import static junit.framework.Assert.*;
  * @since 1.0
  */
 @RunWith(CdiTestRunner.class)
-public class SubjectPermissionMapperTest {
+public class SubjectPermissionHolderTest {
 
     @Inject
     MockPermissionHolder permissionHolder;
     @Inject
-    SubjectPermissionMapper subjectPermissionMapper;
+    SubjectPermissionHolder subjectPermissionHolder;
     @Test
     public void holder_Should_be_mapped_by_string_representation() {
         Permission p = new PermissionImpl("tip.tap", Collections.<Permission>emptySet(),null);
@@ -55,9 +56,9 @@ public class SubjectPermissionMapperTest {
         permissionSet.add(p2);
         permissionHolder.setPermissions(permissionSet);
 
-        assertEquals(p, subjectPermissionMapper.getPermission("tip.tap"));
-        assertFalse(subjectPermissionMapper.hasPermission("testFalse"));
-        assertTrue(subjectPermissionMapper.hasPermission("testTrue"));
+        assertEquals(p, subjectPermissionHolder.getPermission("tip.tap"));
+        assertFalse(subjectPermissionHolder.hasPermission("testFalse"));
+        assertTrue(subjectPermissionHolder.hasPermission("testTrue"));
     }
 
 }

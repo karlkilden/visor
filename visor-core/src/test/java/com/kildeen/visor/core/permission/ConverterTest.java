@@ -22,6 +22,8 @@ package com.kildeen.visor.core.permission;
 import com.kildeen.visor.core.api.permission.DefaultPermissionConverter;
 import com.kildeen.visor.core.api.permission.Permission;
 import org.apache.commons.collections4.set.ListOrderedSet;
+import org.apache.commons.lang3.time.DateUtils;
+import org.apache.commons.lang3.time.StopWatch;
 import org.junit.Test;
 
 import static junit.framework.Assert.*;
@@ -43,7 +45,18 @@ public class ConverterTest {
         assertEquals(expected, converter.getId(this.getClass()));
     }
 
+     // Manages about 2 million / sec (depending on machine)
+    //@Test
+    public void convertPerformanceTest() {
+        DefaultPermissionConverter converter = new DefaultPermissionConverter();
+        StopWatch watch = new StopWatch();
+        watch.start();
+        for (int i =0; i< 1000000; i++)
+        converter.getId(this.getClass());
 
+        watch.stop();
+        System.out.print(watch.getTime() /1000.0);
+    }
 
     @Test
     public void serialized_should_be_as_was_when_deserialized() {

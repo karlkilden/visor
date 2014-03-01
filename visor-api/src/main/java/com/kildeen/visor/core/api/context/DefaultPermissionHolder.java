@@ -50,6 +50,6 @@ public class DefaultPermissionHolder implements PermissionHolder {
 
     @Override
     public Set<Permission> getPermissions() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return permissions;
     }
 }

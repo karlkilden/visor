@@ -17,11 +17,12 @@
  * under the License.
  */
 
-package com.kildeen.visor.core.permission;
+package com.kildeen.visor.core.context;
 
 import com.google.common.collect.ImmutableMap;
 import com.kildeen.visor.core.api.context.PermissionHolder;
 import com.kildeen.visor.core.api.permission.Permission;
+import com.kildeen.visor.core.permission.PermissionImpl;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -37,7 +38,7 @@ import java.util.Map;
  * @since 1.0
  */
 @SessionScoped
-public class SubjectPermissionMapper implements Serializable {
+class SubjectPermissionHolder implements Serializable {
 
     @Inject
     private PermissionHolder permissionHolder;

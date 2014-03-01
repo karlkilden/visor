@@ -24,7 +24,6 @@ import com.kildeen.visor.core.api.permission.Permission;
 import com.kildeen.visor.core.api.permission.PermissionResolver;
 import com.kildeen.visor.core.permission.PermissionImpl;
 import com.kildeen.visor.core.api.permission.PermissionConverter;
-import com.kildeen.visor.core.permission.SubjectPermissionMapper;
 import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigDescriptor;
 import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigResolver;
 import org.apache.deltaspike.security.api.authorization.Secured;
@@ -63,16 +62,16 @@ public class PermissionContextImpl implements PermissionContext {
         NOT_SECURED_DEFAULT.setUpdate(true);
         NOT_SECURED_DEFAULT.setRead(true);
     }
-
+    // Where are we
     @Inject
     private ViewConfigResolver viewConfigResolver;
     @Inject
     private FacesContext facesContext;
+    // What rights does the active subject have
     @Inject
-    private SubjectPermissionMapper subjectPermissionMapper;
+    private SubjectPermissionHolder subjectPermissionHolder;
     @Inject
     private PermissionConverter permissionConverter;
-
     @Inject
     private PermissionResolver permissionResolver;
 
@@ -92,7 +91,7 @@ public class PermissionContextImpl implements PermissionContext {
         requiredPermission = permissionResolver.getPermission(permissionId);
 
         if (secured) {
-            permission = (PermissionImpl) subjectPermissionMapper.getPermission(permissionId);
+            permission = (PermissionImpl) subjectPermissionHolder.getPermission(permissionId);
             if (hasPermission()) {
                 allowed = true;
             }
@@ -107,7 +106,7 @@ public class PermissionContextImpl implements PermissionContext {
     }
 
     private boolean hasPermission() {
-        return permission != SubjectPermissionMapper.NOT_FOUND;
+        return permission != SubjectPermissionHolder.NOT_FOUND;
     }
 
     @Override
@@ -136,14 +135,13 @@ public class PermissionContextImpl implements PermissionContext {
     }
 
     @Override
-    public boolean hasPartPermission(final String stringRepresentation) {
-        return subjectPermissionMapper.getPermission(stringRepresentation) != null;
+    public boolean hasPartPermission(final String id) {
+        return subjectPermissionHolder.getPermission(id) != null;
     }
 
     @Override
     public boolean hasCreate(final String id) {
-        PermissionImpl p = (PermissionImpl) subjectPermissionMapper.getPermission(id);
-        return p.hasCreate();
+        return permission.hasCreate();
     }
 
     @Override
@@ -153,13 +151,11 @@ public class PermissionContextImpl implements PermissionContext {
 
     @Override
     public boolean hasUpdate(final String id) {
-        PermissionImpl p = (PermissionImpl) subjectPermissionMapper.getPermission(id);
-        return p.hasUpdate();    }
+        return permission.hasUpdate();    }
 
     @Override
     public boolean hasDelete(final String id) {
-        PermissionImpl p = (PermissionImpl) subjectPermissionMapper.getPermission(id);
-        return p.hasDelete();    }
+        return permission.hasDelete();    }
 
     @Override
     public Permission getRequired() {

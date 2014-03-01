@@ -26,9 +26,10 @@ import java.util.Collection;
 import java.util.Set;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Karl Kildén
- * Date: 2014-02-21
+ *
+ * @version 1.0
+ * @author: Karl Kildén
+ * @since 1.0
  */
 public interface PermissionManager extends Serializable {
 

@@ -20,7 +20,6 @@
 package com.kildeen.visor.core.permission;
 
 import com.kildeen.visor.core.api.context.PermissionAccessDecisionVoter;
-import com.kildeen.visor.core.api.context.PermissionDataHolder;
 import org.apache.deltaspike.core.api.config.view.metadata.CallbackDescriptor;
 import org.apache.deltaspike.core.api.config.view.metadata.ConfigDescriptor;
 import org.apache.deltaspike.security.api.authorization.Secured;
@@ -30,26 +29,28 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Karl Kildén
- * Date: 2014-02-19
+ * This class puts ViewConfigDescriptors into "Visor context". This context is required when ViewConfigs are mapped to
+ * Permissions thus this context must be created first.
+ * @version 1.0
+ * @author: Karl Kildén
+ * @since 1.0
  */
-public class PermissionMappingContext {
+final class PermissionMappingContext {
 
     private static final Logger log = LoggerFactory.getLogger(PermissionResolverImpl.class);
 
     private Set<String> usedPartPermissionIds = new HashSet<>();
-    private Map<Class<?>, ConfigDescriptor> mappedPermissionModels = new HashMap<>();
+    private Map<Class<?>, ConfigDescriptor> mappedPermissions = new HashMap<>();
 
     public PermissionMappingContext(List<ConfigDescriptor<?>> configDescriptors) {
-        mapPermissionModels(configDescriptors);
+        mapPermissions(configDescriptors);
 
     }
 
-    private void mapPermissionModels(List<ConfigDescriptor<?>> configDescriptors) {
+    private void mapPermissions(List<ConfigDescriptor<?>> configDescriptors) {
         for (ConfigDescriptor configDescriptor : configDescriptors) {
            if (isSecured(configDescriptor)) {
-               mappedPermissionModels.put(configDescriptor.getConfigClass(), configDescriptor);
+               mappedPermissions.put(configDescriptor.getConfigClass(), configDescriptor);
            }
         }
     }
@@ -68,7 +69,7 @@ public class PermissionMappingContext {
 
 
     protected boolean isRoot(Class<?> clazz) {
-       return !(clazz.getEnclosingClass() != null && isFolder(clazz.getEnclosingClass()) && mappedPermissionModels.containsKey(clazz));
+       return !(clazz.getEnclosingClass() != null && isFolder(clazz.getEnclosingClass()) && mappedPermissions.containsKey(clazz));
     }
 
     protected boolean isFolder(Class<?> configClass) {
@@ -84,17 +85,15 @@ public class PermissionMappingContext {
         return false;
     }
 
-    public Map<Class<?>, ConfigDescriptor> getMappedPermissionModels() {
-        return mappedPermissionModels;
+    public Map<Class<?>, ConfigDescriptor> getMappedPermissions() {
+        return mappedPermissions;
     }
 
     public void addPermissionIdToUniqueCheckList(String id) throws Exception {
-        synchronized (usedPartPermissionIds) {
             if (usedPartPermissionIds.contains(id)) {
                 throw new Exception("Duplicate partPermission detected " + id);
             } else {
                 usedPartPermissionIds.add(id);
             }
-        }
     }
 }

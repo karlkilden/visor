@@ -26,7 +26,7 @@ public class SecurityViolationImpl implements SecurityViolation {
 
     private final String reason;
 
-    SecurityViolationImpl(String reason) {
+    public SecurityViolationImpl(String reason) {
         this.reason = reason;
     }
 

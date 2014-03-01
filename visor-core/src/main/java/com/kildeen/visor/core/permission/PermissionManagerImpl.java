@@ -34,7 +34,7 @@ import java.util.Set;
  * Date: 2014-02-21
  */
 @ApplicationScoped
-public class PermissionManagerImpl implements PermissionManager {
+class PermissionManagerImpl implements PermissionManager {
 
     @Inject
     private PermissionConverter permissionConverter;
