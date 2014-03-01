@@ -17,13 +17,15 @@
  * under the License.
  */
 
-package com.kildeen.visor.core.context;
+package com.kildeen.visor.core.api.context;
 
-import com.kildeen.visor.core.api.context.PermissionContext;
 import org.apache.deltaspike.security.api.authorization.AccessDecisionVoter;
 import org.apache.deltaspike.security.api.authorization.AccessDecisionVoterContext;
 import org.apache.deltaspike.security.api.authorization.SecurityViolation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,15 +35,20 @@ import java.util.Set;
  * Date: 2014-02-17
  */
 public class PermissionAccessDecisionVoter implements AccessDecisionVoter {
-
+    private static final Logger log = LoggerFactory.getLogger(PermissionAccessDecisionVoter.class);
     @Inject
     private PermissionContext permissionContext;
-    public Set<SecurityViolation> checkPermission(AccessDecisionVoterContext accessDecisionVoterContext) {
+    @Inject
+    private Event<AccessDecisionVoteEvent> event;
 
-        if(permissionContext.isAllowed()) {
+    public Set<SecurityViolation> checkPermission(AccessDecisionVoterContext accessDecisionVoterContext) {
+        event.fire(new AccessDecisionVoteEvent(permissionContext.getRequired()));
+        if (permissionContext.isAllowed()) {
+            log.debug("isAllowed {}", permissionContext.getRequired());
             return null;
-        }
-        else {
+        } else {
+            log.debug("Not allowed {}", permissionContext.getRequired());
+
             Set<SecurityViolation> violations = new HashSet<>();
             violations.add(new SecurityViolationImpl("Failed Visor Security check"));
             return violations;

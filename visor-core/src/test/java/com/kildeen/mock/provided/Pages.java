@@ -19,7 +19,8 @@
 
 package com.kildeen.mock.provided;
 
-import com.kildeen.visor.core.context.PermissionAccessDecisionVoter;
+import com.kildeen.visor.core.api.context.PermissionAccessDecisionVoter;
+import com.kildeen.visor.core.api.context.PermissionDataHolder;
 import com.kildeen.visor.core.api.permission.PartPermission;
 import org.apache.deltaspike.core.api.config.view.ViewConfig;
 import org.apache.deltaspike.security.api.authorization.Secured;

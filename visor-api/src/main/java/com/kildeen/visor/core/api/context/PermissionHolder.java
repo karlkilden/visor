@@ -34,6 +34,6 @@ import java.util.Set;
 public interface PermissionHolder extends Serializable {
 
     public Set<Permission> getPermissions();
-    public boolean isAutomatic();
+
 
 }

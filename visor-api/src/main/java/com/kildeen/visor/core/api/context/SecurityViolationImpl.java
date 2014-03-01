@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package com.kildeen.visor.core.context;
+package com.kildeen.visor.core.api.context;
 
 import org.apache.deltaspike.security.api.authorization.SecurityViolation;
 

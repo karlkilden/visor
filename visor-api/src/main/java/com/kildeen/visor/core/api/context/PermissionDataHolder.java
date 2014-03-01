@@ -19,9 +19,13 @@
 
 package com.kildeen.visor.core.api.context;
 
-import com.kildeen.visor.core.api.permission.Permission;
+import org.apache.deltaspike.security.api.authorization.AccessDecisionVoter;
+import org.apache.deltaspike.security.api.authorization.AccessDecisionVoterContext;
+import org.apache.deltaspike.security.api.authorization.SecurityViolation;
 
+import javax.inject.Inject;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 /**

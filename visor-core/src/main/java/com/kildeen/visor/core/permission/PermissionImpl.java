@@ -225,6 +225,9 @@ public class PermissionImpl implements Permission {
 
     @Override
     public boolean equals(Object permissionModel) {
+        if (this == permissionModel) {
+            return true;
+        }
         PermissionImpl permission = (PermissionImpl) permissionModel;
         return new EqualsBuilder().append(this.id, permission.id).append(this.create,
                 permission.create).append(this.read, permission.read).append(this.update,
@@ -235,6 +238,11 @@ public class PermissionImpl implements Permission {
     public int hashCode() {
         return new HashCodeBuilder(3, 7).append(id).
                 append(create).append(read).append(update).append(delete).build();
+    }
+
+    @Override
+    public String toString() {
+      return "id: " +id + " path: "+path+ ". CRUD: "+ create + read + update + delete + " isGroup: " + isGroup() + " Count: "+ count;
     }
 
     private enum Crud {

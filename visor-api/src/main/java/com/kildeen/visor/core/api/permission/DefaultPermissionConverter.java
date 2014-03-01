@@ -22,15 +22,13 @@ package com.kildeen.visor.core.api.permission;
 import com.google.common.base.Splitter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.apache.commons.lang3.text.WordUtils;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * <p>File created: 2014-02-16 01:35</p>
@@ -92,11 +90,17 @@ public class DefaultPermissionConverter implements PermissionConverter {
 
     @Override
     public Set<Permission> deserializeAll(final Collection<String> deserialized) {
-        Set<Permission> deserializedPermissions = new ListOrderedSet<>();
-        for (String permission : deserialized) {
-            deserializedPermissions.add(deserialize(permission));
+        if (CollectionUtils.isNotEmpty(deserialized)) {
+            Set<Permission> deserializedPermissions = new ListOrderedSet<>();
+            for (String permission : deserialized) {
+                deserializedPermissions.add(deserialize(permission));
+            }
+            return deserializedPermissions;
         }
-        return deserializedPermissions;
+        else {
+            return Collections.emptySet();
+        }
+
     }
 
 }
