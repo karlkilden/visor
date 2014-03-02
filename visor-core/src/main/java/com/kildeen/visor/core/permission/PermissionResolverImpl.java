@@ -89,6 +89,11 @@ public class PermissionResolverImpl implements PermissionResolver {
     }
 
     @Override
+    public Permission getPermission(final Class<?> clazz) {
+        return getPermission(permissionConverter.getId(clazz));
+    }
+
+    @Override
     public Permission getMaximized(String id) {
         Permission model = state.getMappedPermissions().get(id);
         model.privilege();

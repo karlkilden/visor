@@ -17,24 +17,37 @@
  * under the License.
  */
 
-package com.kildeen.visor.core.api.permission;
+package com.kildeen.visor.test.db;
 
+import com.kildeen.visor.core.api.permission.Permission;
+import com.kildeen.visor.core.api.permission.PermissionConverter;
+import com.kildeen.visor.core.api.permission.PermissionManager;
+import com.kildeen.visor.core.api.permission.PermissionResolver;
+import com.kildeen.visor.test.Pages;
+import com.kildeen.visor.test.model.Group;
+import com.kildeen.visor.test.model.User;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>File created: 2014-02-16 01:50</p>
+ * <p>File created: 2014-03-01 21:10</p>
  *
  * @version 1.0
  * @author: Karl Kildén
  * @since 1.0
  */
-public interface PermissionResolver {
+@ApplicationScoped
+public class Database {
 
-    public List<Permission> getPermissions();
-    public List<Permission> getRootPermissions();
-    public Permission getPermission(String id);
-    public Permission getPermission(Class<?> view);
-    public Permission getMaximized(String permission);
-    public void boot();
+    @Inject
+    private PermissionResolver permissionResolver;
 
+    @Inject
+    private PermissionConverter permissionConverter;
+
+    private  List<Group> groups = new ArrayList<>();
+    private  List<User> users = new ArrayList<>();
 }

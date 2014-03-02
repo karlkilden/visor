@@ -17,24 +17,20 @@
  * under the License.
  */
 
-package com.kildeen.visor.core.api.permission;
+package com.kildeen.visor.core.api.context;
 
-import java.util.List;
+import java.io.Serializable;
+import java.util.Set;
 
 /**
- * <p>File created: 2014-02-16 01:50</p>
+ * <p>File created: 2014-02-15 15:56</p>
  *
  * @version 1.0
  * @author: Karl Kildén
  * @since 1.0
  */
-public interface PermissionResolver {
+public interface StaticPermissionDataHolder extends Serializable {
 
-    public List<Permission> getPermissions();
-    public List<Permission> getRootPermissions();
-    public Permission getPermission(String id);
-    public Permission getPermission(Class<?> view);
-    public Permission getMaximized(String permission);
-    public void boot();
+    public Set<Class<?>> getPermissions();
 
 }

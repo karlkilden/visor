@@ -64,6 +64,7 @@
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>${maven.jetty.plugin.version}</version>
                 <configuration>
+                    <scanIntervalSeconds>10</scanIntervalSeconds>
                     <webAppConfig>
                         <contextPath>/${project.artifactId}</contextPath>
                         <overrideDescriptor>${jsf-web-xml}</overrideDescriptor>

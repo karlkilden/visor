@@ -1,15 +1,34 @@
 package com.kildeen.visor.test;
 
-import com.kildeen.visor.core.api.context.PermissionAccessDecisionVoter;
 import org.apache.deltaspike.core.api.config.view.ViewConfig;
-import org.apache.deltaspike.security.api.authorization.Secured;
 
 /**
  * Created with IntelliJ IDEA.
  * User: Karl Kildén
  * Date: 2014-02-17
  */
-@Secured(PermissionAccessDecisionVoter.class)
-public interface Pages extends ViewConfig, SecuredPages {
-    public class Secured {}
+public interface Pages extends ViewConfig {
+    public class Public1 implements Pages {
+    }
+
+    public class Public2 implements Pages {
+    }
+
+    public interface Secured extends SecuredPages, ViewConfig {
+        public class Secured1 implements Secured {
+        }
+
+        public class Secured2 implements Secured {
+        }
+
+        public class Secured3 implements Secured {
+        }
+
+        public interface Admin extends Secured {
+
+            public class Admin1 implements Secured {
+            }
+
+        }
+    }
 }

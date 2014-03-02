@@ -45,15 +45,15 @@ public interface PermissionContext extends Serializable {
 
     public boolean isAllowed();
 
-    public boolean hasCreate();
+    public boolean isCreate();
 
-    public boolean hasRead();
+    public boolean isRead();
 
-    public boolean hasUpdate();
+    public boolean isUpdate();
 
-    public boolean hasDelete();
+    public boolean isDelete();
 
-    public boolean hasPartPermission(String stringRepresentation);
+    public boolean has(String id);
 
     public boolean hasCreate(String partPermission);
 

@@ -32,3 +32,9 @@ body {
 h1 {
     font-size: 20px;
 }
+
+.ui-state-highlight {
+    background: none !important;
+    text-shadow: none !important;
+    color: black !important;
+}

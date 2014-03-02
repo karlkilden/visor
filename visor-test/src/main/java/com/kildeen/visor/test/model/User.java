@@ -17,24 +17,30 @@
  * under the License.
  */
 
-package com.kildeen.visor.core.api.permission;
-
-import java.util.List;
+package com.kildeen.visor.test.model;
 
 /**
- * <p>File created: 2014-02-16 01:50</p>
+ * <p>File created: 2014-03-01 21:04</p>
  *
  * @version 1.0
  * @author: Karl Kildén
  * @since 1.0
  */
-public interface PermissionResolver {
+public class User {
 
-    public List<Permission> getPermissions();
-    public List<Permission> getRootPermissions();
-    public Permission getPermission(String id);
-    public Permission getPermission(Class<?> view);
-    public Permission getMaximized(String permission);
-    public void boot();
+    private String username;
+    private Group group;
 
+    public User(final String username, final Group group) {
+        this.username = username;
+        this.group = group;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
 }

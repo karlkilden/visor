@@ -20,6 +20,7 @@
 package com.kildeen.visor.core.permission;
 
 import com.kildeen.visor.core.api.permission.Permission;
+import com.kildeen.visor.core.api.permission.SubPermission;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -96,7 +97,7 @@ public class PermissionImpl implements Permission {
 
     @Override
     public void pushCreate(final boolean create) {
-        updateState(Crud.CREATE, create);
+        updateState(SubPermission.CREATE, create);
     }
 
     @Override
@@ -111,7 +112,7 @@ public class PermissionImpl implements Permission {
 
     @Override
     public void pushRead(final boolean read) {
-        updateState(Crud.READ, read);
+        updateState(SubPermission.READ, read);
     }
 
     @Override
@@ -121,12 +122,12 @@ public class PermissionImpl implements Permission {
 
     @Override
     public void pushUpdate(final boolean update) {
-        updateState(Crud.UPDATE, update);
+        updateState(SubPermission.UPDATE, update);
     }
 
     @Override
     public void setUpdate(final boolean update) {
-        updateState(Crud.UPDATE, update);
+        updateState(SubPermission.UPDATE, update);
     }
 
     @Override
@@ -136,14 +137,18 @@ public class PermissionImpl implements Permission {
 
     @Override
     public void setDelete(final boolean delete) {
-        updateState(Crud.DELETE, delete);
+        updateState(SubPermission.DELETE, delete);
     }
 
     @Override
     public void pushDelete(final boolean delete) {
-        updateState(Crud.DELETE, delete);
+        updateState(SubPermission.DELETE, delete);
     }
 
+    @Override
+    public void push(final SubPermission subPermission, final boolean state) {
+        updateState(subPermission, state);
+    }
 
     @Override
     public boolean isPrivileged() {
@@ -192,12 +197,10 @@ public class PermissionImpl implements Permission {
 
     @Override
     public void privilege() {
-        updateState(Crud.CREATE, true);
-        updateState(Crud.READ, true);
-        updateState(Crud.UPDATE, true);
-        updateState(Crud.DELETE, true);
-
-
+        updateState(SubPermission.CREATE, true);
+        updateState(SubPermission.READ, true);
+        updateState(SubPermission.UPDATE, true);
+        updateState(SubPermission.DELETE, true);
     }
 
     @Override
@@ -205,7 +208,7 @@ public class PermissionImpl implements Permission {
         return (Set) children;
     }
 
-    private void updateState(Crud crud, boolean state) {
+    private void updateState(SubPermission crud, boolean state) {
         if (group) {
             for (PermissionImpl permission : children) {
                 permission.updateState(crud, state);
@@ -245,9 +248,6 @@ public class PermissionImpl implements Permission {
       return "id: " +id + " path: "+path+ ". CRUD: "+ create + read + update + delete + " isGroup: " + isGroup() + " Count: "+ count;
     }
 
-    private enum Crud {
-        CREATE, READ, UPDATE, DELETE;
-    }
 }
 
 

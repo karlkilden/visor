@@ -21,7 +21,11 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-        >
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:o="http://omnifaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
 <h:head>
     <title>Hello World</title>
 </h:head>
@@ -38,6 +42,23 @@
             <h:commandButton value="Press me" action="#{helloWorld.send}"/><br/>
             <h:messages showDetail="true" showSummary="false"/>
         </h:form>
+
+        <h:form id="form">
+
+            <ul>
+                <ui:repeat value="#{permissionBean.permissionResolver}" var="p">
+                    <li></li>
+                    <li>Tea
+                        <ul>
+                            <li>Black tea</li>
+                            <li>Green tea</li>
+                        </ul>
+                    </li>
+                    <li>Milk</li>
+                </ui:repeat>
+            </ul>
+        </h:form>
+
     </div>
 </h:body>
 </html>

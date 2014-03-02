@@ -87,7 +87,7 @@ public class PermissionResolverTest {
     @Test
     public void part_permissions_should_have_parent_simpleName_uncapitalized_simpleName_as_string_representation() throws Exception {
         mockFacesContext.setId("/pages/secured.xhtml");
-        permissionContext.hasPartPermission("secured.Part1");
+        permissionContext.has("secured.Part1");
     }
 
 

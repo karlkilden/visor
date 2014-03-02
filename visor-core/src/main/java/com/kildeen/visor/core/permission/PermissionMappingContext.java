@@ -31,6 +31,7 @@ import java.util.*;
 /**
  * This class puts ViewConfigDescriptors into "Visor context". This context is required when ViewConfigs are mapped to
  * Permissions thus this context must be created first.
+ *
  * @version 1.0
  * @author: Karl Kildén
  * @since 1.0
@@ -49,9 +50,9 @@ final class PermissionMappingContext {
 
     private void mapPermissions(List<ConfigDescriptor<?>> configDescriptors) {
         for (ConfigDescriptor configDescriptor : configDescriptors) {
-           if (isSecured(configDescriptor)) {
-               mappedPermissions.put(configDescriptor.getConfigClass(), configDescriptor);
-           }
+            if (isSecured(configDescriptor)) {
+                mappedPermissions.put(configDescriptor.getConfigClass(), configDescriptor);
+            }
         }
     }
 
@@ -69,7 +70,14 @@ final class PermissionMappingContext {
 
 
     protected boolean isRoot(Class<?> clazz) {
-       return !(clazz.getEnclosingClass() != null && isFolder(clazz.getEnclosingClass()) && mappedPermissions.containsKey(clazz));
+        Class<?> parent = clazz.getEnclosingClass();
+        if (parent != null) {
+            ConfigDescriptor parentDescriptor = mappedPermissions.get(parent);
+            if (parentDescriptor != null && isSecured(parentDescriptor) && isFolder(parent)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     protected boolean isFolder(Class<?> configClass) {
@@ -90,10 +98,10 @@ final class PermissionMappingContext {
     }
 
     public void addPermissionIdToUniqueCheckList(String id) throws Exception {
-            if (usedPartPermissionIds.contains(id)) {
-                throw new Exception("Duplicate partPermission detected " + id);
-            } else {
-                usedPartPermissionIds.add(id);
-            }
+        if (usedPartPermissionIds.contains(id)) {
+            throw new Exception("Duplicate partPermission detected " + id);
+        } else {
+            usedPartPermissionIds.add(id);
+        }
     }
 }

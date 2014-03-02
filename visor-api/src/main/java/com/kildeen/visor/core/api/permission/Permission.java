@@ -53,6 +53,7 @@ public interface Permission {
     void setDelete(boolean delete);
     void pushDelete(boolean delete);
 
+    void push(SubPermission subPermission, boolean state);
 
     boolean isPrivileged();
 

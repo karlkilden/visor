@@ -19,22 +19,13 @@
 
 package com.kildeen.visor.core.api.permission;
 
-import java.util.List;
-
 /**
- * <p>File created: 2014-02-16 01:50</p>
- *
- * @version 1.0
- * @author: Karl Kildén
- * @since 1.0
- */
-public interface PermissionResolver {
-
-    public List<Permission> getPermissions();
-    public List<Permission> getRootPermissions();
-    public Permission getPermission(String id);
-    public Permission getPermission(Class<?> view);
-    public Permission getMaximized(String permission);
-    public void boot();
-
+* <p>File created: 2014-03-02 16:05</p>
+*
+* @version 1.0
+* @author: Karl Kildén
+* @since 1.0
+*/
+public enum SubPermission {
+    CREATE, READ, UPDATE, DELETE;
 }

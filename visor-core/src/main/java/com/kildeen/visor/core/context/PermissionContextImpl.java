@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.inject.Produces;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -85,7 +86,7 @@ public class PermissionContextImpl implements PermissionContext {
 
     @PostConstruct
     private void init() {
-        viewConfigDescriptor = viewConfigResolver.getViewConfigDescriptor(facesContext.getViewRoot().getViewId());
+            viewConfigDescriptor = viewConfigResolver.getViewConfigDescriptor(facesContext.getViewRoot().getViewId());
         secured = viewConfigDescriptor.getCallbackDescriptor(Secured.class) != null;
         String permissionId = permissionConverter.getId(viewConfigDescriptor.getConfigClass());
         requiredPermission = permissionResolver.getPermission(permissionId);
@@ -115,47 +116,50 @@ public class PermissionContextImpl implements PermissionContext {
     }
 
     @Override
-    public boolean hasCreate() {
+    public boolean isCreate() {
         return permission.hasCreate();
     }
 
     @Override
-    public boolean hasRead() {
+    public boolean isRead() {
         return permission.hasRead();
     }
 
     @Override
-    public boolean hasUpdate() {
+    public boolean isUpdate() {
         return permission.hasUpdate();
     }
 
     @Override
-    public boolean hasDelete() {
+    public boolean isDelete() {
         return false;
     }
 
     @Override
-    public boolean hasPartPermission(final String id) {
+    public boolean has(final String id) {
         return subjectPermissionHolder.getPermission(id) != null;
     }
 
     @Override
     public boolean hasCreate(final String id) {
-        return permission.hasCreate();
+        return subjectPermissionHolder.getPermission(id).hasCreate();
     }
 
     @Override
-    public boolean hasRead(final String partPermission) {
-        return false;
+    public boolean hasRead(final String id) {
+        return subjectPermissionHolder.getPermission(id).hasRead();
     }
 
     @Override
     public boolean hasUpdate(final String id) {
-        return permission.hasUpdate();    }
+        return subjectPermissionHolder.getPermission(id).hasUpdate();
+
+    }
 
     @Override
     public boolean hasDelete(final String id) {
-        return permission.hasDelete();    }
+        return subjectPermissionHolder.getPermission(id).hasDelete();
+    }
 
     @Override
     public Permission getRequired() {
@@ -166,4 +170,5 @@ public class PermissionContextImpl implements PermissionContext {
     public boolean isAllowed() {
         return allowed;
     }
+
 }
