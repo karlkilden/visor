@@ -68,7 +68,8 @@ public class PermissionBean implements Serializable {
 
         tree = new ListTreeModel<>();
         for (Permission p :permissionResolver.getRootPermissions()) {
-            addChildren(tree.addChild(p));
+            TreeModel<Permission> node = tree.addChild(p);
+            addChildren(node);
         }
 
 
@@ -76,8 +77,11 @@ public class PermissionBean implements Serializable {
         createTree();
 */
     }
-    private TreeModel addChildren (TreeModel model) {
-        for (model.)
+    private TreeModel<Permission> addChildren (TreeModel<Permission> model) {
+        for (Permission child : model.getData().getChildren()) {
+            addChildren(model.addChild(child));
+        }
+        return model;
     }
     private void createTree() {
         root = new CheckboxTreeNode(new PermissionTreeNode(), null);
@@ -191,5 +195,9 @@ public class PermissionBean implements Serializable {
 
     public List<Permission> getPermissionResolver() {
         return permissionResolver.getRootPermissions();
+    }
+
+    public TreeModel<Permission> getTree() {
+        return tree;
     }
 }

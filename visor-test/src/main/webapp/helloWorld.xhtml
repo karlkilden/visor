@@ -21,13 +21,16 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:o="http://omnifaces.org/ui"
-      xmlns:f="http://java.sun.com/jsf/core">
+        >
 
 <h:head>
     <title>Hello World</title>
+    <script type="text/javascript">
+
+    </script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+
 </h:head>
 <h:body>
     <h:outputStylesheet name="style.css" library="css"/>
@@ -44,21 +47,64 @@
         </h:form>
 
         <h:form id="form">
-
-            <ul>
-                <ui:repeat value="#{permissionBean.permissionResolver}" var="p">
-                    <li></li>
-                    <li>Tea
-                        <ul>
-                            <li>Black tea</li>
-                            <li>Green tea</li>
-                        </ul>
-                    </li>
-                    <li>Milk</li>
-                </ui:repeat>
-            </ul>
+            <o:tree id="tree" value="#{permissionBean.tree}" var="permission" varNode="node">
+                <o:treeNode>
+                    <ul>
+                        <o:treeNodeItem>
+                            <li>
+                                <span class="Collapsable">
+                                    #{permission.id}
+                                </span>
+                                <span>C</span><h:selectBooleanCheckbox value="#{permission.create}"
+                                                                       styleClass="crud-toggle create"/>
+                                <span>R</span><h:selectBooleanCheckbox value="#{permission.read}"
+                                                                       styleClass="crud-toggle read"/>
+                                <span>U</span><h:selectBooleanCheckbox value="#{permission.update}"
+                                                                       styleClass="crud-toggle update"/>
+                                <span>D</span><h:selectBooleanCheckbox value="#{permission.delete}"
+                                                                       styleClass="crud-toggle delete"/>
+                                <o:treeInsertChildren/>
+                            </li>
+                        </o:treeNodeItem>
+                    </ul>
+                </o:treeNode>
+            </o:tree>
         </h:form>
+        <script type="text/javascript">
+            var toggle = function () {
+                $(this).parent().children().not('.visible').toggle();
+                $(this).toggle();
 
+            };
+
+            var toggleCrud = function () {
+                function check() {
+                    if($(this).is(':checkbox')) {
+                        $(this).prop('checked', checked);
+                    }
+                    else {
+
+                    }
+                }
+
+                var checked = $(this).prop('checked')
+                var index =0
+                for (var i=0;i&lt;$(this).parent().children().length;i++)  {
+                    if ((this).parent().children().eq) {
+                        index = i;
+                        break;
+                    }
+                }
+                $(this).parent().children().last().children().children()[index](check)
+
+            };
+
+            $(".Collapsable").click(toggle).each(toggle);
+
+            $(".crud-toggle").click(toggleCrud);
+        </script>
     </div>
+
+
 </h:body>
 </html>
