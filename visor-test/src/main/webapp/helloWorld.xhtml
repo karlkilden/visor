@@ -78,25 +78,10 @@
             };
 
             var toggleCrud = function () {
-                function check() {
-                    if($(this).is(':checkbox')) {
-                        $(this).prop('checked', checked);
-                    }
-                    else {
-
-                    }
-                }
-
                 var checked = $(this).prop('checked')
                 var index =0
-                for (var i=0;i&lt;$(this).parent().children().length;i++)  {
-                    if ((this).parent().children().eq) {
-                        index = i;
-                        break;
-                    }
-                }
-                $(this).parent().children().last().children().children()[index](check)
-
+                var clazz = this.className.split(/\s+/);
+                $(this).parent().children().last().find('.'+clazz[1]).prop('checked', checked);
             };
 
             $(".Collapsable").click(toggle).each(toggle);
