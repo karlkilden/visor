@@ -47,46 +47,81 @@
         </h:form>
 
         <h:form id="form">
-            <o:tree id="tree" value="#{permissionBean.tree}" var="permission" varNode="node">
-                <o:treeNode>
-                    <ul>
-                        <o:treeNodeItem>
-                            <li>
+            <div class="tree-container">
+                <p style="vertical-align: middle">Use enheritence<input id="use-inheritance" type="checkbox"
+                                                                        checked="checked"/></p>
+                <o:tree id="tree" value="#{permissionBean.tree}" var="permission" varNode="node">
+                    <o:treeNode>
+                        <ul>
+                            <o:treeNodeItem>
+                                <li>
+                                    <h:selectBooleanCheckbox class="grant-node visible"/>
                                 <span class="Collapsable">
                                     #{permission.id}
                                 </span>
-                                <span>C</span><h:selectBooleanCheckbox value="#{permission.create}"
-                                                                       styleClass="crud-toggle create"/>
-                                <span>R</span><h:selectBooleanCheckbox value="#{permission.read}"
-                                                                       styleClass="crud-toggle read"/>
-                                <span>U</span><h:selectBooleanCheckbox value="#{permission.update}"
-                                                                       styleClass="crud-toggle update"/>
-                                <span>D</span><h:selectBooleanCheckbox value="#{permission.delete}"
-                                                                       styleClass="crud-toggle delete"/>
-                                <o:treeInsertChildren/>
-                            </li>
-                        </o:treeNodeItem>
-                    </ul>
-                </o:treeNode>
-            </o:tree>
+                                    <h:button onclick="return false;" value="Customize" styleClass="customize"/>
+                                    <span class="crud-container">Create<h:selectBooleanCheckbox
+                                            value="#{permission.create}"
+                                            styleClass="crud-checkbox create"/> </span>
+                                    <span class="crud-container">Read<h:selectBooleanCheckbox value="#{permission.read}"
+                                                                                              styleClass="crud-checkbox read"/></span>
+                                    <span class="crud-container">Update<h:selectBooleanCheckbox
+                                            value="#{permission.update}"
+                                            styleClass="crud-checkbox update"/> </span>
+                                    <span class="crud-container">Delete<h:selectBooleanCheckbox
+                                            value="#{permission.delete}"
+                                            styleClass="crud-checkbox delete"/></span>
+                                    <o:treeInsertChildren/>
+                                </li>
+                            </o:treeNodeItem>
+                        </ul>
+                    </o:treeNode>
+                </o:tree>
+            </div>
         </h:form>
         <script type="text/javascript">
+            var customize = function () {
+                $(this).parent().children('.crud-container').toggle();
+            };
+            <!-- A node is selected, all children will have all their checkboxes checked if inheritance is selected-->
+            var grantNode = function () {
+                var checked = $(this).prop('checked')
+                if ($('#use-inheritance').prop('checked')) {
+                    $(this).parent().children().find('input[type=checkbox]').prop('checked', checked);
+                }
+            };
+
             var toggle = function () {
+                $(this).parent().children().not('.crud-container').not('.visible').toggle();
+                var visible = !$(this).parent().children().next('ul').is(":visible") &amp;&amp;
+                $(this).parent().children().next('.crud-container').is(":visible");
+                if (visible) {
+                    $(this).parent().children().next('.customize').parent().children('.crud-container').toggle()
+                }
+                $(this).toggle();
+            };
+
+            var toggleEach = function () {
                 $(this).parent().children().not('.visible').toggle();
                 $(this).toggle();
-
             };
 
             var toggleCrud = function () {
                 var checked = $(this).prop('checked')
-                var index =0
-                var clazz = this.className.split(/\s+/);
-                $(this).parent().children().last().find('.'+clazz[1]).prop('checked', checked);
+                if ($('#use-inheritance').prop('checked')) {
+                    var clazz = this.className.split(/\s+/);
+                    $(this).parent().parent().children().last().find('.' + clazz[1]).prop('checked', checked);
+                }
             };
+            <!-- we start out by hiding everything so only the visible part node is there-->
+            $(".Collapsable").each(toggleEach);
 
-            $(".Collapsable").click(toggle).each(toggle);
+            <!-- we start out by hiding everything so only the visible part node is there-->
+            $(".customize").click(customize);
+            $(".Collapsable").click(toggle);
+            $(".crud-checkbox").click(toggleCrud);
+            $(".grant-node").click(grantNode);
 
-            $(".crud-toggle").click(toggleCrud);
         </script>
     </div>
 
