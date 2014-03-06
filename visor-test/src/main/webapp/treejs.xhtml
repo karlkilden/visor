@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Created by IntelliJ IDEA.
+  User: karkil
+  Date: 2014-03-06
+  Time: 09:25
+-->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+</h:head>
+
+<h:body>
+    <script type="text/javascript">
+        var customize = function () {
+            $(this).parent().children('.crud-container').toggle();
+        };
+        <!-- A node is selected, all children will have all their checkboxes checked if inheritance is selected-->
+        function grantNode(nodeGrant) {
+            var checked = nodeGrant.prop('checked')
+            if ($('#use-inheritance').prop('checked')) {
+                nodeGrant.parent().children().find('input[type=checkbox]').prop('checked', checked);
+            }
+        }
+        ;
+
+        function expand(nodeToExpand) {
+            nodeToExpand.parent().children().not('.crud-container').not('.visible').toggle();
+            var visible = !nodeToExpand.parent().children().next('ul').is(":visible") &amp;&amp;
+                    nodeToExpand.parent().children().next('.crud-container').is(":visible");
+            if (visible) {
+                nodeToExpand.parent().children().next('.customize').parent().children('.crud-container').toggle()
+            }
+            nodeToExpand.toggle();
+        }
+
+        function treeNodeClick(nodeHeader) {
+            if ($("#node-click-action").text() === 'Expand') {
+                expand(nodeHeader);
+            }
+            else {
+                gn = nodeHeader.parent().children().next(".grant-node");
+                gn.prop('checked', !gn.prop('checked'))
+                grantNode(nodeHeader.parent().children().next(".grant-node"));
+            }
+        }
+
+
+        var minimizeAllPermissionnodes = function () {
+            $(this).parent().children().not('.visible').toggle();
+            $(this).toggle();
+        };
+
+        var handleCustomizeInheritance = function () {
+            var checked = $(this).prop('checked')
+            if ($('#use-inheritance').prop('checked')) {
+                var clazz = this.className.split(/\s+/);
+                $(this).parent().parent().children().last().find('.' + clazz[1]).prop('checked', checked);
+            }
+        };
+            <!-- we start out by hiding everything so only the visible part node is there-->
+            $(".tree-node-header").each(minimizeAllPermissionnodes);
+
+
+        $(".customize").click(customize);
+
+        $(".tree-node-header").click(function () {
+            treeNodeClick($(this));
+            <!-- this is our hook to the server -->
+            treeUpdate({ treeNodeId: $(this).attr('id') });
+        });
+        $(".perform-expand").click(function () {
+            expand($(this).parent().children().next('.tree-node-header'));
+        });
+        $(".crud-checkbox").click(handleCustomizeInheritance);
+
+        $(".grant-node").click(function () {
+            grantNode($(this));
+        });
+
+        $("#node-click-action").click(function () {
+            $(this).text(function (i, v) {
+                return v === 'Expand' ? 'Select' : 'Expand'
+            })
+        });
+
+    </script>
+</h:body>
+
+</html>

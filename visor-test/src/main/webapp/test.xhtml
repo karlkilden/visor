@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Created by IntelliJ IDEA.
+  User: karkil
+  Date: 2014-03-06
+  Time: 09:18
+-->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+    <h:outputStylesheet name="qunit-1.14.0.css" library="qunit"/>
+    <h:outputScript library="qunit" name="qunit-1.14.0.js" />
+    <h:outputScript library="qunit" name="tests.js" /></h:head>
+
+<h:body>
+
+   <div id="qunit"></div>
+    <!-- state is maintained manually-->
+    <div id="qunit-fixture"></div>
+
+
+
+    <div class="tree-container" id="tree-container">
+        <p style="vertical-align: middle">Use enheritence:<input id="use-inheritance" type="checkbox" checked="checked" /></p>
+
+        <p style="vertical-align: middle">Node click mode:
+            <button onclick="return false;" class="tree-button" id="node-click-action">Expand</button>
+
+        </p>
+        <ul class="rootNode">
+            <li class="node-container"><span style="font-size: larger; font-weight: bolder" class="perform-expand visible">+</span><input id="form:tree:0:j_id_o" type="checkbox" name="form:tree:0:j_id_o" value="true" class="grant-node visible" />
+
+                                <span class="tree-node-header">
+                                    kildeen.visor.test.Pages.Secured
+                                </span><input id="form:tree:0:j_id_q" name="form:tree:0:j_id_q" type="button" value="Customize" style="display: inline-block" onclick="return false;;window.location.href = '/helloWorld.xhtml?jfwid=-1bgdu3e1qo'" class="tree-button customize" />
+                <span class="crud-container">Create<input id="form:tree:0:j_id_s" type="checkbox" name="form:tree:0:j_id_s" value="true" class="crud-checkbox create" /> </span>
+                <span class="crud-container">Read<input id="form:tree:0:j_id_u" type="checkbox" name="form:tree:0:j_id_u" value="true" class="crud-checkbox read" /></span>
+                <span class="crud-container">Update<input id="form:tree:0:j_id_w" type="checkbox" name="form:tree:0:j_id_w" value="true" class="crud-checkbox update" /> </span>
+                <span class="crud-container">Delete<input id="form:tree:0:j_id_y" type="checkbox" name="form:tree:0:j_id_y" value="true" class="crud-checkbox delete" /></span>
+                <ul>
+                    <li class="node-container"><span style="font-size: larger; font-weight: bolder" class="perform-expand visible">+</span><input id="form:tree:0_0:j_id_o" type="checkbox" name="form:tree:0_0:j_id_o" value="true" class="grant-node visible" />
+
+                                <span class="tree-node-header">
+                                    kildeen.visor.test.Pages.Secured.Admin
+                                </span><input id="form:tree:0_0:j_id_q" name="form:tree:0_0:j_id_q" type="button" value="Customize" onclick="return false;;window.location.href = '/helloWorld.xhtml?jfwid=-1bgdu3e1qo'" class="tree-button customize" />
+                        <span class="crud-container">Create<input id="form:tree:0_0:j_id_s" type="checkbox" name="form:tree:0_0:j_id_s" value="true" class="crud-checkbox create" /> </span>
+                        <span class="crud-container">Read<input id="form:tree:0_0:j_id_u" type="checkbox" name="form:tree:0_0:j_id_u" value="true" class="crud-checkbox read" /></span>
+                        <span class="crud-container">Update<input id="form:tree:0_0:j_id_w" type="checkbox" name="form:tree:0_0:j_id_w" value="true" class="crud-checkbox update" /> </span>
+                        <span class="crud-container">Delete<input id="form:tree:0_0:j_id_y" type="checkbox" name="form:tree:0_0:j_id_y" value="true" class="crud-checkbox delete" /></span>
+                        <ul>
+                            <li class="node-container"><input id="form:tree:0_0_0:j_id_o" type="checkbox" name="form:tree:0_0_0:j_id_o" value="true" class="grant-node visible" />
+
+                                <span class="tree-node-header">
+                                    kildeen.visor.test.Pages.Secured.Admin.Admin1
+                                </span><input id="form:tree:0_0_0:j_id_q" name="form:tree:0_0_0:j_id_q" type="button" value="Customize" onclick="return false;;window.location.href = '/helloWorld.xhtml?jfwid=-1bgdu3e1qo'" class="tree-button customize" />
+                                <span class="crud-container">Create<input id="form:tree:0_0_0:j_id_s" type="checkbox" name="form:tree:0_0_0:j_id_s" value="true" class="crud-checkbox create" /> </span>
+                                <span class="crud-container">Read<input id="form:tree:0_0_0:j_id_u" type="checkbox" name="form:tree:0_0_0:j_id_u" value="true" class="crud-checkbox read" /></span>
+                                <span class="crud-container">Update<input id="form:tree:0_0_0:j_id_w" type="checkbox" name="form:tree:0_0_0:j_id_w" value="true" class="crud-checkbox update" /> </span>
+                                <span class="crud-container">Delete<input id="form:tree:0_0_0:j_id_y" type="checkbox" name="form:tree:0_0_0:j_id_y" value="true" class="crud-checkbox delete" /></span>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="node-container"><input id="form:tree:0_1:j_id_o" type="checkbox" name="form:tree:0_1:j_id_o" value="true" class="grant-node visible" />
+
+                                <span class="tree-node-header">
+                                    kildeen.visor.test.Pages.Secured.Secured3
+                                </span><input id="form:tree:0_1:j_id_q" name="form:tree:0_1:j_id_q" type="button" value="Customize" onclick="return false;;window.location.href = '/helloWorld.xhtml?jfwid=-1bgdu3e1qo'" class="tree-button customize" />
+                        <span class="crud-container">Create<input id="form:tree:0_1:j_id_s" type="checkbox" name="form:tree:0_1:j_id_s" value="true" class="crud-checkbox create" /> </span>
+                        <span class="crud-container">Read<input id="form:tree:0_1:j_id_u" type="checkbox" name="form:tree:0_1:j_id_u" value="true" class="crud-checkbox read" /></span>
+                        <span class="crud-container">Update<input id="form:tree:0_1:j_id_w" type="checkbox" name="form:tree:0_1:j_id_w" value="true" class="crud-checkbox update" /> </span>
+                        <span class="crud-container">Delete<input id="form:tree:0_1:j_id_y" type="checkbox" name="form:tree:0_1:j_id_y" value="true" class="crud-checkbox delete" /></span>
+                    </li>
+                    <li class="node-container"><input id="form:tree:0_2:j_id_o" type="checkbox" name="form:tree:0_2:j_id_o" value="true" class="grant-node visible" />
+
+                                <span class="tree-node-header">
+                                    kildeen.visor.test.Pages.Secured.Secured2
+                                </span><input id="form:tree:0_2:j_id_q" name="form:tree:0_2:j_id_q" type="button" value="Customize" onclick="return false;;window.location.href = '/helloWorld.xhtml?jfwid=-1bgdu3e1qo'" class="tree-button customize" />
+                        <span class="crud-container">Create<input id="form:tree:0_2:j_id_s" type="checkbox" name="form:tree:0_2:j_id_s" value="true" class="crud-checkbox create" /> </span>
+                        <span class="crud-container">Read<input id="form:tree:0_2:j_id_u" type="checkbox" name="form:tree:0_2:j_id_u" value="true" class="crud-checkbox read" /></span>
+                        <span class="crud-container">Update<input id="form:tree:0_2:j_id_w" type="checkbox" name="form:tree:0_2:j_id_w" value="true" class="crud-checkbox update" /> </span>
+                        <span class="crud-container">Delete<input id="form:tree:0_2:j_id_y" type="checkbox" name="form:tree:0_2:j_id_y" value="true" class="crud-checkbox delete" /></span>
+                    </li>
+                    <li class="node-container"><input id="form:tree:0_3:j_id_o" type="checkbox" name="form:tree:0_3:j_id_o" value="true" class="grant-node visible" />
+
+                                <span class="tree-node-header">
+                                    kildeen.visor.test.Pages.Secured.Secured1
+                                </span><input id="form:tree:0_3:j_id_q" name="form:tree:0_3:j_id_q" type="button" value="Customize" onclick="return false;;window.location.href = '/helloWorld.xhtml?jfwid=-1bgdu3e1qo'" class="tree-button customize" />
+                        <span class="crud-container">Create<input id="form:tree:0_3:j_id_s" type="checkbox" name="form:tree:0_3:j_id_s" value="true" class="crud-checkbox create" /> </span>
+                        <span class="crud-container">Read<input id="form:tree:0_3:j_id_u" type="checkbox" name="form:tree:0_3:j_id_u" value="true" class="crud-checkbox read" /></span>
+                        <span class="crud-container">Update<input id="form:tree:0_3:j_id_w" type="checkbox" name="form:tree:0_3:j_id_w" value="true" class="crud-checkbox update" /> </span>
+                        <span class="crud-container">Delete<input id="form:tree:0_3:j_id_y" type="checkbox" name="form:tree:0_3:j_id_y" value="true" class="crud-checkbox delete" /></span>
+                    </li>
+                </ul>
+            </li>
+            <li class="node-container"><input id="form:tree:1:j_id_o" type="checkbox" name="form:tree:1:j_id_o" value="true" class="grant-node visible" />
+
+                                <span class="tree-node-header">
+                                    kildeen.visor.test.HelloWorld
+                                </span><input id="form:tree:1:j_id_q" name="form:tree:1:j_id_q" type="button" value="Customize" onclick="return false;;window.location.href = '/helloWorld.xhtml?jfwid=-1bgdu3e1qo'" class="tree-button customize" />
+                <span class="crud-container">Create<input id="form:tree:1:j_id_s" type="checkbox" name="form:tree:1:j_id_s" value="true" class="crud-checkbox create" /> </span>
+                <span class="crud-container">Read<input id="form:tree:1:j_id_u" type="checkbox" name="form:tree:1:j_id_u" value="true" class="crud-checkbox read" /></span>
+                <span class="crud-container">Update<input id="form:tree:1:j_id_w" type="checkbox" name="form:tree:1:j_id_w" value="true" class="crud-checkbox update" /> </span>
+                <span class="crud-container">Delete<input id="form:tree:1:j_id_y" type="checkbox" name="form:tree:1:j_id_y" value="true" class="crud-checkbox delete" /></span>
+            </li>
+        </ul>
+    </div>
+
+    <ui:include src="treejs.xhtml" />
+
+</h:body>
+
+</html>

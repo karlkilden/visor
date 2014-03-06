@@ -24,6 +24,7 @@ import com.kildeen.visor.core.api.permission.PermissionResolver;
 import com.kildeen.visor.core.api.permission.SubPermission;
 import org.omnifaces.model.tree.ListTreeModel;
 import org.omnifaces.model.tree.TreeModel;
+import org.omnifaces.util.Faces;
 import org.primefaces.component.tree.Tree;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.NodeCollapseEvent;
@@ -62,6 +63,7 @@ public class PermissionBean implements Serializable {
     private Map<CheckboxTreeNode, CheckboxTreeNode> parent = new HashMap<>();
     private List<String> update = new ArrayList<>();
     private TreeModel<Permission> tree;
+    private String currentNodeId;
 
     @PostConstruct
     public void init() {
@@ -193,11 +195,27 @@ public class PermissionBean implements Serializable {
         event.getTreeNode().setExpanded(false);
     }
 
-    public List<Permission> getPermissionResolver() {
+    public List<Permission> getRootPermissions() {
         return permissionResolver.getRootPermissions();
+    }
+
+    public Permission getCurrentPermission() {
+        return permissionResolver.getPermission(currentNodeId);
     }
 
     public TreeModel<Permission> getTree() {
         return tree;
+    }
+
+    public void update() {
+     currentNodeId = Faces.getRequestParameter("treeNodeId");
+    }
+
+    public String getCurrentNodeId() {
+        return currentNodeId;
+    }
+
+    public void setCurrentNodeId(String currentNodeId) {
+        this.currentNodeId = currentNodeId;
     }
 }

@@ -21,7 +21,7 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:o="http://omnifaces.org/ui"
+      xmlns:o="http://omnifaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets"
         >
 
 <h:head>
@@ -29,11 +29,11 @@
     <script type="text/javascript">
 
     </script>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 
 </h:head>
 <h:body>
     <h:outputStylesheet name="style.css" library="css"/>
+
 
     <div id="container">
         <h1>JSF/DS Hello World</h1>
@@ -47,27 +47,30 @@
         </h:form>
 
         <h:form id="form">
+            <o:commandScript action="#{permissionBean.update}" name="treeUpdate" render="info"/>
+            <h:panelGroup id="info">
+                #{permissionBean.currentNodeId}
+                #{permissionBean.currentPermission.path}
+            </h:panelGroup>
 
-          <span class="btn"> apa<span id="switch"
-                                      class="text_btn-background toolboxItem ui-icon btn-icon-enable btn-fontItalicIcon"/>apa</span>
 
-            <div class="tree-container">
+            <div class="tree-container" id="tree-container">
                 <p style="vertical-align: middle">Use enheritence:<input id="use-inheritance" type="checkbox"
                                                                          checked="checked"/></p>
 
-                <p style="vertical-align: middle">Row click mode:
-                    <button onclick="return false;" class="tree-button" id="row-click-action">Expand</button>
+                <p style="vertical-align: middle">Node click mode:
+                    <button onclick="return false;" class="tree-button" id="node-click-action">Expand</button>
                 </p>
                 <o:tree id="tree" value="#{permissionBean.tree}" var="permission" varNode="node">
                     <o:treeNode>
                         <ul>
                             <o:treeNodeItem>
-                                <li>
+                                <li class="node-container">
                                     <h:outputText value="+" style="font-size: larger; font-weight: bolder"
                                                   rendered="#{permission.parent}" styleClass="perform-expand visible"/>
                                     <h:selectBooleanCheckbox class="grant-node visible"/>
 
-                                <span class="tree-row">
+                                <span class="tree-node-header" id="#{permission.id}">
                                     #{permission.id}
                                 </span>
                                     <h:button onclick="return false;" value="Customize" styleClass="tree-button customize"/>
@@ -90,74 +93,7 @@
                 </o:tree>
             </div>
         </h:form>
-        <script type="text/javascript">
-            var customize = function () {
-                $(this).parent().children('.crud-container').toggle();
-            };
-            <!-- A node is selected, all children will have all their checkboxes checked if inheritance is selected-->
-            function grantNode (nodeGrant) {
-                var checked = nodeGrant.prop('checked')
-                if ($('#use-inheritance').prop('checked')) {
-                    nodeGrant.parent().children().find('input[type=checkbox]').prop('checked', checked);
-                }
-            };
-
-            function toggle(nodeExpand) {
-                nodeExpand.parent().children().not('.crud-container').not('.visible').toggle();
-                var visible = !nodeExpand.parent().children().next('ul').is(":visible") &amp;&amp;
-                        nodeExpand.parent().children().next('.crud-container').is(":visible");
-                if (visible) {
-                    nodeExpand.parent().children().next('.customize').parent().children('.crud-container').toggle()
-                }
-                nodeExpand.toggle();
-            }
-            ;
-
-            var toggleEach = function () {
-                $(this).parent().children().not('.visible').toggle();
-                $(this).toggle();
-            };
-
-            var toggleCrud = function () {
-                var checked = $(this).prop('checked')
-                if ($('#use-inheritance').prop('checked')) {
-                    var clazz = this.className.split(/\s+/);
-                    $(this).parent().parent().children().last().find('.' + clazz[1]).prop('checked', checked);
-                }
-            };
-            <!-- we start out by hiding everything so only the visible part node is there-->
-            $(".tree-row").each(toggleEach);
-
-            $(".customize").click(customize);
-
-            $(".tree-row").click(function () {
-                if($("#row-click-action").text() ==='Expand') {
-                    toggle($(this));
-                }
-                else {
-                    gn = $(this).parent().children().next(".grant-node");
-                    gn.prop('checked', !gn.prop('checked'))
-                    grantNode($(this).parent().children().next(".grant-node"));
-                }
-
-            });
-            $(".perform-expand").click(function () {
-                toggle($(this).parent().children().next('.tree-row'));
-            });
-            $(".crud-checkbox").click(toggleCrud);
-
-            $(".grant-node").click(function () {
-                 grantNode($(this));
-            });
-
-
-            $("#row-click-action").click(function () {
-                $(this).text(function (i, v) {
-                    return v === 'Expand' ? 'Select' : 'Expand'
-                })
-            });
-        </script>
     </div>
-
+          <ui:include src="treejs.xhtml" />
 </h:body>
 </html>
