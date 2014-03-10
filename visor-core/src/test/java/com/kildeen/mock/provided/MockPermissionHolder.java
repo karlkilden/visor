@@ -22,6 +22,8 @@ package com.kildeen.mock.provided;
 import com.kildeen.visor.core.api.context.DefaultPermissionHolder;
 import com.kildeen.visor.core.api.permission.Permission;
 import com.kildeen.visor.core.permission.PermissionImpl;
+import com.kildeen.visor.core.permission.PermissionModel;
+import com.kildeen.visor.core.permission.PermissionModelImpl;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -53,10 +55,14 @@ public class MockPermissionHolder extends DefaultPermissionHolder {
 
     @PostConstruct
     private void init() {
-        PermissionImpl p = new PermissionImpl("", Collections.<Permission>emptySet(),null);
+        PermissionModel t = new PermissionModelImpl("", Collections.<PermissionModel>emptySet(),null);
+
+        PermissionImpl p = new PermissionImpl(t);
         permissions = new HashSet<>();
         permissions.add(p);
-        PermissionImpl p2 = new PermissionImpl("testTrue", Collections.<Permission>emptySet(),null);
+        PermissionModel t2 = new PermissionModelImpl("testTrue", Collections.<PermissionModel>emptySet(),null);
+
+        PermissionImpl p2 = new PermissionImpl(t2);
         permissions.add(p2);
     }
 }

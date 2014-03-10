@@ -19,10 +19,10 @@
 
 package com.kildeen.visor.core.permission;
 
-import com.kildeen.visor.core.api.permission.Permission;
 import junit.framework.Assert;
-import org.apache.commons.collections4.set.ListOrderedSet;
 import org.junit.Test;
+
+import java.util.Collections;
 
 /**
  * Created with IntelliJ IDEA.
@@ -34,8 +34,11 @@ public class PermissionTest {
 
     @Test
     public void permission_should_return_children_as_model() throws Exception {
-        PermissionImpl permission = new PermissionImpl("", new ListOrderedSet<Permission>(),null);
-        PermissionImpl child = new PermissionImpl("2", new ListOrderedSet<Permission>(),null);
+        PermissionModel t = new PermissionModelImpl("", Collections.<PermissionModel>emptySet(),null);
+        PermissionModel t2 = new PermissionModelImpl("2", Collections.<PermissionModel>emptySet(),null);
+
+        PermissionImpl permission = new PermissionImpl(t);
+        PermissionImpl child = new PermissionImpl(t2);
         permission.getChildren().add(child);
 
         Assert.assertEquals(child, permission.getChildren().iterator().next());

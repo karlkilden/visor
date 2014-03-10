@@ -24,6 +24,8 @@ import com.kildeen.visor.core.api.permission.Permission;
 import com.kildeen.visor.core.api.permission.PermissionResolver;
 import com.kildeen.visor.core.permission.PermissionImpl;
 import com.kildeen.visor.core.api.permission.PermissionConverter;
+import com.kildeen.visor.core.permission.PermissionModel;
+import com.kildeen.visor.core.permission.PermissionModelImpl;
 import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigDescriptor;
 import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigResolver;
 import org.apache.deltaspike.security.api.authorization.Secured;
@@ -31,7 +33,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.inject.Produces;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -39,7 +40,7 @@ import javax.inject.Named;
 
 /**
  * This is the central implementation for PermissionContext. It uses {@link javax.faces.bean.ViewScoped} and as
- * a consequence it's dependent on Deltaspike porting this to CDI. This is to ensure interoperability between
+ * NOT_SECURED consequence it's dependent on Deltaspike porting this to CDI. This is to ensure interoperability between
  * JSF 2.x and JSF 2.2.
  *
  *  {@inheritDoc}
@@ -55,7 +56,8 @@ import javax.inject.Named;
 public class PermissionContextImpl implements PermissionContext {
     // This is only used when security information is requested but the current view is unsecured.
     private static final String DEFAULT="DEFAULT";
-    private static final PermissionImpl NOT_SECURED_DEFAULT = new PermissionImpl(DEFAULT, null,null);
+    private static final PermissionModel NOT_SECURED = new PermissionModelImpl(DEFAULT, null,null);
+    private static final PermissionImpl NOT_SECURED_DEFAULT = new PermissionImpl(NOT_SECURED);
 
     static {
         NOT_SECURED_DEFAULT.setCreate(true);
@@ -107,7 +109,7 @@ public class PermissionContextImpl implements PermissionContext {
     }
 
     private boolean hasPermission() {
-        return permission != SubjectPermissionHolder.NOT_FOUND;
+        return permission != SubjectPermissionHolder.NOT_FOUND_DEFAULT;
     }
 
     @Override

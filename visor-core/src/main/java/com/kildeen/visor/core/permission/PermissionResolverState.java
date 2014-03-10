@@ -19,7 +19,6 @@
 
 package com.kildeen.visor.core.permission;
 
-import com.kildeen.visor.core.api.permission.Permission;
 import org.apache.commons.collections4.set.ListOrderedSet;
 
 import java.util.HashMap;
@@ -34,15 +33,12 @@ import java.util.Map;
  * @since 1.0
  */
 final class PermissionResolverState {
-    private ListOrderedSet<PermissionImpl> permissions = new ListOrderedSet<>();
-    private ListOrderedSet<Permission> rootPermissions = new ListOrderedSet<>();
-    private Map<String, Permission> mappedPermissions = new HashMap<>();
+    private ListOrderedSet<PermissionModel> permissions = new ListOrderedSet<>();
+    private ListOrderedSet<PermissionModel> rootPermissions = new ListOrderedSet<>();
+    private Map<String, PermissionModel> mappedPermissions = new HashMap<>();
 
-    private void addToRelevantCollections(PermissionImpl permission, boolean isRoot) {
-        if (permission instanceof PermissionImpl) {
-            permissions.add((PermissionImpl) permission);
-
-        }
+    private void addToRelevantCollections(PermissionModel permission, boolean isRoot) {
+        permissions.add(permission);
         if (isRoot) {
             rootPermissions.add(permission);
         }
@@ -51,19 +47,19 @@ final class PermissionResolverState {
 
     }
 
-    public List<PermissionImpl> getPermissions() {
+    public List<PermissionModel> getPermissions() {
         return permissions.asList();
     }
 
-    public List<Permission> getRootPermissions() {
+    public List<PermissionModel> getRootPermissions() {
         return rootPermissions.asList();
     }
 
-    public Map<String, Permission> getMappedPermissions() {
+    public Map<String, PermissionModel> getMappedPermissions() {
         return mappedPermissions;
     }
 
-    public void add(PermissionImpl permission, boolean isRoot) {
+    public void add(PermissionModel permission, boolean isRoot) {
         addToRelevantCollections(permission, isRoot);
     }
 }

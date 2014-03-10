@@ -22,6 +22,8 @@ package com.kildeen.visor.core.context;
 import com.kildeen.mock.provided.MockPermissionHolder;
 import com.kildeen.visor.core.api.permission.Permission;
 import com.kildeen.visor.core.permission.PermissionImpl;
+import com.kildeen.visor.core.permission.PermissionModel;
+import com.kildeen.visor.core.permission.PermissionModelImpl;
 import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,10 +51,13 @@ public class SubjectPermissionHolderTest {
     SubjectPermissionHolder subjectPermissionHolder;
     @Test
     public void holder_Should_be_mapped_by_string_representation() {
-        Permission p = new PermissionImpl("tip.tap", Collections.<Permission>emptySet(),null);
+        PermissionModel t = new PermissionModelImpl("tip.tap", Collections.<PermissionModel>emptySet(),null);
+        Permission p = new PermissionImpl(t);
         Set<Permission> permissionSet = new HashSet<>();
         permissionSet.add(p);
-        PermissionImpl p2 = new PermissionImpl("testTrue", Collections.<Permission>emptySet(),null);
+        PermissionModel t2 = new PermissionModelImpl("testTrue", Collections.<PermissionModel>emptySet(),null);
+
+        PermissionImpl p2 = new PermissionImpl(t2);
         permissionSet.add(p2);
         permissionHolder.setPermissions(permissionSet);
 

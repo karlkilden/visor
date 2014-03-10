@@ -17,60 +17,27 @@
  * under the License.
  */
 
-package com.kildeen.visor.core.api.permission;
+package com.kildeen.visor.core.permission;
 
 import java.util.Set;
 
 /**
- * <p>File created: 2014-02-18 20:08</p>
+ * <p>File created: 2014-03-08 14:10</p>
  *
  * @version 1.0
  * @author: Karl Kildén
  * @since 1.0
  */
-public interface Permission {
-
-    boolean isParent();
-
-    boolean hasCreate();
-    void setCreate(boolean create);
-    void pushCreate(boolean create);
-
-    boolean hasRead();
-    void setRead(boolean read);
-    void pushRead(boolean read);
-
-    boolean hasUpdate();
-    void setUpdate(boolean update);
-    void pushUpdate(boolean update);
-
-    boolean hasDelete();
-    void setDelete(boolean delete);
-    void pushDelete(boolean delete);
-
-    void push(SubPermission subPermission, boolean state);
-
-    boolean isPrivileged();
-
-    public Set<Permission> getChildren();
+public interface PermissionModel {
+    String getPath();
 
     boolean isGroup();
 
     int getCount();
 
-    void privilege();
+    Set<PermissionModel> getChildren();
 
     String getId();
 
-    String getPath();
-
-    boolean isCreate();
-
-    boolean isRead();
-
-    boolean isUpdate();
-
-    boolean isDelete();
-
-
+    boolean getGroup();
 }

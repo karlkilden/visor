@@ -22,10 +22,7 @@ package com.kildeen.visor.core.permission;
 import com.kildeen.visor.core.api.permission.Permission;
 import com.kildeen.visor.core.api.permission.SubPermission;
 import org.apache.commons.collections4.set.ListOrderedSet;
-import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.deltaspike.core.api.config.view.metadata.ConfigDescriptor;
-import org.apache.deltaspike.core.api.config.view.metadata.ViewConfigDescriptor;
 
 import java.util.Set;
 
@@ -48,7 +45,7 @@ public class PermissionImpl implements Permission {
     private boolean group;
     private int count = 1;
 
-    public PermissionImpl(final String id, final Set<Permission> children, final ConfigDescriptor configDescriptor) {
+/*    public PermissionImpl(final String id, final Set<Permission> children, final ConfigDescriptor configDescriptor) {
         //We want no trouble with Json so we cheat here.
         this.children = (Set) children;
         this.id = id;
@@ -66,7 +63,7 @@ public class PermissionImpl implements Permission {
             }
 
         }
-    }
+    }*/
 
 
     @Override
@@ -74,15 +71,14 @@ public class PermissionImpl implements Permission {
         return children.isEmpty() == false;
     }
 
-    public PermissionImpl(PermissionImpl permission) {
-        this.children = (Set) permission.children;
-        this.id = permission.id;
-        this.create = permission.create;
-        this.read = permission.create;
-        this.update = permission.create;
-        this.delete = permission.create;
-        this.path = permission.path;
-        this.group = permission.group;
+    public PermissionImpl(PermissionModel permission) {
+        for (PermissionModel permissionModel : permission.getChildren()) {
+            this.children.add(new PermissionImpl(permissionModel));
+        }
+        this.id = permission.getId();
+        this.path = permission.getPath();
+        this.group = permission.getGroup();
+        this.count = permission.getCount();
     }
 
     @Override
@@ -232,15 +228,12 @@ public class PermissionImpl implements Permission {
             return true;
         }
         PermissionImpl permission = (PermissionImpl) permissionModel;
-        return new EqualsBuilder().append(this.id, permission.id).append(this.create,
-                permission.create).append(this.read, permission.read).append(this.update,
-                permission.update).append(this.delete, permission.delete).build();
+        return this.id.equals(permission.id);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(3, 7).append(id).
-                append(create).append(read).append(update).append(delete).build();
+        return new HashCodeBuilder(3, 7).append(id).build();
     }
 
     @Override

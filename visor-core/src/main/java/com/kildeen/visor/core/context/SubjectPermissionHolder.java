@@ -23,6 +23,8 @@ import com.google.common.collect.ImmutableMap;
 import com.kildeen.visor.core.api.context.PermissionHolder;
 import com.kildeen.visor.core.api.permission.Permission;
 import com.kildeen.visor.core.permission.PermissionImpl;
+import com.kildeen.visor.core.permission.PermissionModel;
+import com.kildeen.visor.core.permission.PermissionModelImpl;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -44,7 +46,9 @@ class SubjectPermissionHolder implements Serializable {
     private PermissionHolder permissionHolder;
 
     private Map<String, Permission> mappedPermissions;
-    public static final Permission NOT_FOUND = new PermissionImpl(null, null, null);
+    public static final PermissionModel NOT_FOUND = new PermissionModelImpl(null, null, null);
+    public static final Permission NOT_FOUND_DEFAULT = new PermissionImpl(NOT_FOUND);
+
 
     @PostConstruct
     private void init() {
@@ -70,7 +74,7 @@ class SubjectPermissionHolder implements Serializable {
     public Permission getPermission(String permission) {
         Permission p = mappedPermissions.get(permission);
         if (p == null) {
-            return NOT_FOUND;
+            return NOT_FOUND_DEFAULT;
         }
         else {
             return p;

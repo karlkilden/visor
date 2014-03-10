@@ -25,10 +25,22 @@
         function grantNode(nodeGrant) {
             var checked = nodeGrant.prop('checked')
             if ($('#use-inheritance').prop('checked')) {
-                nodeGrant.parent().children().find('input[type=checkbox]').prop('checked', checked);
+                nodeGrant.parent().children().find('input[type=checkbox]').prop('checked', checked)
             }
+            nodeGrantAjaxCall(nodeGrant, checked);
+
         }
         ;
+
+        function nodeGrantAjaxCall(node, checked) {
+            if (typeof(nodeChecked) == "function" &amp;&amp; checked) {
+                nodeChecked({ checkedNodeId: node.attr('data') })
+
+            }
+            else if (typeof(nodeUnchecked) == "function" &amp;&amp; !checked) {
+                nodeUnchecked({ uncheckedNodeId: node.attr('data') })
+            }
+        }
 
         function expand(nodeToExpand) {
             nodeToExpand.parent().children().not('.crud-container').not('.visible').toggle();
@@ -64,8 +76,8 @@
                 $(this).parent().parent().children().last().find('.' + clazz[1]).prop('checked', checked);
             }
         };
-            <!-- we start out by hiding everything so only the visible part node is there-->
-            $(".tree-node-header").each(minimizeAllPermissionnodes);
+        <!-- we start out by hiding everything so only the visible part node is there-->
+        $(".tree-node-header").each(minimizeAllPermissionnodes);
 
 
         $(".customize").click(customize);
@@ -73,7 +85,9 @@
         $(".tree-node-header").click(function () {
             treeNodeClick($(this));
             <!-- this is our hook to the server -->
-            treeUpdate({ treeNodeId: $(this).attr('id') });
+            if (typeof(nodeClick) == "function")
+                nodeClick({ nodeId: $(this).attr('data') });
+              document.getElementById($(this).attr('data')+'_1').click();
         });
         $(".perform-expand").click(function () {
             expand($(this).parent().children().next('.tree-node-header'));

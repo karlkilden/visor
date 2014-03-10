@@ -17,27 +17,25 @@
  * under the License.
  */
 
-package com.kildeen.visor.core.api.permission;
+package com.kildeen.visor.test;
 
-import com.kildeen.visor.core.permission.PermissionModel;
-
-import java.io.Serializable;
-import java.util.List;
+import com.kildeen.visor.core.api.permission.Permission;
+import org.omnifaces.model.tree.TreeModel;
 
 /**
- * <p>File created: 2014-02-16 01:50</p>
+ * <p>File created: 2014-03-08 14:21</p>
  *
  * @version 1.0
  * @author: Karl Kildén
  * @since 1.0
  */
-public interface PermissionResolver extends Serializable {
-
-    public List<Permission> getPermissions();
-    public List<Permission> getRootPermissions();
-    public Permission getPermission(String id);
-    public Permission getPermission(Class<?> view);
-    public Permission getMaximized(String permission);
-    public void boot();
-    public PermissionModel getPermissionModel(String currentNodeId);
+public class PermissionTreeUtil {
+    public static Permission getPermission(TreeModel<Permission> tree, String nodeId) {
+        for (TreeModel<Permission> permission : tree.getChildren()) {
+            if (permission.getData().getId().equals(nodeId)) {
+              return permission.getData();
+            }
+        }
+        throw new RuntimeException("Node does not exist: "+nodeId);
+    }
 }

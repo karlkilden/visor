@@ -21,29 +21,20 @@ package com.kildeen.visor.test.model;
 
 import com.kildeen.visor.core.api.permission.Permission;
 import com.kildeen.visor.core.api.permission.PermissionResolver;
-import com.kildeen.visor.core.api.permission.SubPermission;
+import com.kildeen.visor.core.permission.PermissionModel;
+import com.kildeen.visor.test.PermissionTreeUtil;
 import org.omnifaces.model.tree.ListTreeModel;
 import org.omnifaces.model.tree.TreeModel;
 import org.omnifaces.util.Faces;
-import org.primefaces.component.tree.Tree;
-import org.primefaces.context.RequestContext;
-import org.primefaces.event.NodeCollapseEvent;
-import org.primefaces.event.NodeExpandEvent;
-import org.primefaces.event.NodeSelectEvent;
-import org.primefaces.event.NodeUnselectEvent;
-import org.primefaces.model.CheckboxTreeNode;
-import org.primefaces.model.TreeNode;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.faces.component.UIComponent;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 /**
  * <p>File created: 2014-03-01 22:45</p>
@@ -52,155 +43,38 @@ import java.util.Map;
  * @author: Karl Kildén
  * @since 1.0
  */
-@ApplicationScoped
+@SessionScoped
 @Named
 public class PermissionBean implements Serializable {
 
     @Inject
     private PermissionResolver permissionResolver;
-    private TreeNode root;
-    private TreeNode[] selectedNodes;
-    private Map<CheckboxTreeNode, CheckboxTreeNode> parent = new HashMap<>();
-    private List<String> update = new ArrayList<>();
     private TreeModel<Permission> tree;
     private String currentNodeId;
+    private List<Permission> rootPermissions;
+    private Set<Permission> selected = new HashSet<>();
+    private Permission currentPermission;
 
     @PostConstruct
     public void init() {
 
+        rootPermissions = permissionResolver.getRootPermissions();
         tree = new ListTreeModel<>();
-        for (Permission p :permissionResolver.getRootPermissions()) {
+        for (Permission p : rootPermissions) {
             TreeModel<Permission> node = tree.addChild(p);
             addChildren(node);
         }
-
-
-/*
-        createTree();
-*/
     }
-    private TreeModel<Permission> addChildren (TreeModel<Permission> model) {
+
+    private TreeModel<Permission> addChildren(TreeModel<Permission> model) {
         for (Permission child : model.getData().getChildren()) {
             addChildren(model.addChild(child));
         }
         return model;
     }
-    private void createTree() {
-        root = new CheckboxTreeNode(new PermissionTreeNode(), null);
-        for (Permission p : permissionResolver.getRootPermissions()) {
-            CheckboxTreeNode node = new CheckboxTreeNode(new PermissionTreeNode(p), root);
-            addSubPermissions(p, node);
-            createNode(p, node);
-        }
-    }
 
-
-    private void createNode(Permission permission, TreeNode parent) {
-        for (Permission child : permission.getChildren()) {
-            CheckboxTreeNode childNode = new CheckboxTreeNode(new PermissionTreeNode(child), parent);
-            addSubPermissions(child, childNode);
-            createNode(child, childNode);
-        }
-    }
-
-    public TreeNode getRoot() {
-        return root;
-    }
-
-    public TreeNode[] getSelectedNodes() {
-        return selectedNodes;
-    }
-
-    public void setSelectedNodes(final TreeNode[] selectedNodes) {
-        this.selectedNodes = selectedNodes;
-    }
-
-    public void onNodeSelect(NodeSelectEvent event) {
-        PermissionTreeNode permissionTreeNode = (PermissionTreeNode) event.getTreeNode().getData();
-        TreeNode node = event.getTreeNode();
-        setExpand(node);
-        if (permissionTreeNode.isSubPermission() == false) {
-            return;
-        }
-        permissionTreeNode.getPermission().push(permissionTreeNode.getSubPermission(), true);
-        handleUpdate(event.getComponent().getParent(), permissionTreeNode.getSubPermission().ordinal());
-        permissionTreeNode.getPermission().push(permissionTreeNode.getSubPermission(), true);
-        handleEvent(event.getTreeNode().getParent(), permissionTreeNode.getSubPermission(), true);
-        RequestContext ctx = RequestContext.getCurrentInstance();
-        ctx.update(update);
-    }
-
-    public void onNodeUnselect(NodeUnselectEvent event) {
-        Tree tree = (Tree) event.getComponent();
-        tree.getRowKey();
-        PermissionTreeNode permissionTreeNode = (PermissionTreeNode) event.getTreeNode().getData();
-        TreeNode node = event.getTreeNode();
-        setExpand(node);
-        if (permissionTreeNode.isSubPermission() == false) {
-            return;
-        }
-        handleUpdate(event.getComponent().getParent(), permissionTreeNode.getSubPermission().ordinal());
-        permissionTreeNode.getPermission().push(permissionTreeNode.getSubPermission(), false);
-        handleEvent(event.getTreeNode().getParent(), permissionTreeNode.getSubPermission(), false);
-        RequestContext ctx = RequestContext.getCurrentInstance();
-        ctx.update(update);
-    }
-
-    private void handleUpdate(final UIComponent parent, int subPermission) {
-        update.add(parent.getChildren().get(subPermission).getId());
-
-        for (int i = 3; 3 < parent.getChildren().size(); i++) {
-             handleUpdate(parent.getChildren().get(i), subPermission);
-        }
-    }
-
-    private void setExpand(TreeNode node) {
-/*            node.setExpanded(true);
-        while (node.getParent() != null) {
-            node.getParent().setExpanded(true);
-            node = node.getParent();
-        }*/
-    }
-
-    private void handleEvent(TreeNode treeNode, SubPermission subPermission, boolean state) {
-        PermissionTreeNode permissionTreeNode = (PermissionTreeNode) treeNode.getData();
-        for (TreeNode childNode : treeNode.getChildren()) {
-            PermissionTreeNode child = (PermissionTreeNode) childNode.getData();
-            if (child.isSubPermission() && child.getSubPermission().equals(subPermission)) {
-                childNode.setSelected(state);
-            } else if (child.isSubPermission() == false) {
-                handleEvent(childNode, subPermission, state);
-            }
-        }
-    }
-
-    private void addSubPermissions(final Permission p, final CheckboxTreeNode node) {
-        CheckboxTreeNode crud = new CheckboxTreeNode(new PermissionTreeNode(SubPermission.CREATE, p), node);
-        parent.put(crud, node);
-        crud = new CheckboxTreeNode(new PermissionTreeNode(SubPermission.READ, p), node);
-        parent.put(crud, node);
-        crud = new CheckboxTreeNode(new PermissionTreeNode(SubPermission.UPDATE, p), node);
-        parent.put(crud, node);
-        crud = new CheckboxTreeNode(new PermissionTreeNode(SubPermission.DELETE, p), node);
-        parent.put(crud, node);
-
-    }
-
-
-    public void onNodeExpand(NodeExpandEvent event) {
-        event.getTreeNode().setExpanded(true);
-    }
-
-    public void onNodeCollapse(NodeCollapseEvent event) {
-        event.getTreeNode().setExpanded(false);
-    }
-
-    public List<Permission> getRootPermissions() {
-        return permissionResolver.getRootPermissions();
-    }
-
-    public Permission getCurrentPermission() {
-        return permissionResolver.getPermission(currentNodeId);
+    public PermissionModel getCurrentPermission() {
+        return permissionResolver.getPermissionModel(currentNodeId);
     }
 
     public TreeModel<Permission> getTree() {
@@ -208,7 +82,20 @@ public class PermissionBean implements Serializable {
     }
 
     public void update() {
-     currentNodeId = Faces.getRequestParameter("treeNodeId");
+        currentNodeId = Faces.getRequestParameter("nodeId");
+    }
+
+    public void onCheckedNode() {
+        String node = Faces.getRequestParameter("checkedNodeId");
+        Permission currentPermission = PermissionTreeUtil.getPermission(tree, node);
+        selected.add(currentPermission);
+    }
+
+    public void onUncheckedNode() {
+        String node = Faces.getRequestParameter("uncheckedNodeId");
+        Permission currentPermission = PermissionTreeUtil.getPermission(tree, node);
+        selected.remove(currentPermission);
+
     }
 
     public String getCurrentNodeId() {
@@ -217,5 +104,13 @@ public class PermissionBean implements Serializable {
 
     public void setCurrentNodeId(String currentNodeId) {
         this.currentNodeId = currentNodeId;
+    }
+
+    public Permission getCurrentNode() {
+        return currentPermission;
+    }
+
+    public void setCurrentPermission(final Permission currentPermission) {
+        this.currentPermission = currentPermission;
     }
 }

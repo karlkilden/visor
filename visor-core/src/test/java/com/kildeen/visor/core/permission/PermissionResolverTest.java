@@ -97,6 +97,7 @@ public class PermissionResolverTest {
         assertEquals(PermissionImpl.class, model.getClass());
         assertTrue(model.isParent());
         Permission expectedChild = permissionResolver.getPermission("kildeen.mock.provided.Pages.Secured");
+        expectedChild.equals(model.getChildren().iterator().next());
         assertTrue(model.getChildren().contains(expectedChild));
         expectedChild = permissionResolver.getPermission("kildeen.mock.provided.Pages.NestedSecured");
         Permission expectedGrandChild = permissionResolver.getPermission("kildeen.mock.provided.Pages.NestedSecured.NestedSecuredChild");
