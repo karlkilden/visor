@@ -1,4 +1,4 @@
-package com.kildeen.visor.test;
+package com.kildeen.visor.ui;
 
 import com.kildeen.visor.core.api.context.PermissionDataHolder;
 import com.kildeen.visor.core.api.permission.Permission;

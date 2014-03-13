@@ -27,7 +27,7 @@ var QUnit,
 		document: typeof window.document !== "undefined",
 		setTimeout: typeof window.setTimeout !== "undefined",
 		sessionStorage: (function() {
-			var x = "qunit-test-string";
+			var x = "qunit-ui-string";
 			try {
 				sessionStorage.setItem( x, x );
 				sessionStorage.removeItem( x );
@@ -92,7 +92,7 @@ var QUnit,
 // `QUnit` initialized at top of scope
 QUnit = {
 
-	// call on start of module test to prepend name to all tests
+	// call on start of module ui to prepend name to all tests
 	module: function( name, testEnvironment ) {
 		config.currentModule = name;
 		config.currentModuleTestEnvironment = testEnvironment;
@@ -110,7 +110,7 @@ QUnit = {
 
 	test: function( testName, expected, callback, async ) {
 		var test,
-			nameHtml = "<span class='test-name'>" + escapeText( testName ) + "</span>";
+			nameHtml = "<span class='ui-name'>" + escapeText( testName ) + "</span>";
 
 		if ( arguments.length === 2 ) {
 			callback = expected;
@@ -139,7 +139,7 @@ QUnit = {
 		test.queue();
 	},
 
-	// Specify the number of expected assertions to guarantee that failed test (no assertions are run at all) don't slip through.
+	// Specify the number of expected assertions to guarantee that failed ui (no assertions are run at all) don't slip through.
 	expect: function( asserts ) {
 		if (arguments.length === 1) {
 			config.current.expected = asserts;
@@ -251,7 +251,7 @@ config = {
 		{
 			id: "noglobals",
 			label: "Check for Globals",
-			tooltip: "Enabling this will test if any test introduces new properties on the `window` object. Stored as query-strings."
+			tooltip: "Enabling this will ui if any ui introduces new properties on the `window` object. Stored as query-strings."
 		},
 		{
 			id: "notrycatch",
@@ -286,7 +286,7 @@ config = {
 			current = params[ i ].split( "=" );
 			current[ 0 ] = decodeURIComponent( current[ 0 ] );
 
-			// allow just a key to turn on a flag, e.g., test.html?noglobals
+			// allow just a key to turn on a flag, e.g., ui.html?noglobals
 			current[ 1 ] = current[ 1 ] ? decodeURIComponent( current[ 1 ] ) : true;
 			if ( urlParams[ current[ 0 ] ] ) {
 				urlParams[ current[ 0 ] ] = [].concat( urlParams[ current[ 0 ] ], current[ 1 ] );
@@ -375,9 +375,9 @@ extend( QUnit, {
 		}
 	},
 
-	// Resets the test setup. Useful for tests that modify the DOM.
+	// Resets the ui setup. Useful for tests that modify the DOM.
 	/*
-	DEPRECATED: Use multiple tests instead of resetting inside a test.
+	DEPRECATED: Use multiple tests instead of resetting inside a ui.
 	Use testStart or testDone for custom cleanup.
 	This method will throw an error in 2.0, and will be removed in 2.1
 	*/
@@ -428,7 +428,7 @@ extend( QUnit, {
 
 	push: function( result, actual, expected, message ) {
 		if ( !config.current ) {
-			throw new Error( "assertion outside test context, was " + sourceFromStacktrace() );
+			throw new Error( "assertion outside ui context, was " + sourceFromStacktrace() );
 		}
 
 		var output, source,
@@ -442,24 +442,24 @@ extend( QUnit, {
 			};
 
 		message = escapeText( message ) || ( result ? "okay" : "failed" );
-		message = "<span class='test-message'>" + message + "</span>";
+		message = "<span class='ui-message'>" + message + "</span>";
 		output = message;
 
 		if ( !result ) {
 			expected = escapeText( QUnit.jsDump.parse(expected) );
 			actual = escapeText( QUnit.jsDump.parse(actual) );
-			output += "<table><tr class='test-expected'><th>Expected: </th><td><pre>" + expected + "</pre></td></tr>";
+			output += "<table><tr class='ui-expected'><th>Expected: </th><td><pre>" + expected + "</pre></td></tr>";
 
 			if ( actual !== expected ) {
-				output += "<tr class='test-actual'><th>Result: </th><td><pre>" + actual + "</pre></td></tr>";
-				output += "<tr class='test-diff'><th>Diff: </th><td><pre>" + QUnit.diff( expected, actual ) + "</pre></td></tr>";
+				output += "<tr class='ui-actual'><th>Result: </th><td><pre>" + actual + "</pre></td></tr>";
+				output += "<tr class='ui-diff'><th>Diff: </th><td><pre>" + QUnit.diff( expected, actual ) + "</pre></td></tr>";
 			}
 
 			source = sourceFromStacktrace();
 
 			if ( source ) {
 				details.source = source;
-				output += "<tr class='test-source'><th>Source: </th><td><pre>" + escapeText( source ) + "</pre></td></tr>";
+				output += "<tr class='ui-source'><th>Source: </th><td><pre>" + escapeText( source ) + "</pre></td></tr>";
 			}
 
 			output += "</table>";
@@ -475,7 +475,7 @@ extend( QUnit, {
 
 	pushFailure: function( message, source, actual ) {
 		if ( !config.current ) {
-			throw new Error( "pushFailure() assertion outside test context, was " + sourceFromStacktrace(2) );
+			throw new Error( "pushFailure() assertion outside ui context, was " + sourceFromStacktrace(2) );
 		}
 
 		var output,
@@ -487,18 +487,18 @@ extend( QUnit, {
 			};
 
 		message = escapeText( message ) || "error";
-		message = "<span class='test-message'>" + message + "</span>";
+		message = "<span class='ui-message'>" + message + "</span>";
 		output = message;
 
 		output += "<table>";
 
 		if ( actual ) {
-			output += "<tr class='test-actual'><th>Result: </th><td><pre>" + escapeText( actual ) + "</pre></td></tr>";
+			output += "<tr class='ui-actual'><th>Result: </th><td><pre>" + escapeText( actual ) + "</pre></td></tr>";
 		}
 
 		if ( source ) {
 			details.source = source;
-			output += "<tr class='test-source'><th>Source: </th><td><pre>" + escapeText( source ) + "</pre></td></tr>";
+			output += "<tr class='ui-source'><th>Source: </th><td><pre>" + escapeText( source ) + "</pre></td></tr>";
 		}
 
 		output += "</table>";
@@ -536,7 +536,7 @@ extend( QUnit, {
 });
 
 /**
- * @deprecated: Created for backwards compatibility with test runner that set the hook function
+ * @deprecated: Created for backwards compatibility with ui runner that set the hook function
  * into QUnit.{hook}, instead of invoking it and passing the hook function.
  * QUnit.constructor is set to the empty F() above so that we can add to it's prototype here.
  * Doing this allows us to tell if the following methods have been overwritten on the actual
@@ -545,7 +545,7 @@ extend( QUnit, {
 extend( QUnit.constructor.prototype, {
 
 	// Logging callbacks; all receive a single argument with the listed properties
-	// run test/logs.html for any related changes
+	// run ui/logs.html for any related changes
 	begin: registerLoggingCallback( "begin" ),
 
 	// done: { failed, passed, total, runtime }
@@ -862,7 +862,7 @@ function done() {
 		// `key` & `i` initialized at top of scope
 		for ( i = 0; i < sessionStorage.length; i++ ) {
 			key = sessionStorage.key( i++ );
-			if ( key.indexOf( "qunit-test-" ) === 0 ) {
+			if ( key.indexOf( "qunit-ui-" ) === 0 ) {
 				sessionStorage.removeItem( key );
 			}
 		}
@@ -881,7 +881,7 @@ function done() {
 	});
 }
 
-/** @return Boolean: true if this test should be ran */
+/** @return Boolean: true if this ui should be ran */
 function validTest( test ) {
 	var include,
 		filter = config.filter && config.filter.toLowerCase(),
@@ -1210,7 +1210,7 @@ Test.prototype = {
 			li.appendChild( b );
 			li.appendChild( a );
 			li.className = "running";
-			li.id = this.id = "qunit-test-output" + testId++;
+			li.id = this.id = "qunit-ui-output" + testId++;
 
 			tests.appendChild( li );
 		}
@@ -1220,7 +1220,7 @@ Test.prototype = {
 			// Emit moduleStart when we're switching from one module to another
 			this.module !== config.previousModule ||
 				// They could be equal (both undefined) but if the previousModule property doesn't
-				// yet exist it means this is the first test in a suite that isn't wrapped in a
+				// yet exist it means this is the first ui in a suite that isn't wrapped in a
 				// module, in which case we'll just emit a moduleStart event for 'undefined'.
 				// Without this, reporters can get testStart before moduleStart  which is a problem.
 				!hasOwn.call( config, "previousModule" )
@@ -1257,7 +1257,7 @@ Test.prototype = {
 
 
 		/**
-		 * Expose the current test environment.
+		 * Expose the current ui environment.
 		 *
 		 * @deprecated since 1.12.0: Use QUnit.config.current.testEnvironment instead.
 		 */
@@ -1305,8 +1305,8 @@ Test.prototype = {
 		} catch( e ) {
 			this.callbackRuntime = +new Date() - this.callbackStarted;
 
-			QUnit.pushFailure( "Died on test #" + (this.assertions.length + 1) + " " + this.stack + ": " + ( e.message || e ), extractStacktrace( e, 0 ) );
-			// else next test will carry the responsibility
+			QUnit.pushFailure( "Died on ui #" + (this.assertions.length + 1) + " " + this.stack + ": " + ( e.message || e ), extractStacktrace( e, 0 ) );
+			// else next ui will carry the responsibility
 			saveGlobal();
 
 			// Restart the tests if they're blocking
@@ -1376,9 +1376,9 @@ Test.prototype = {
 			// store result when possible
 			if ( QUnit.config.reorder && defined.sessionStorage ) {
 				if ( bad ) {
-					sessionStorage.setItem( "qunit-test-" + this.module + "-" + this.testName, bad );
+					sessionStorage.setItem( "qunit-ui-" + this.module + "-" + this.testName, bad );
 				} else {
-					sessionStorage.removeItem( "qunit-test-" + this.module + "-" + this.testName );
+					sessionStorage.removeItem( "qunit-ui-" + this.module + "-" + this.testName );
 				}
 			}
 
@@ -1471,9 +1471,9 @@ Test.prototype = {
 		}
 
 		// `bad` initialized at top of scope
-		// defer when previous test run passed, if storage is available
+		// defer when previous ui run passed, if storage is available
 		bad = QUnit.config.reorder && defined.sessionStorage &&
-						+sessionStorage.getItem( "qunit-test-" + this.module + "-" + this.testName );
+						+sessionStorage.getItem( "qunit-ui-" + this.module + "-" + this.testName );
 
 		if ( bad ) {
 			run();
@@ -1497,7 +1497,7 @@ assert = QUnit.assert = {
 	 */
 	ok: function( result, msg ) {
 		if ( !config.current ) {
-			throw new Error( "ok() assertion outside test context, was " + sourceFromStacktrace(2) );
+			throw new Error( "ok() assertion outside ui context, was " + sourceFromStacktrace(2) );
 		}
 		result = !!result;
 		msg = msg || ( result ? "okay" : "failed" );
@@ -1510,13 +1510,13 @@ assert = QUnit.assert = {
 				message: msg
 			};
 
-		msg = "<span class='test-message'>" + escapeText( msg ) + "</span>";
+		msg = "<span class='ui-message'>" + escapeText( msg ) + "</span>";
 
 		if ( !result ) {
 			source = sourceFromStacktrace( 2 );
 			if ( source ) {
 				details.source = source;
-				msg += "<table><tr class='test-source'><th>Source: </th><td><pre>" +
+				msg += "<table><tr class='ui-source'><th>Source: </th><td><pre>" +
 					escapeText( source ) +
 					"</pre></td></tr></table>";
 			}

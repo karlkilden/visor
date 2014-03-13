@@ -1,4 +1,4 @@
-package com.kildeen.visor.test;
+package com.kildeen.visor.ui;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
 */
-package com.kildeen.visor.test;
+package com.kildeen.visor.ui;
 
 import com.kildeen.visor.core.api.permission.PermissionResolver;
 import org.apache.deltaspike.core.api.scope.WindowScoped;

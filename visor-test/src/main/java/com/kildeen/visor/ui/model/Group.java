@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package com.kildeen.visor.test.model;
+package com.kildeen.visor.ui.model;
 
 /**
  * <p>File created: 2014-03-01 21:04</p>
@@ -26,21 +26,7 @@ package com.kildeen.visor.test.model;
  * @author: Karl Kildén
  * @since 1.0
  */
-public class User {
+public class Group {
 
-    private String username;
-    private Group group;
 
-    public User(final String username, final Group group) {
-        this.username = username;
-        this.group = group;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public Group getGroup() {
-        return group;
-    }
 }

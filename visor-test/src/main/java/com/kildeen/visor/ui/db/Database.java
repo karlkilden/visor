@@ -17,18 +17,34 @@
  * under the License.
  */
 
-package com.kildeen.visor.test.model;
+package com.kildeen.visor.ui.db;
 
-import java.util.Set;
+import com.kildeen.visor.core.api.permission.PermissionConverter;
+import com.kildeen.visor.core.api.permission.PermissionResolver;
+import com.kildeen.visor.ui.model.Group;
+import com.kildeen.visor.ui.model.User;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * <p>File created: 2014-03-01 21:04</p>
+ * <p>File created: 2014-03-01 21:10</p>
  *
  * @version 1.0
  * @author: Karl Kildén
  * @since 1.0
  */
-public class Group {
+@ApplicationScoped
+public class Database {
 
+    @Inject
+    private PermissionResolver permissionResolver;
 
+    @Inject
+    private PermissionConverter permissionConverter;
+
+    private  List<Group> groups = new ArrayList<>();
+    private  List<User> users = new ArrayList<>();
 }

@@ -1,7 +1,6 @@
-package com.kildeen.visor.test;
+package com.kildeen.visor.ui;
 
 import com.kildeen.visor.core.api.context.PermissionAccessDecisionVoter;
-import org.apache.deltaspike.core.api.config.view.ViewConfig;
 import org.apache.deltaspike.security.api.authorization.Secured;
 
 @Secured(PermissionAccessDecisionVoter.class)

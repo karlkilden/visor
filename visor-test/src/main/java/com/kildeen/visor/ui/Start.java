@@ -1,4 +1,4 @@
-package com.kildeen.visor.test;
+package com.kildeen.visor.ui;
 
 import org.omnifaces.config.WebXml;
 

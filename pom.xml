@@ -30,6 +30,7 @@
     <modules>
         <module>visor-core</module>
         <module>visor-api</module>
+        <module>visor-ui</module>
         <module>visor-test</module>
     </modules>
 
@@ -277,7 +278,7 @@
         </dependency>
 
 
-        <!-- test dependencies -->
+        <!-- ui dependencies -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

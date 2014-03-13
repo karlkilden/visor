@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package com.kildeen.visor.test.model;
+package com.kildeen.visor.ui.model;
 
 import com.kildeen.visor.core.api.permission.Permission;
 import com.kildeen.visor.core.api.permission.SubPermission;

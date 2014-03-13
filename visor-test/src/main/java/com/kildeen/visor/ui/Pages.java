@@ -1,4 +1,4 @@
-package com.kildeen.visor.test;
+package com.kildeen.visor.ui;
 
 import org.apache.deltaspike.core.api.config.view.ViewConfig;
 

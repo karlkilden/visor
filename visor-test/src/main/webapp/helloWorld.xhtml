@@ -22,7 +22,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:o="http://omnifaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+        >
 
 <h:head>
     <title>Hello World</title>
@@ -66,16 +67,12 @@
                 </p>
                 <o:tree id="tree" value="#{permissionBean.tree}" var="permission" varNode="node">
                     <o:treeNode>
-                        <h:commandLink style="visibility: hidden" styleClass="node-action-click">
-                            <f:ajax execute="@form" render="form:info" />
-                            <f:setPropertyActionListener target="#{permissionBean.currentNode}" value="#{permission}" />
-                        </h:commandLink>
                         <ul>
 
                             <o:treeNodeItem>
                                 <li class="node-container">
                                     <h:outputText value="+" style="font-size: larger; font-weight: bolder"
-                                                  rendered="#{permission.parent}" styleClass="perform-expand visible"/>
+                                                  rendered="#{permission.parent}" styleClass="perform-expand visible" />
                                     <input type="checkbox" class="grant-node visible" data="#{permission.id}"/>
                                 <span class="tree-node-header" data="#{permission.id}">
                                     #{permission.id}

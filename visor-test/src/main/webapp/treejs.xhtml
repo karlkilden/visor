@@ -87,7 +87,6 @@
             <!-- this is our hook to the server -->
             if (typeof(nodeClick) == "function")
                 nodeClick({ nodeId: $(this).attr('data') });
-              document.getElementById($(this).attr('data')+'_1').click();
         });
         $(".perform-expand").click(function () {
             expand($(this).parent().children().next('.tree-node-header'));
