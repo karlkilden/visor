@@ -9,6 +9,11 @@ import org.apache.deltaspike.core.api.config.ConfigResolver;
  * Date: 2014-03-13
  */
 public class TreeConfigurationResolver {
+      private boolean sendForSelect;
+    private boolean sendForCheck;
+    private boolean sendForUncheck;
+    private String onSelectRender;
+    private String onCheckRender;
 
 
     public void init () {

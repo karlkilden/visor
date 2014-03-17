@@ -40,6 +40,13 @@
 
         <dependency>
             <groupId>com.kildeen.visor</groupId>
+            <artifactId>visor-ui</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.kildeen.visor</groupId>
             <artifactId>visor-core</artifactId>
             <version>1.0.1-SNAPSHOT</version>
             <scope>runtime</scope>

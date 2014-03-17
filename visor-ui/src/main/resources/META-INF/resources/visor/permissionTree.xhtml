@@ -1,0 +1,101 @@
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one
+  ~ or more contributor license agreements. See the NOTICE file
+  ~ distributed with this work for additional information
+  ~ regarding copyright ownership. The ASF licenses this file
+  ~ to you under the Apache License, Version 2.0 (the
+  ~ "License"); you may not use this file except in compliance
+  ~ with the License. You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied. See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  -->
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:o="http://omnifaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:cc="http://java.sun.com/jsf/composite">
+
+
+<cc:interface componentType="com.kildeen.visor.tree">
+    <cc:attribute name="collapsed"/>
+    <cc:attribute name="onSelectRender"/>
+    <cc:attribute name="onCheckRender"/>
+    <cc:attribute name="onUncheckRender"/>
+    <cc:attribute name="value"/>
+
+
+    <cc:actionSource name="toggle"/>
+    <cc:facet name="header"/>
+</cc:interface>
+<cc:implementation>
+    <h:panelGroup layout="block" styleClass="collapsiblePanel-header">
+        <h:commandButton id="toggle" actionListener="#{cc.toggle}"
+                         styleClass="collapsiblePanel-img"
+                         image="#{resource[cc.collapsed
+          ? 'jsflive:plus.png' : 'jsflive:minus.png']}"/>
+        <cc:renderFacet name="header"/>
+    </h:panelGroup>
+    <h:panelGroup layout="block" rendered="#{!cc.collapsed}">
+        <cc:insertChildren/>
+    </h:panelGroup>
+
+
+    <o:commandScript action="#{permissionBean.onCheckedNode}" execute="tree" name="nodeChecked" render="#{cc.onCheckRender}" rendered="#{cc.onCheckRender != null}"/>
+    <o:commandScript action="#{permissionBean.onUncheckedNode}" execute="tree" name="nodeUnchecked" render="#{cc.onUncheckRender}" rendered="#{cc.onUncheckRender != null}"/>
+    <o:commandScript action="#{permissionBean.update}" execute="tree" name="nodeClick" render="#{cc.onSelectRender}" rendered="#{cc.onSelectRender != null}" />
+
+    <h:panelGroup id="info">
+        #{permissionBean.currentNodeId}
+        #{permissionBean.currentPermission.path}
+    </h:panelGroup>
+
+
+    <div class="tree-container" id="tree-container">
+        <p style="vertical-align: middle">Use enheritence:<input id="use-inheritance" type="checkbox"
+                                                                 checked="checked"/></p>
+
+        <p style="vertical-align: middle">Node click mode:
+            <button onclick="return false;" class="tree-button" id="node-click-action">Expand</button>
+        </p>
+        <o:tree id="tree" value="#{cc.attrs.value}" var="permission" varNode="node">
+            <o:treeNode>
+                <ul>
+
+                    <o:treeNodeItem>
+                        <li class="node-container">
+                            <h:outputText value="+" style="font-size: larger; font-weight: bolder"
+                                          rendered="#{permission.parent}" styleClass="perform-expand visible"/>
+                            <input type="checkbox" class="grant-node visible" data="#{permission.id}"/>
+                                <span class="tree-node-header" data="#{permission.id}">
+                                    #{permission.id}
+                                </span>
+                            <h:button onclick="return false;" value="Customize" styleClass="tree-button customize"/>
+                                    <span class="crud-container">Create<h:selectBooleanCheckbox
+                                            value="#{permission.create}"
+                                            styleClass="crud-checkbox create"/> </span>
+                                    <span class="crud-container">Read<h:selectBooleanCheckbox value="#{permission.read}"
+                                                                                              styleClass="crud-checkbox read"/></span>
+                                    <span class="crud-container">Update<h:selectBooleanCheckbox
+                                            value="#{permission.update}"
+                                            styleClass="crud-checkbox update"/> </span>
+                                    <span class="crud-container">Delete<h:selectBooleanCheckbox
+                                            value="#{permission.delete}"
+                                            styleClass="crud-checkbox delete"/></span>
+                            <o:treeInsertChildren/>
+                        </li>
+                    </o:treeNodeItem>
+                </ul>
+            </o:treeNode>
+        </o:tree>
+    </div>
+    <ui:include src="treejs.xhtml"/>
+</cc:implementation>
+
+</html>

@@ -22,6 +22,8 @@ public final class VisorConfig {
             public static final String NODE_LABEL = Appearance.class.getSimpleName()+".nodeLabel";
             public static final String EXPAND_SYMBOL = Appearance.class.getSimpleName()+".expandSymbol";
             public static final String COLLAPSE_SYMBOL = Appearance.class.getSimpleName()+".collapseSymbol";
+            public static final String EXPAND_SYMBOL_MODE = Appearance.class.getSimpleName()+".expandSymbolMode";
+            public static final String COLLAPSE_SYMBOL_MODE = Appearance.class.getSimpleName()+".collapseSymbolMode";
 
             public static final String DISPLAY_NODE_SELECT_INHERITANCE_CONTROL = Appearance.class.getSimpleName()+".displayNodeSelectInheritanceControl";
             public static final String DISPLAY_NODE_CLICK_MODE_CONTROL = Appearance.class.getSimpleName()+".displayNodeClickMode";
