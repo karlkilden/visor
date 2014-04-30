@@ -4,6 +4,7 @@ import com.kildeen.visor.core.api.context.PermissionDataHolder;
 import com.kildeen.visor.core.api.permission.Permission;
 import com.kildeen.visor.core.api.permission.PermissionConverter;
 import com.kildeen.visor.core.api.permission.PermissionResolver;
+import com.kildeen.visor.ui.model.PermissionBean;
 import org.apache.commons.collections4.set.ListOrderedSet;
 
 import javax.inject.Inject;
@@ -20,6 +21,9 @@ public class PermissionDataHolderImpl implements PermissionDataHolder {
 
     @Inject
     private PermissionResolver permissionResolver;
+
+    @Inject
+    private PermissionBean permissionBean;
 
     @Override
     public Set<String> getPermissions() {

@@ -9,6 +9,5 @@ import org.apache.deltaspike.security.api.authorization.Secured;
  * User: Karl Kildén
  * Date: 2014-02-17
  */
-@Secured(value=PermissionAccessDecisionVoter.class)
 public class HelloWorld implements ViewConfig {
 }

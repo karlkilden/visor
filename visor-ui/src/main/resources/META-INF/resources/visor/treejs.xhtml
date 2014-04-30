@@ -109,6 +109,11 @@
         });
         $(".perform-expand").click(function () {
             expand($(this).parent().children().next('.tree-node-header'));
+
+            $(this).text(function (i, v) {
+                return v === '+' ? '&#8211;' : '+';
+            })
+
         });
         $(".crud-checkbox").click(handleCustomizeInheritance);
 

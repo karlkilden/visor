@@ -36,10 +36,6 @@
 </cc:interface>
 <cc:implementation>
     <h:panelGroup layout="block" styleClass="collapsiblePanel-header">
-        <h:commandButton id="toggle" actionListener="#{cc.toggle}"
-                         styleClass="collapsiblePanel-img"
-                         image="#{resource[cc.collapsed
-          ? 'jsflive:plus.png' : 'jsflive:minus.png']}"/>
         <cc:renderFacet name="header"/>
     </h:panelGroup>
     <h:panelGroup layout="block" rendered="#{!cc.collapsed}">
@@ -47,13 +43,13 @@
     </h:panelGroup>
 
 
-    <o:commandScript action="#{permissionBean.onCheckedNode}" execute="tree" name="nodeChecked" render="#{cc.onCheckRender}" rendered="#{cc.onCheckRender != null}"/>
-    <o:commandScript action="#{permissionBean.onUncheckedNode}" execute="tree" name="nodeUnchecked" render="#{cc.onUncheckRender}" rendered="#{cc.onUncheckRender != null}"/>
-    <o:commandScript action="#{permissionBean.update}" execute="tree" name="nodeClick" render="#{cc.onSelectRender}" rendered="#{cc.onSelectRender != null}" />
+    <o:commandScript action="#{treeContext.onCheckedNode}" execute="tree" name="nodeChecked" render="#{cc.onCheckRender}" rendered="#{cc.onCheckRender != null}"/>
+    <o:commandScript action="#{treeContext.onUncheckedNode}" execute="tree" name="nodeUnchecked" render="#{cc.onUncheckRender}" rendered="#{cc.onUncheckRender != null}"/>
+    <o:commandScript action="#{treeContext.update}" execute="tree" name="nodeClick" render="#{cc.onSelectRender}" rendered="#{cc.onSelectRender != null}" />
 
     <h:panelGroup id="info">
-        #{permissionBean.currentNodeId}
-        #{permissionBean.currentPermission.path}
+        #{treeContext.currentNodeId}
+        #{treeContext.currentPermission.path}
     </h:panelGroup>
 
 

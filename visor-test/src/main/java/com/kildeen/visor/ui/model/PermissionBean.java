@@ -21,11 +21,8 @@ package com.kildeen.visor.ui.model;
 
 import com.kildeen.visor.core.api.permission.Permission;
 import com.kildeen.visor.core.api.permission.PermissionResolver;
-import com.kildeen.visor.core.permission.PermissionModel;
-import com.kildeen.visor.ui.PermissionTreeUtil;
-import org.omnifaces.model.tree.ListTreeModel;
+import com.kildeen.visor.ui.model.tree.TreeContext;
 import org.omnifaces.model.tree.TreeModel;
-import org.omnifaces.util.Faces;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
@@ -50,67 +47,25 @@ public class PermissionBean implements Serializable {
     @Inject
     private PermissionResolver permissionResolver;
     private TreeModel<Permission> tree;
-    private String currentNodeId;
-    private List<Permission> rootPermissions;
     private Set<Permission> selected = new HashSet<>();
-    private Permission currentPermission;
+
+    @Inject
+    TreeContext treeContext;
 
     @PostConstruct
     public void init() {
-
-        rootPermissions = permissionResolver.getRootPermissions();
-        tree = new ListTreeModel<>();
-        for (Permission p : rootPermissions) {
-            TreeModel<Permission> node = tree.addChild(p);
-            addChildren(node);
-        }
-    }
-
-    private TreeModel<Permission> addChildren(TreeModel<Permission> model) {
-        for (Permission child : model.getData().getChildren()) {
-            addChildren(model.addChild(child));
-        }
-        return model;
-    }
-
-    public PermissionModel getCurrentPermission() {
-        return permissionResolver.getPermissionModel(currentNodeId);
+        tree = treeContext.getDefaultTree();
     }
 
     public TreeModel<Permission> getTree() {
         return tree;
     }
 
-    public void update() {
-        currentNodeId = Faces.getRequestParameter("nodeId");
+    public void save() {
+        selected = treeContext.getSelected();
     }
 
-    public void onCheckedNode() {
-        String node = Faces.getRequestParameter("checkedNodeId");
-        Permission currentPermission = PermissionTreeUtil.getPermission(tree, node);
-        selected.add(currentPermission);
-    }
-
-    public void onUncheckedNode() {
-        String node = Faces.getRequestParameter("uncheckedNodeId");
-        Permission currentPermission = PermissionTreeUtil.getPermission(tree, node);
-        selected.remove(currentPermission);
-
-    }
-
-    public String getCurrentNodeId() {
-        return currentNodeId;
-    }
-
-    public void setCurrentNodeId(String currentNodeId) {
-        this.currentNodeId = currentNodeId;
-    }
-
-    public Permission getCurrentNode() {
-        return currentPermission;
-    }
-
-    public void setCurrentPermission(final Permission currentPermission) {
-        this.currentPermission = currentPermission;
+    public Set<Permission> getSelected() {
+        return selected;
     }
 }

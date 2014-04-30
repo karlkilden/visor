@@ -23,7 +23,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:o="http://omnifaces.org/ui" xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
-        >
+      xmlns:v="http://www.kildeen.com/visor">
 
 <h:head>
     <title>Hello World</title>
@@ -34,7 +34,6 @@
 </h:head>
 <h:body>
     <h:outputStylesheet name="style.css" library="css"/>
-
 
     <div id="container">
         <h1>JSF/DS Hello World</h1>
@@ -48,56 +47,9 @@
         </h:form>
 
         <h:form id="form">
-            <o:commandScript action="#{permissionBean.onCheckedNode}" execute="tree" name="nodeChecked" render="info"/>
-            <o:commandScript action="#{permissionBean.onUncheckedNode}" execute="tree" name="nodeUnchecked" render="info"/>
-            <o:commandScript action="#{permissionBean.update}" execute="tree" name="nodeClick" render="info"/>
-
-            <h:panelGroup id="info">
-                #{permissionBean.currentNodeId}
-                #{permissionBean.currentPermission.path}
-            </h:panelGroup>
-
-
-            <div class="tree-container" id="tree-container">
-                <p style="vertical-align: middle">Use enheritence:<input id="use-inheritance" type="checkbox"
-                                                                         checked="checked"/></p>
-
-                <p style="vertical-align: middle">Node click mode:
-                    <button onclick="return false;" class="tree-button" id="node-click-action">Expand</button>
-                </p>
-                <o:tree id="tree" value="#{permissionBean.tree}" var="permission" varNode="node">
-                    <o:treeNode>
-                        <ul>
-
-                            <o:treeNodeItem>
-                                <li class="node-container">
-                                    <h:outputText value="+" style="font-size: larger; font-weight: bolder"
-                                                  rendered="#{permission.parent}" styleClass="perform-expand visible" />
-                                    <input type="checkbox" class="grant-node visible" data="#{permission.id}"/>
-                                <span class="tree-node-header" data="#{permission.id}">
-                                    #{permission.id}
-                                </span>
-                                    <h:button onclick="return false;" value="Customize" styleClass="tree-button customize"/>
-                                    <span class="crud-container">Create<h:selectBooleanCheckbox
-                                            value="#{permission.create}"
-                                            styleClass="crud-checkbox create"/> </span>
-                                    <span class="crud-container">Read<h:selectBooleanCheckbox value="#{permission.read}"
-                                                                                              styleClass="crud-checkbox read"/></span>
-                                    <span class="crud-container">Update<h:selectBooleanCheckbox
-                                            value="#{permission.update}"
-                                            styleClass="crud-checkbox update"/> </span>
-                                    <span class="crud-container">Delete<h:selectBooleanCheckbox
-                                            value="#{permission.delete}"
-                                            styleClass="crud-checkbox delete"/></span>
-                                    <o:treeInsertChildren/>
-                                </li>
-                            </o:treeNodeItem>
-                        </ul>
-                    </o:treeNode>
-                </o:tree>
-            </div>
+            <v:permissionTree value="#{permissionBean.tree}" onSelectRender="info" onCheckRender="info" onUncheckRender="info"/>
+            <h:commandButton action="#{permissionBean.save}" />
         </h:form>
     </div>
-          <ui:include src="treejs.xhtml" />
 </h:body>
 </html>

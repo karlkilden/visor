@@ -21,7 +21,6 @@ package com.kildeen.visor.ui.model.tree;
 
 import com.kildeen.visor.core.api.permission.Permission;
 import com.kildeen.visor.core.api.permission.PermissionResolver;
-import com.kildeen.visor.core.permission.PermissionModel;
 import org.omnifaces.model.tree.ListTreeModel;
 import org.omnifaces.model.tree.TreeModel;
 import org.omnifaces.util.Faces;
@@ -47,7 +46,7 @@ import java.util.Set;
  */
 @SessionScoped
 @Named
-public class TreeBean implements Serializable {
+public class TreeContext implements Serializable {
 
     @Inject
     private PermissionResolver permissionResolver;
@@ -55,7 +54,7 @@ public class TreeBean implements Serializable {
     @Inject
     private Event<NodeActionEvent> event;
 
-    private static final Logger log = LoggerFactory.getLogger(TreeBean.class);
+    private static final Logger log = LoggerFactory.getLogger(TreeContext.class);
 
     private TreeModel<Permission> tree;
     private String currentNodeId;
@@ -85,7 +84,7 @@ public class TreeBean implements Serializable {
         return currentPermission;
     }
 
-    public TreeModel<Permission> getTree() {
+    public TreeModel<Permission> getDefaultTree() {
         return tree;
     }
 
@@ -107,7 +106,6 @@ public class TreeBean implements Serializable {
         Permission currentPermission = PermissionTreeUtil.getPermission(tree, node);
         selected.remove(currentPermission);
         send(currentPermission);
-
     }
 
     private void send(Permission permission) {
@@ -124,5 +122,9 @@ public class TreeBean implements Serializable {
 
     public void setSelected(Set<Permission> selected) {
         this.selected = selected;
+    }
+
+    public Set<Permission> getSelected() {
+        return selected;
     }
 }
