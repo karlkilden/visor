@@ -17,7 +17,15 @@
 </h:head>
 
 <h:body>
-    Place your content here
+
+   Allowed: <h:inputText rendered="#{permissionContext.allowed}" />
+    Read Only: <h:inputText disabled="#{permissionContext.readOnly}" />
+
+
+    Subpart admin1.Sub
+
+    <h:outputText value="Not permitted?????" rendered="#{permissionContext.has('admin.Sub')}"/>
+
 </h:body>
 
 </html>

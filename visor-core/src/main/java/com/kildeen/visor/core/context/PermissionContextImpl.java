@@ -52,7 +52,7 @@ import javax.inject.Named;
  * @since 1.0
  */
 @ViewScoped
-@Named("PermissionContext")
+@Named("permissionContext")
 public class PermissionContextImpl implements PermissionContext {
     // This is only used when security information is requested but the current view is unsecured.
     private static final String DEFAULT="DEFAULT";
@@ -125,6 +125,11 @@ public class PermissionContextImpl implements PermissionContext {
     @Override
     public boolean isRead() {
         return permission.hasRead();
+    }
+
+    @Override
+    public boolean isReadOnly() {
+        return !permission.hasRead();
     }
 
     @Override

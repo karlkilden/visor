@@ -74,7 +74,7 @@ public interface PermissionConverter extends Serializable {
 
     /**
      *
-     * @param permissions to serialize.
+     * @param permissions to toPermissions.
      * @return Convenience method, Default uses {@link #serialize(Permission)} for all entries.
      */
     public Collection<String> serializeAll(Collection<Permission> permissions);

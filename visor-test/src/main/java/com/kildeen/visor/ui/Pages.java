@@ -1,5 +1,7 @@
 package com.kildeen.visor.ui;
 
+import com.kildeen.visor.core.api.permission.PartPermission;
+import com.kildeen.visor.core.api.permission.SubPermission;
 import org.apache.deltaspike.core.api.config.view.ViewConfig;
 
 /**
@@ -27,6 +29,9 @@ public interface Pages extends ViewConfig {
         public interface Admin extends Secured {
 
             public class Admin1 implements Secured {
+                public class Sub implements PartPermission {
+
+                }
             }
 
         }

@@ -33,7 +33,11 @@ import java.util.Set;
  */
 public interface PermissionManager extends Serializable {
 
-    Collection<String> serialize(Collection<Permission> permissions);
+    Collection<String> toStrings(Collection<Permission> permissions);
 
-    Set<Permission> deSerialize(Collection<String> permissions);
+    Set<Permission> toPermissions(Collection<String> permissions);
+
+    Collection<String> toStrings(Permission... permissions);
+
+    Set<Permission> toPermissions(String... permissions);
 }

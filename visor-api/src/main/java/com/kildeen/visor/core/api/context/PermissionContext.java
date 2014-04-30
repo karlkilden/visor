@@ -49,6 +49,8 @@ public interface PermissionContext extends Serializable {
 
     public boolean isRead();
 
+    public boolean isReadOnly();
+
     public boolean isUpdate();
 
     public boolean isDelete();

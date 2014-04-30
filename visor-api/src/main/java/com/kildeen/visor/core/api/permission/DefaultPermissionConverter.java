@@ -26,6 +26,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.apache.commons.lang3.text.WordUtils;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.*;
@@ -47,6 +48,7 @@ public class DefaultPermissionConverter implements PermissionConverter {
 
     private static final Splitter splitter = Splitter.on("*");
     private static final Splitter dotSplitter = Splitter.on(".");
+    private Class<Permission> permissionImplClass;
 
     @Override
     public String getId(Class<?> permissionClass) {
@@ -72,11 +74,7 @@ public class DefaultPermissionConverter implements PermissionConverter {
     @Override
     public Permission deserialize(final String deserialized) {
         Gson gson = new GsonBuilder().create();
-        try {
-            return (Permission) gson.fromJson(deserialized, Class.forName("com.kildeen.visor.core.permission.PermissionImpl"));
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException("PermissionImpl missing", e);
-        }
+            return (Permission) gson.fromJson(deserialized, permissionImplClass);
     }
 
     @Override
@@ -100,6 +98,18 @@ public class DefaultPermissionConverter implements PermissionConverter {
         else {
             return Collections.emptySet();
         }
+
+    }
+
+    @PostConstruct
+    private void init() {
+
+        try {
+            this.permissionImplClass = (Class<Permission>) Class.forName("com.kildeen.visor.core.permission.PermissionImpl");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("PermissionImpl missing", e);
+        }
+
 
     }
 

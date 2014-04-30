@@ -25,8 +25,7 @@ import com.kildeen.visor.core.api.permission.PermissionManager;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.Collection;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -40,12 +39,32 @@ class PermissionManagerImpl implements PermissionManager {
     private PermissionConverter permissionConverter;
 
     @Override
-    public Collection<String> serialize(Collection<Permission> permissions) {
+    public Collection<String> toStrings(Collection<Permission> permissions) {
         return permissionConverter.serializeAll(permissions);
     }
 
     @Override
-    public Set<Permission> deSerialize(Collection<String> permissions) {
+    public Set<Permission> toPermissions(Collection<String> permissions) {
         return permissionConverter.deserializeAll(permissions);
+    }
+
+    @Override
+    public Collection<String> toStrings(Permission... permissions) {
+        List<String> result = new ArrayList<>();
+
+        for (Permission permission : permissions) {
+            result.add(permissionConverter.serialize(permission));
+        }
+        return result;
+    }
+
+    @Override
+    public Set<Permission> toPermissions(String... permissions) {
+        Set<Permission> result = new HashSet<>();
+
+        for (String permission : permissions) {
+            result.add(permissionConverter.deserialize(permission));
+        }
+        return result;
     }
 }
